@@ -257,6 +257,7 @@ message Quote {
 message OrderBook {
   // Информация об уровне в стакане (строке)
   message Row {
+    // Команда
     enum Action {
       // Действие не указано 
       ACTION_UNSPECIFIED = 0;
@@ -317,6 +318,7 @@ message StreamError {
 message StreamOrderBook {
   // Информация об уровне в стакане (строке)
   message Row {
+    // Команда
     enum Action {
       // Действие не указано 
       ACTION_UNSPECIFIED = 0;

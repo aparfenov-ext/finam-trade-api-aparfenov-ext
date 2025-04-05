@@ -10,6 +10,7 @@ import "google/type/interval.proto";
 option go_package = "trade_api/v1/assets/assets_service";
 option java_multiple_files = true;
 
+// Сервис счетов
 service AssetsService {
   // Получение списка доступных бирж, названия и mic коды
   // Пример HTTP запроса:
@@ -115,6 +116,7 @@ message Exchange {
   string name = 2;
 }
 
+// Информация об инструменте
 message Asset {
   // Символ инструмента ticker@mic
   string symbol = 1;
