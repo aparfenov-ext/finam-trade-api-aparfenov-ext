@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/type/date.proto";
 import "google/type/decimal.proto";
 import "google/type/interval.proto";
+import "google/type/money.proto";
 
 option go_package = "trade_api/v1/assets/assets_service";
 option java_multiple_files = true;
@@ -29,6 +30,20 @@ service AssetsService {
   rpc Assets(AssetsRequest) returns (AssetsResponse) {
     option (google.api.http) = {
       get: "/v1/assets"
+    };
+  };
+
+  // Получение торговых параметров по инструменту
+  // Пример HTTP запроса:
+  // GET /v1/assets/SBER@MISX/params?account_id=1440399
+  // Authorization: <token>
+  //
+  // Параметры:
+  // - symbol - передается в URL пути
+  // - account_id - передаётся как query-параметр
+  rpc GetAssetParams(GetAssetParamsRequest) returns (GetAssetParamsResponse) {
+    option (google.api.http) = {
+      get: "/v1/assets/{symbol}/params"
     };
   };
 
@@ -71,6 +86,36 @@ message AssetsRequest {
 message AssetsResponse {
   // Информация об инструменте
   repeated Asset assets = 1;
+}
+
+// Запрос торговых параметров инструмента
+message GetAssetParamsRequest {
+  // Символ инструмента
+  string symbol = 1;
+  // ID аккаунта для которого будут подбираться торговые параметры
+  string account_id = 2;
+}
+
+// Торговые параметры инструмента
+message GetAssetParamsResponse {
+  // Символ инструмента
+  string symbol = 1;
+  // ID аккаунта для которого подбираются торговые параметры
+  string account_id = 2;
+  // Доступны ли торговые операции
+  bool tradeable = 3;
+  // Доступны ли операции в Лонг 
+  Longable longable = 4;
+  // Доступны ли операции в Шорт
+  Shortable shortable = 5;
+  // Ставка риска для операции в Лонг
+  google.type.Decimal long_risk_rate = 6;
+  // Сумма обеспечения для поддержания позиции Лонг
+  google.type.Money long_collateral = 7;
+  // Ставка риска для операции в Шорт
+  google.type.Decimal short_risk_rate = 8;
+  // Сумма обеспечения для поддержания позиции Шорт
+  google.type.Money short_collateral = 9;
 }
 
 // Запрос получения цепочки опционов
@@ -134,7 +179,7 @@ message Asset {
   string name = 7;
 }
 
-// Инфомация об опционе
+// Информация об опционе
 message Option {
   // Тип опциона
   enum Type {
@@ -160,4 +205,42 @@ message Option {
   google.type.Decimal strike = 7; 
   // Множитель опциона
   google.type.Decimal multiplier = 9; 
+}
+
+// Доступны ли операции в Лонг
+message Longable {
+  // Статус
+  enum Status {
+    // Не доступен
+    NOT_AVAILABLE        = 0;
+    // Доступен
+    AVAILABLE            = 1;
+    // Запрещено на уровне счета
+    ACCOUNT_NOT_APPROVED = 2;
+  }
+  // Статус инструмента
+  Status value = 1;
+  // Сколько дней действует запрет на операции в Лонг (если есть)
+  int32 halted_days = 2;
+}
+
+// Доступны ли операции в Шорт
+message Shortable{
+  // Статус
+  enum Status {
+    // Не доступен
+    NOT_AVAILABLE        = 0;
+    // Доступен
+    AVAILABLE            = 1;
+    // Признак того, что бумага Hard To Borrow (если есть)
+    HTB                  = 2;
+    // Запрещено на уровне счета
+    ACCOUNT_NOT_APPROVED = 3;
+    // Разрешено в составе стратегии
+    AVAILABLE_STRATEGY   = 4;
+  }
+  // Статус инструмента
+  Status value = 1;
+  // Сколько дней действует запрет на операции в Шорт (если есть)
+  int32 halted_days = 2;
 }
