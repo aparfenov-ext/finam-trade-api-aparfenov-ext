@@ -7,6 +7,7 @@ import "google/type/date.proto";
 import "google/type/decimal.proto";
 import "google/type/interval.proto";
 import "google/type/money.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "trade_api/v1/assets/assets_service";
 option java_multiple_files = true;
@@ -30,6 +31,21 @@ service AssetsService {
   rpc Assets(AssetsRequest) returns (AssetsResponse) {
     option (google.api.http) = {
       get: "/v1/assets"
+    };
+  };
+
+
+  // Получение информации по конкретному инструменту
+  // Пример HTTP запроса:
+  // GET /v1/assets/SBER@MISX?account_id=1440399
+  // Authorization: <token>
+  //
+  // Параметры:
+  // - symbol - передается в URL пути
+  // - account_id - передаётся как query-параметр
+  rpc GetAsset(GetAssetRequest) returns (GetAssetResponse) {
+    option (google.api.http) = {
+      get: "/v1/assets/{symbol}"
     };
   };
 
@@ -66,6 +82,16 @@ service AssetsService {
       get: "/v1/assets/{symbol}/schedule"
     };
   };
+
+  // Получение времени на сервере
+  // Пример HTTP запроса:
+  // GET /v1/assets/clock
+  // Authorization: <token>
+  rpc Clock(ClockRequest) returns (ClockResponse) {
+    option (google.api.http) = {
+      get: "/v1/assets/clock"
+    };
+  };
 }
 
 // Запрос получения списка доступных бирж
@@ -86,6 +112,40 @@ message AssetsRequest {
 message AssetsResponse {
   // Информация об инструменте
   repeated Asset assets = 1;
+}
+
+// Запрос получения информации по конкретному инструменту
+message GetAssetRequest{
+  // Символ инструмента
+  string symbol = 1;
+  // ID аккаунта для которого будет подбираться информация по инструменту
+  string account_id = 2;
+}
+
+// Список информации по конкретному инструменту
+message GetAssetResponse{
+  // Код режима торгов
+  string board = 1;
+  // Идентификатор инструмента
+  string id = 2;
+  // Тикер инструмента
+  string ticker = 3;
+  // mic идентификатор биржи
+  string mic = 4;
+  // Isin идентификатор инструмента
+  string isin = 5;
+  // Тип инструмента
+  string type = 6;
+  // Наименование инструмента
+  string name = 7;
+  // Кол-во десятичных знаков в цене
+  int32 decimals = 10;
+  // Минимальный шаг цены
+  int64 min_step = 11;
+  // Кол-во штук в лоте
+  google.type.Decimal lot_size = 9;
+  // Дата экспирации фьючерса
+  google.type.Date expiration_date = 12;
 }
 
 // Запрос торговых параметров инструмента
@@ -143,14 +203,24 @@ message ScheduleResponse {
   // Сессии
   message Sessions {
     // Тип сессии
-    string type = 1; 
+    string type = 1;
     // Интервал сессии
-    google.type.Interval interval = 2; 
+    google.type.Interval interval = 2;
   }
   // Символ инструмента
   string symbol = 1;
   // Сессии инструмента
   repeated Sessions sessions = 2;
+}
+
+// Запрос получения времени на сервере
+message ClockRequest {
+}
+
+// Время на сервере
+message ClockResponse {
+  // Метка времени
+  google.protobuf.Timestamp timestamp = 1;
 }
 
 // Информация о бирже
@@ -195,16 +265,16 @@ message Option {
   string symbol = 1;
   // Тип инструмента
   Type type = 2;
-   // Лот, количество базового актива в инструменте
+  // Лот, количество базового актива в инструменте
   google.type.Decimal contract_size = 4;
   // Дата начала торговли
-  google.type.Date trade_first_day = 5; 
+  google.type.Date trade_first_day = 5;
   // Дата экспирации
-  google.type.Date trade_last_day = 6; 
+  google.type.Date trade_last_day = 6;
   // Цена исполнения опциона
-  google.type.Decimal strike = 7; 
+  google.type.Decimal strike = 7;
   // Множитель опциона
-  google.type.Decimal multiplier = 9; 
+  google.type.Decimal multiplier = 9;
 }
 
 // Доступны ли операции в Лонг
@@ -212,9 +282,9 @@ message Longable {
   // Статус
   enum Status {
     // Не доступен
-    NOT_AVAILABLE        = 0;
+    NOT_AVAILABLE = 0;
     // Доступен
-    AVAILABLE            = 1;
+    AVAILABLE = 1;
     // Запрещено на уровне счета
     ACCOUNT_NOT_APPROVED = 2;
   }
@@ -229,15 +299,15 @@ message Shortable{
   // Статус
   enum Status {
     // Не доступен
-    NOT_AVAILABLE        = 0;
+    NOT_AVAILABLE = 0;
     // Доступен
-    AVAILABLE            = 1;
+    AVAILABLE = 1;
     // Признак того, что бумага Hard To Borrow (если есть)
-    HTB                  = 2;
+    HTB = 2;
     // Запрещено на уровне счета
     ACCOUNT_NOT_APPROVED = 3;
     // Разрешено в составе стратегии
-    AVAILABLE_STRATEGY   = 4;
+    AVAILABLE_STRATEGY = 4;
   }
   // Статус инструмента
   Status value = 1;

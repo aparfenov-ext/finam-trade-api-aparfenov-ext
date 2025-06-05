@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 import "google/type/decimal.proto";
 import "google/type/interval.proto";
+import "grpc/tradeapi/v1/side.proto";
 
 option go_package = "trade_api/v1/marketdata/marketdata_service";
 option java_multiple_files = true;
@@ -57,40 +58,43 @@ service MarketDataService {
   // Подписка на сделки по инструменту. Стрим метод
   rpc SubscribeLatestTrades(SubscribeLatestTradesRequest) returns (stream SubscribeLatestTradesResponse);
 
+  // Подписка на агрегированные свечи. Стрим метод
+  rpc SubscribeBars(SubscribeBarsRequest) returns (stream SubscribeBarsResponse);
+
+}
+
+// Доступные таймфреймы для свечей
+enum TimeFrame {
+  // Таймфрейм не указан
+  TIME_FRAME_UNSPECIFIED = 0;
+  // 1 минута. Глубина данных 7 дней.
+  TIME_FRAME_M1 = 1;
+  // 5 минут. Глубина данных 30 дней.
+  TIME_FRAME_M5 = 5;
+  // 15 минут. Глубина данных 30 дней.
+  TIME_FRAME_M15 = 9;
+  // 30 минут. Глубина данных 30 дней.
+  TIME_FRAME_M30 = 11;
+  // 1 час. Глубина данных 30 дней.
+  TIME_FRAME_H1 = 12;
+  // 2 часа. Глубина данных 30 дней.
+  TIME_FRAME_H2 = 13;
+  // 4 часа. Глубина данных 30 дней.
+  TIME_FRAME_H4 = 15;
+  // 8 часов. Глубина данных 30 дней.
+  TIME_FRAME_H8 = 17;
+  // День. Глубина данных 365 дней.
+  TIME_FRAME_D = 19;
+  // Неделя. Глубина данных 365*5 дней.
+  TIME_FRAME_W = 20;
+  // Месяц. Глубина данных 365*5 дней.
+  TIME_FRAME_MN = 21;
+  // Квартал. Глубина данных 365*5 дней.
+  TIME_FRAME_QR = 22;
 }
 
 // Запрос получения исторических данных по инструменту (агрегированные свечи)
 message BarsRequest {
-  // Доступные таймфреймы для свечей
-  enum TimeFrame {
-    // Таймфрейм не указан
-    TIME_FRAME_UNSPECIFIED = 0;
-    // 1 минута. Глубина данных 7 дней.
-    TIME_FRAME_M1 = 1;
-    // 5 минут. Глубина данных 30 дней.
-    TIME_FRAME_M5 = 5;
-    // 15 минут. Глубина данных 30 дней.
-    TIME_FRAME_M15 = 9;
-    // 30 минут. Глубина данных 30 дней.
-    TIME_FRAME_M30 = 11;
-    // 1 час. Глубина данных 30 дней.
-    TIME_FRAME_H1 = 12;
-    // 2 часа. Глубина данных 30 дней.
-    TIME_FRAME_H2 = 13;
-    // 4 часа. Глубина данных 30 дней.
-    TIME_FRAME_H4 = 15;
-    // 8 часов. Глубина данных 30 дней.
-    TIME_FRAME_H8 = 17;
-    // День. Глубина данных 365 дней.
-    TIME_FRAME_D = 19;
-    // Неделя. Глубина данных 365*5 дней.
-    TIME_FRAME_W = 20;
-    // Месяц. Глубина данных 365*5 дней.
-    TIME_FRAME_MN = 21;
-    // Квартал. Глубина данных 365*5 дней.
-    TIME_FRAME_QR = 22;
-  }
-
   // Символ инструмента
   string symbol = 1;
   // Необходимый таймфрейм
@@ -173,6 +177,22 @@ message SubscribeOrderBookRequest {
 message SubscribeOrderBookResponse {
   // Список стакан стримов
   repeated StreamOrderBook order_book = 1;
+}
+
+// Запрос подписки на агрегированные свечи. Стрим
+message SubscribeBarsRequest {
+  // Символ инструмента
+  string symbol = 1;
+  // Необходимый таймфрейм
+  TimeFrame timeframe = 2;
+}
+
+// Список агрегированных свеч. Стрим
+message SubscribeBarsResponse {
+  // Символ инструмента
+  string symbol = 1;
+  // Агрегированная свеча
+  repeated Bar bars = 2;
 }
 
 // Информация об агрегированной свече
@@ -303,6 +323,8 @@ message Trade {
   google.type.Decimal price = 4;
   // Размер сделки
   google.type.Decimal size = 5;
+  //  Сторона сделки (buy или sell)
+  Side side = 6;
 }
 
 // Ошибка стрим сервиса

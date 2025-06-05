@@ -8,6 +8,7 @@ import "google/type/decimal.proto";
 import "google/type/interval.proto";
 import "google/type/money.proto";
 import "grpc/tradeapi/v1/side.proto";
+import "grpc/tradeapi/v1/trade.proto";
 
 option go_package = "trade_api/v1/accounts/accounts_service";
 option java_multiple_files = true;
@@ -55,7 +56,8 @@ service AccountsService {
 
 // Запрос получения информации по конкретному аккаунту
 message GetAccountRequest {
-  string account_id = 1; // Идентификатор аккаунта
+  // Идентификатор аккаунта
+  string account_id = 1;
 }
 
 // Информация о конкретном аккаунте
@@ -118,22 +120,6 @@ message Position {
   google.type.Decimal average_price = 3;
   // Текущая цена
   google.type.Decimal current_price = 4;
-}
-
-// Информация о сделке
-message AccountTrade {
-  // Идентификатор сделки
-  string trade_id = 1;
-  // Символ инструмента
-  string symbol = 2;
-  // Цена исполнения
-  google.type.Decimal price = 3;
-  // Размер в шт.
-  google.type.Decimal size = 4;
-  // Сторона сделки (long или short)
-  grpc.tradeapi.v1.Side side = 5;
-  // Метка времени
-  google.protobuf.Timestamp timestamp = 6;
 }
 
 // Информация о транзакции
