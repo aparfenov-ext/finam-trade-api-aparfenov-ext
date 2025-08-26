@@ -20,7 +20,9 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
 
       - name: Publish package
-        run: ./gradlew publish
+        run: |
+          cd sdk/kotlin
+          ./gradlew publish
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}

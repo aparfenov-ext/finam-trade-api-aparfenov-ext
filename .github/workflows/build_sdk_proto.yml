@@ -26,13 +26,13 @@ jobs:
 
       - name: Build proto
         run: |
-          cd sdk
-          ./gradlew build -x test
+          cd sdk/kotlin
+          ./gradlew build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: finam_trade_api_sdk_proto
-          path: sdk/build/libs
+          path: sdk/kotlin/build/libs
           overwrite: true
           if-no-files-found: error
