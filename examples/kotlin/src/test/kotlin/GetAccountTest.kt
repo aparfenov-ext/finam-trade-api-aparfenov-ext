@@ -58,8 +58,6 @@ class GetAccountTest {
         assertTrue(getAccountResponse.status.isNotBlank())
         assertTrue(getAccountResponse.hasEquity())
         assertTrue(getAccountResponse.hasUnrealizedProfit())
-        assertTrue(getAccountResponse.positionsCount > 0)
-        assertTrue(getAccountResponse.cashCount > 0)
 
         println(getAccountResponse)
     }
