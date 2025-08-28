@@ -267,14 +267,18 @@ message Option {
   Type type = 2;
   // Лот, количество базового актива в инструменте
   google.type.Decimal contract_size = 4;
-  // Дата начала торговли
+  // Дата старта торговли
   google.type.Date trade_first_day = 5;
-  // Дата экспирации
+  // Дата окончания торговли
   google.type.Date trade_last_day = 6;
   // Цена исполнения опциона
   google.type.Decimal strike = 7;
   // Множитель опциона
   google.type.Decimal multiplier = 9;
+  // Дата начала экспирации
+  google.type.Date expiration_first_day = 10;
+  // Дата окончания экспирации
+  google.type.Date expiration_last_day = 11;
 }
 
 // Доступны ли операции в Лонг

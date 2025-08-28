@@ -25,4 +25,6 @@ message AccountTrade {
   google.protobuf.Timestamp timestamp = 6;
   // Идентификатор заявки
   string order_id = 7;
+  // Идентификатор аккаунта
+  string account_id = 8;
 }
