@@ -1,14 +1,19 @@
-import java.net.URI
+import org.jreleaser.model.Active
+import org.jreleaser.model.Signing.Mode
 
 plugins {
     id("com.google.protobuf") version "0.9.5"
     id("maven-publish")
+    id("org.jreleaser") version "1.19.0"
 }
 
 val coroutinesVersion: String by project
 val protobufVersion: String by project
 val grpcVersion: String by project
 val grpcKotlinVersion: String by project
+
+val group = project.group.toString()
+val projectName = rootProject.name
 
 repositories {
     mavenCentral()
@@ -67,15 +72,82 @@ protobuf {
     }
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 publishing {
+    publications {
+        create<MavenPublication>("release") {
+            from(components["java"])
+            groupId = group
+            artifactId = projectName
+            pom {
+                name.set("Finam Trade API")
+                description.set("Kotlin Finam Trade API")
+                url.set("https://github.com/FinamWeb/finam-trade-api")
+                issueManagement {
+                    url.set("https://github.com/FinamWeb/finam-trade-api/issues")
+                }
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("FinamTrade")
+                        name.set("FinamTrade")
+                        url.set("https://tradeapi.finam.ru/")
+                    }
+                }
+                scm {
+                    connection.set("scm:git://github.com/FinamWeb/finam-trade-api.git")
+                    developerConnection.set("scm:git://github.com/FinamWeb/finam-trade-api.git")
+                    url.set("https://github.com/FinamWeb/finam-trade-api")
+                }
+            }
+        }
+    }
     repositories {
         maven {
-            name = "OSSRH"
-            url = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-            credentials {
-                username = System.getenv("MAVEN_USERNAME")
-                password = System.getenv("MAVEN_PASSWORD")
+            name = "PreDeploy"
+            url = uri(layout.buildDirectory.dir("pre-deploy"))
+        }
+    }
+}
+
+jreleaser {
+    gitRootSearch = true
+    project {
+        inceptionYear.set("2025")
+        author("FinamTrade")
+    }
+    signing {
+        active = Active.ALWAYS
+        armored = true
+        mode = Mode.MEMORY
+        verify = true
+    }
+    deploy {
+        maven {
+            mavenCentral.create("sonatype") {
+                active = Active.ALWAYS
+                url = "https://central.sonatype.com/api/v1/publisher"
+                stagingRepository("build/pre-deploy")
+                setAuthorization("Basic")
+                retryDelay = 60
             }
+        }
+    }
+    release {
+        github {
+            enabled = true
+            skipRelease = true
+            skipTag = true
         }
     }
 }
