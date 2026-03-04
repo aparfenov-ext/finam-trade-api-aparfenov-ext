@@ -33,7 +33,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// Сервис счетов
+// Сервис инструментов
 type AssetsServiceClient interface {
 	// Получение списка доступных бирж, названия и mic коды
 	// Пример HTTP запроса:
@@ -179,7 +179,7 @@ func (c *assetsServiceClient) Clock(ctx context.Context, in *ClockRequest, opts 
 // All implementations must embed UnimplementedAssetsServiceServer
 // for forward compatibility.
 //
-// Сервис счетов
+// Сервис инструментов
 type AssetsServiceServer interface {
 	// Получение списка доступных бирж, названия и mic коды
 	// Пример HTTP запроса:

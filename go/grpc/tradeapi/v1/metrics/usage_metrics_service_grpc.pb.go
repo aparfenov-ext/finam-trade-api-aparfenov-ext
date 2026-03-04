@@ -4,7 +4,7 @@
 // - protoc             v4.23.4
 // source: grpc/tradeapi/v1/metrics/usage_metrics_service.proto
 
-package usage_metrics_service
+package metrics
 
 import (
 	context "context"

@@ -23,6 +23,9 @@
     },
     {
       "name": "OrdersService"
+    },
+    {
+      "name": "ReportsService"
     }
   ],
   "schemes": [
@@ -159,7 +162,7 @@
       },
       "post": {
         "summary": "Выставление биржевой заявки\nПример HTTP запроса:\nPOST /v1/accounts/A12345/orders\nContent-Type: application/json\nAuthorization: \u003ctoken\u003e",
-        "description": "{\n  \"symbol\": \"SBER@MISX\",\n  \"quantity\": {\n\t\t\t \"value\": \"10\"\n\t\t },\n  \"side\": \"SIDE_BUY\",\n  \"type\": \"ORDER_TYPE_LIMIT\",\n  \"time_in_force\": \"TIME_IN_FORCE_DAY\",\n  \"limit_price\": {\n\t\t\t \"value\": \"150.50\"\n\t\t }\n}\n\nПоле account_id берется из URL-пути, остальные поля передаются в теле запроса",
+        "description": "{\n  \"symbol\": \"SBER@MISX\",\n  \"quantity\": {\n\t\t \"value\": \"10\"\n\t },\n  \"side\": \"SIDE_BUY\",\n  \"type\": \"ORDER_TYPE_LIMIT\",\n  \"time_in_force\": \"TIME_IN_FORCE_DAY\",\n  \"limit_price\": {\n\t\t \"value\": \"150.50\"\n\t }\n}\n\nПоле account_id берется из URL-пути, остальные поля передаются в теле запроса",
         "operationId": "OrdersService_PlaceOrder",
         "responses": {
           "200": {
@@ -169,7 +172,7 @@
             }
           },
           "400": {
-            "description": "Не верно переданы торговые параметры",
+            "description": "Неверно переданы торговые параметры",
             "schema": {}
           },
           "401": {
@@ -356,6 +359,80 @@
             "in": "path",
             "required": true,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "OrdersService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/accounts/{accountId}/sltp-orders": {
+      "post": {
+        "summary": "Выставление SL/TP заявки\nПример HTTP запроса:\nPOST /v1/accounts/A12345/sltp-orders\nContent-Type: application/json\nAuthorization: \u003ctoken\u003e",
+        "description": "{\n  \"symbol\": \"SBER@MISX\",\n  \"side\": \"SIDE_BUY\",\n  \"quantity_sl\": {\n    \"value\": \"10\"\n  },\n  \"sl_price\": {\n    \"value\": \"270.00\"\n  },\n  \"limit_price\": {\n    \"value\": \"269.50\"\n  },\n  \"quantity_tp\": {\n    \"value\": \"10\"\n  },\n  \"tp_price\": {\n    \"value\": \"295.50\"\n  },\n  \"tp_guard_spread\": {\n    \"value\": \"0.5\"  },\n  \"tp_spread_measure\": \"TP_SPREAD_MEASURE_VALUE\",\n  \"valid_before\": \"VALID_BEFORE_GOOD_TILL_DATE\",\n  \"valid_expiry_time\": \"2026-12-31T23:59:59Z\",\n  \"comment\": \"my SL/TP order\"\n }\n\n Поле account_id берется из URL-пути, остальные поля передаются в теле запроса",
+        "operationId": "OrdersService_PlaceSLTPOrder",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ordersOrderState"
+            }
+          },
+          "400": {
+            "description": "Неверно переданы торговые параметры",
+            "schema": {}
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт или инструмент не были найдены",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "accountId",
+            "description": "Идентификатор аккаунта",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrdersServicePlaceSLTPOrderBody"
+            }
           }
         ],
         "tags": [
@@ -1375,6 +1452,129 @@
         ]
       }
     },
+    "/v1/report": {
+      "post": {
+        "summary": "Запустить генерацию отчета по счету за период\nПример HTTP запроса:\nPOST /v1/report\nAuthorization: \u003ctoken\u003e",
+        "operationId": "ReportsService_CreateAccountReport",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/reportsCreateAccountReportResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reportsCreateAccountReportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ReportsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/report/{reportId}/info": {
+      "get": {
+        "summary": "Получение информации о результате генерации отчета по счету\nПример HTTP запроса:\nGET /v1/report/01KBMPQ3CEZ4BBCVGBW5JS8S8Y/info\nAuthorization: \u003ctoken\u003e",
+        "operationId": "ReportsService_GetAccountReportInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/reportsGetAccountReportInfoResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "reportId",
+            "description": "Идентификатор отчёта",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "ReportsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/v1/sessions": {
       "post": {
         "summary": "Получение JWT токена из API токена\nПример HTTP запроса:\nPOST /v1/sessions\nContent-Type: application/json",
@@ -1653,6 +1853,65 @@
       },
       "title": "Информация о заявке"
     },
+    "OrdersServicePlaceSLTPOrderBody": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "side": {
+          "$ref": "#/definitions/v1Side",
+          "title": "Сторона для обеих заявок"
+        },
+        "quantitySl": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество в шт для SL"
+        },
+        "slPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Параметр условия цены для SL части"
+        },
+        "limitPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Если указано, после активации SL будет выставлена лимитная заявка с этой ценой"
+        },
+        "quantityTp": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество в шт для TP"
+        },
+        "tpPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Параметр условия цены для TP части"
+        },
+        "tpGuardSpread": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Если указано, после активации TP будет выставлена лимитная заявка с учетом защитного спрэда"
+        },
+        "tpSpreadMeasure": {
+          "$ref": "#/definitions/ordersTPSpreadMeasure",
+          "title": "Единица измерения величины защитного спреда"
+        },
+        "clientOrderId": {
+          "type": "string",
+          "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
+        },
+        "validBefore": {
+          "$ref": "#/definitions/ordersValidBefore",
+          "title": "Срок действия условной заявки. Если не заполнено, то по умолчанию выставляется VALID_BEFORE_GOOD_TILL_CANCEL"
+        },
+        "validExpiryTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Временная метка прекращения действия SL/TP заявки"
+        },
+        "comment": {
+          "type": "string",
+          "title": "Метка заявки. (максимум 128 символов)"
+        }
+      },
+      "title": "Информация о SL/TP заявке"
+    },
     "ScheduleResponseSessions": {
       "type": "object",
       "properties": {
@@ -1695,7 +1954,7 @@
         },
         "moneyReserved": {
           "$ref": "#/definitions/typeDecimal",
-          "title": "Минимальная маржа (необходимая сумма обеспечения под открытые позици)"
+          "title": "Минимальная маржа (необходимая сумма обеспечения под открытые позиции)"
         }
       },
       "description": "Тип портфеля для торговли на срочном рынке Московской Биржи.\nПредназначен для работы с производными финансовыми инструментами: фьючерсами и опционами."
@@ -2918,15 +3177,19 @@
         },
         "initialQuantity": {
           "$ref": "#/definitions/typeDecimal",
-          "title": "Начальный объем"
+          "title": "Начальный объем (заполняется только для биржевой заявки)"
         },
         "executedQuantity": {
           "$ref": "#/definitions/typeDecimal",
-          "title": "Исполненный объем"
+          "title": "Исполненный объем (заполняется только для биржевой заявки)"
         },
         "remainingQuantity": {
           "$ref": "#/definitions/typeDecimal",
-          "title": "Оставшийся объем"
+          "title": "Оставшийся объем (заполняется только для биржевой заявки)"
+        },
+        "sltpOrder": {
+          "$ref": "#/definitions/ordersSLTPOrder",
+          "title": "Информация о SL/TP заявке"
         }
       },
       "title": "Состояние заявки"
@@ -3028,6 +3291,69 @@
       },
       "title": "Список торговых заявок"
     },
+    "ordersSLTPOrder": {
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "type": "string",
+          "title": "Идентификатор аккаунта"
+        },
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "side": {
+          "$ref": "#/definitions/v1Side",
+          "title": "Сторона для обеих заявок"
+        },
+        "quantitySl": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество в шт для SL"
+        },
+        "slPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Параметр условия цены для SL части"
+        },
+        "limitPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Если указано, после активации SL будет выставлена лимитная заявка с этой ценой"
+        },
+        "quantityTp": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество в шт для TP"
+        },
+        "tpPrice": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Параметр условия цены для TP части"
+        },
+        "tpGuardSpread": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Если указано, после активации TP будет выставлена лимитная заявка с учетом защитного спрэда"
+        },
+        "tpSpreadMeasure": {
+          "$ref": "#/definitions/ordersTPSpreadMeasure",
+          "title": "Единица измерения величины защитного спреда"
+        },
+        "clientOrderId": {
+          "type": "string",
+          "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
+        },
+        "validBefore": {
+          "$ref": "#/definitions/ordersValidBefore",
+          "title": "Срок действия условной заявки. Если не заполнено, то по умолчанию выставляется VALID_BEFORE_GOOD_TILL_CANCEL"
+        },
+        "validExpiryTime": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Временная метка прекращения действия SL/TP заявки"
+        },
+        "comment": {
+          "type": "string",
+          "title": "Метка заявки. (максимум 128 символов)"
+        }
+      },
+      "title": "Информация о SL/TP заявке"
+    },
     "ordersStopCondition": {
       "type": "string",
       "enum": [
@@ -3067,6 +3393,17 @@
       },
       "title": "Список собственных сделок"
     },
+    "ordersTPSpreadMeasure": {
+      "type": "string",
+      "enum": [
+        "TP_SPREAD_MEASURE_UNDEFINED",
+        "TP_SPREAD_MEASURE_VALUE",
+        "TP_SPREAD_MEASURE_PERCENT"
+      ],
+      "default": "TP_SPREAD_MEASURE_UNDEFINED",
+      "description": "- TP_SPREAD_MEASURE_UNDEFINED: Значение не указано\n - TP_SPREAD_MEASURE_VALUE: в единицах цены\n - TP_SPREAD_MEASURE_PERCENT: в процентах, с максимальной точностью до сотых процента",
+      "title": "Единица измерения величины защитного спреда для цены исполнения TP"
+    },
     "ordersTimeInForce": {
       "type": "string",
       "enum": [
@@ -3093,7 +3430,7 @@
         "VALID_BEFORE_GOOD_TILL_DATE"
       ],
       "default": "VALID_BEFORE_UNSPECIFIED",
-      "description": "- VALID_BEFORE_UNSPECIFIED: Значение не указано\n - VALID_BEFORE_END_OF_DAY: До конца торгового дня\n - VALID_BEFORE_GOOD_TILL_CANCEL: До отмены\n - VALID_BEFORE_GOOD_TILL_DATE: До указанной даты-времени. Данный тип на текущий момент не поддерживается при выставлении заявки",
+      "description": "- VALID_BEFORE_UNSPECIFIED: Значение не указано\n - VALID_BEFORE_END_OF_DAY: До конца торгового дня\n - VALID_BEFORE_GOOD_TILL_CANCEL: До отмены\n - VALID_BEFORE_GOOD_TILL_DATE: До указанной даты-времени. Данный тип поддерживается только при выставлении SL/TP заявок",
       "title": "Срок действия условной заявки"
     },
     "protobufAny": {
@@ -3104,6 +3441,126 @@
         }
       },
       "additionalProperties": {}
+    },
+    "reportsAccountReportInfo": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "type": "string",
+          "title": "Идентификатор отчёта"
+        },
+        "status": {
+          "$ref": "#/definitions/reportsReportCreationStatus",
+          "title": "Статус генерации отчёта"
+        },
+        "dateRange": {
+          "$ref": "#/definitions/reportsDateRange",
+          "title": "Временной интервал отчёта. Берётся из запроса на генерацию отчёта"
+        },
+        "reportForm": {
+          "$ref": "#/definitions/reportsReportForm",
+          "title": "Форма отчета. Берётся из запроса на генерацию отчёта"
+        },
+        "accountId": {
+          "type": "string",
+          "format": "int64",
+          "title": "Идентификатор счета. Берётся из запроса на генерацию отчёта"
+        },
+        "url": {
+          "type": "string",
+          "title": "Ссылка на скачивание отчёта. Появляется только в случае успешной генерации отчёта (ReportCreationStatus = SUCCESS)"
+        }
+      },
+      "title": "Информация о статусе генерации отчёта"
+    },
+    "reportsCreateAccountReportRequest": {
+      "type": "object",
+      "properties": {
+        "dateRange": {
+          "$ref": "#/definitions/reportsDateRange",
+          "title": "Временной интервал. Максимальный интервал дат - 92 дня"
+        },
+        "reportForm": {
+          "$ref": "#/definitions/reportsReportForm",
+          "title": "Форма отчета"
+        },
+        "accountId": {
+          "type": "string",
+          "format": "int64",
+          "title": "Идентификатор счета"
+        }
+      },
+      "title": "Запрос на генерацию отчёта по счёту за период"
+    },
+    "reportsCreateAccountReportResponse": {
+      "type": "object",
+      "properties": {
+        "reportId": {
+          "type": "string",
+          "title": "Идентификатор отчёта"
+        }
+      },
+      "title": "Информация о генерируемом отчёте"
+    },
+    "reportsDateRange": {
+      "type": "object",
+      "properties": {
+        "dateBegin": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Дата начала временного интервала"
+        },
+        "dateEnd": {
+          "type": "string",
+          "format": "date-time",
+          "title": "Дата конца временного интервала"
+        }
+      },
+      "title": "Временной интервал"
+    },
+    "reportsGetAccountReportInfoResponse": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/reportsAccountReportInfo",
+          "title": "Информация о статусе генерации отчёта"
+        }
+      },
+      "title": "Информация о статусе генерации отчёта"
+    },
+    "reportsReportCreationStatus": {
+      "type": "string",
+      "enum": [
+        "NOT_FOUND",
+        "PENDING",
+        "IN_PROGRESS",
+        "SUCCESS",
+        "ERROR"
+      ],
+      "default": "NOT_FOUND",
+      "description": "- NOT_FOUND: Не найден\n - PENDING: Ожидает генерации\n - IN_PROGRESS: Генерация запущена\n - SUCCESS: Генерация завершена успешно\n - ERROR: Генерация завершена с ошибкой",
+      "title": "Статус генерации отчёта"
+    },
+    "reportsReportForm": {
+      "type": "string",
+      "enum": [
+        "REPORT_FORM_UNKNOWN",
+        "REPORT_FORM_SHORT",
+        "REPORT_FORM_LONG"
+      ],
+      "default": "REPORT_FORM_UNKNOWN",
+      "description": "- REPORT_FORM_UNKNOWN: Не указана\n - REPORT_FORM_SHORT: Краткая\n - REPORT_FORM_LONG: Полная",
+      "title": "Форма отчета"
+    },
+    "reportsSubscribeAccountReportInfoResponse": {
+      "type": "object",
+      "properties": {
+        "info": {
+          "$ref": "#/definitions/reportsAccountReportInfo",
+          "title": "Информация о статусе генерации отчёта"
+        }
+      },
+      "title": "Информация о статусе генерации отчёта. Стрим"
     },
     "typeDate": {
       "type": "object",
