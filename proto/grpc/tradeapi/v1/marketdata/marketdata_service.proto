@@ -7,11 +7,11 @@ import "google/protobuf/timestamp.proto";
 import "google/type/decimal.proto";
 import "google/type/interval.proto";
 import "grpc/tradeapi/v1/side.proto";
-import "protoc_gen_openapiv2/options/annotations.proto";
+import "grpc/gateway/protoc_gen_openapiv2/options/annotations.proto";
 
 option go_package = "github.com/FinamWeb/finam-trade-api/go/grpc/tradeapi/v1/marketdata";
 option java_multiple_files = true;
-option (protoc_gen_openapiv2.options.openapiv2_swagger) = {
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: [
     HTTP,
     HTTPS
@@ -101,7 +101,7 @@ service MarketDataService {
     option (google.api.http) = {
       get: "/v1/instruments/{symbol}/bars"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -126,7 +126,7 @@ service MarketDataService {
     option (google.api.http) = {
       get: "/v1/instruments/{symbol}/quotes/latest"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -145,7 +145,7 @@ service MarketDataService {
     option (google.api.http) = {
       get: "/v1/instruments/{symbol}/orderbook"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -164,7 +164,7 @@ service MarketDataService {
     option (google.api.http) = {
       get: "/v1/instruments/{symbol}/trades/latest"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {

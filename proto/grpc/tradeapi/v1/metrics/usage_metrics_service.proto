@@ -4,11 +4,11 @@ package grpc.tradeapi.v1.metrics;
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "protoc_gen_openapiv2/options/annotations.proto";
+import "grpc/gateway/protoc_gen_openapiv2/options/annotations.proto";
 
 option go_package = "github.com/FinamWeb/finam-trade-api/go/grpc/tradeapi/v1/metrics";
 option java_multiple_files = true;
-option (protoc_gen_openapiv2.options.openapiv2_swagger) = {
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: [
     HTTP,
     HTTPS
@@ -84,7 +84,7 @@ service UsageMetricsService {
     option (google.api.http) = {
       get: "/v1/usage"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
