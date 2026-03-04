@@ -7,11 +7,11 @@ import "google/protobuf/timestamp.proto";
 import "google/type/decimal.proto";
 import "grpc/tradeapi/v1/side.proto";
 import "grpc/tradeapi/v1/trade.proto";
-import "protoc_gen_openapiv2/options/annotations.proto";
+import "grpc/gateway/protoc_gen_openapiv2/options/annotations.proto";
 
 option go_package = "github.com/FinamWeb/finam-trade-api/go/grpc/tradeapi/v1/orders";
 option java_multiple_files = true;
-option (protoc_gen_openapiv2.options.openapiv2_swagger) = {
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: [
     HTTP,
     HTTPS
@@ -102,7 +102,7 @@ service OrdersService {
       post: "/v1/accounts/{account_id}/orders"
       body: "*"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -135,7 +135,7 @@ service OrdersService {
     option (google.api.http) = {
       delete: "/v1/accounts/{account_id}/orders/{order_id}"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -168,7 +168,7 @@ service OrdersService {
     option (google.api.http) = {
       get: "/v1/accounts/{account_id}/orders"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -193,7 +193,7 @@ service OrdersService {
     option (google.api.http) = {
       get: "/v1/accounts/{account_id}/orders/{order_id}"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -259,7 +259,7 @@ service OrdersService {
       post: "/v1/accounts/{account_id}/sltp-orders"
       body: "*"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {

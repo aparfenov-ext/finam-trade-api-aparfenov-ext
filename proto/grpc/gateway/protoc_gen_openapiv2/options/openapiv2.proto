@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package protoc_gen_openapiv2.options;
+package grpc.gateway.protoc_gen_openapiv2.options;
 
 import "google/protobuf/struct.proto";
 

@@ -9,11 +9,11 @@ import "google/type/interval.proto";
 import "google/type/money.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
-import "protoc_gen_openapiv2/options/annotations.proto";
+import "grpc/gateway/protoc_gen_openapiv2/options/annotations.proto";
 
 option go_package = "github.com/FinamWeb/finam-trade-api/go/grpc/tradeapi/v1/assets";
 option java_multiple_files = true;
-option (protoc_gen_openapiv2.options.openapiv2_swagger) = {
+option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   schemes: [
     HTTP,
     HTTPS
@@ -93,7 +93,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/exchanges"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -113,7 +113,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -132,7 +132,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/all"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -155,7 +155,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/{symbol}"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -184,7 +184,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/{symbol}/params"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -209,7 +209,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/{underlying_symbol}/options"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -234,7 +234,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/{symbol}/schedule"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
@@ -259,7 +259,7 @@ service AssetsService {
     option (google.api.http) = {
       get: "/v1/assets/clock"
     };
-    option (protoc_gen_openapiv2.options.openapiv2_operation) = {
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
       security: [
         {
           security_requirement: {
