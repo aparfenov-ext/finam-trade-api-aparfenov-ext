@@ -110,13 +110,15 @@ protoc \
   --go_out=go --go_opt=paths=source_relative \
   --go-grpc_out=go --go-grpc_opt=paths=source_relative \
   --openapiv2_out=docs/swagger \
-  --openapiv2_opt=logtostderr=true,allow_merge=true,merge_file_name=api \
+  --openapiv2_opt=logtostderr=true,allow_merge=true,merge_file_name=api,json_names_for_fields=false \
   ./proto/grpc/tradeapi/v1/*.proto \
   ./proto/grpc/tradeapi/v1/accounts/*.proto \
   ./proto/grpc/tradeapi/v1/assets/*.proto \
   ./proto/grpc/tradeapi/v1/auth/*.proto \
   ./proto/grpc/tradeapi/v1/marketdata/*.proto \
-  ./proto/grpc/tradeapi/v1/orders/*.proto
+  ./proto/grpc/tradeapi/v1/metrics/*.proto \
+  ./proto/grpc/tradeapi/v1/orders/*.proto \
+  ./proto/grpc/tradeapi/v1/reports/*.proto
 ```
 
 Что получится
