@@ -388,6 +388,8 @@ message Quote {
   google.type.Decimal close = 14;
   // Изменение цены (last минус close)
   google.type.Decimal change = 15;
+  // Открытый интерес. Общее количество незакрытых (активных) контрактов по деривативу.
+  google.type.Decimal open_interest = 16;
 
   oneof additions {
     // Информация об опционе
@@ -444,6 +446,8 @@ message Trade {
   google.type.Decimal size = 5;
   // Сторона сделки (buy или sell)
   Side side = 6;
+  // Открытый интерес на момент совершения сделки.
+  google.type.Decimal open_interest = 7;
 }
 
 // Ошибка стрим сервиса

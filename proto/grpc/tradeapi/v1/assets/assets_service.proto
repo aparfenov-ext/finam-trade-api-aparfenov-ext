@@ -104,7 +104,7 @@ service AssetsService {
     };
   };
 
-  // Получение списка доступных инструментов, их описание
+  // Получение списка доступных для торговли инструментов, их описание
   // Пример HTTP запроса:
   // GET /v1/assets
   // Authorization: <token>
@@ -124,7 +124,7 @@ service AssetsService {
     };
   };
 
-  // Получение списка всех инструментов, их описание
+  // Получение списка всех инструментов, в том числе индикативных и архивных, их описание
   // Пример HTTP запроса:
   // GET /v1/assets/all?cursor=56658&only_disabled=true
   // Authorization: <token>
@@ -270,6 +270,22 @@ service AssetsService {
     };
   };
 
+  // Получить состав биржевого индекса по его символу
+  rpc GetConstituents(GetConstituentsRequest) returns (GetConstituentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/assets/{symbol}/constituents"
+    };
+    option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_operation) = {
+      security: [
+        {
+          security_requirement: {
+            key: "Authorization"
+          }
+        }
+      ]
+    };
+  };
+
 }
 
 // Запрос получения списка доступных бирж
@@ -326,6 +342,29 @@ message GetAssetRequest {
 
 // Список информации по конкретному инструменту
 message GetAssetResponse {
+  // Специфичные параметры для инструмента типа "Фьючерс"
+  message FutureDetails {
+    // Дата и время экспирации (исполнения) фьючерсного контракта.
+    google.protobuf.Timestamp expiration_date = 1;
+    // Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте.
+    google.type.Decimal contract_size = 2;
+  }
+  // Специфичные параметры для инструмента типа "Опцион"
+  message OptionDetails {
+    // Дата и время экспирации (исполнения) опционного контракта.
+    google.protobuf.Timestamp expiration_date = 1;
+    // Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте.
+    google.type.Decimal contract_size = 2;
+    // Цена исполнения (страйк) опциона.
+    google.type.Decimal strike = 3;
+  }
+  // Специфичные параметры для инструмента типа "Облигация"
+  message BondDetails {
+    // Текущая номинальная стоимость одной облигации.
+    google.type.Decimal bond_face_value = 1;
+    // Символьный код валюты номинала облигации (например, RUB, USD).
+    string currency = 2;
+  }
   // Код режима торгов
   string board = 1;
   // Идентификатор инструмента
@@ -347,9 +386,18 @@ message GetAssetResponse {
   // Кол-во штук в лоте
   google.type.Decimal lot_size = 9;
   // Дата экспирации фьючерса
-  google.type.Date expiration_date = 12;
+  google.type.Date expiration_date = 12 [deprecated = true];
   // Валюта котировки, может не совпадать с валютой режима торгов инструмента
   string quote_currency = 13;
+
+  oneof asset_details {
+    // Специфичные параметры для инструмента типа "Фьючерс"
+    FutureDetails future_details = 14;
+    // Специфичные параметры для инструмента типа "Опцион"
+    OptionDetails option_details = 15;
+    // Специфичные параметры для инструмента типа "Облигация"
+    BondDetails bond_details = 16;
+  }
 }
 
 // Запрос торговых параметров инструмента
@@ -551,5 +599,39 @@ enum PriceType {
   NON_NEGATIVE = 2;
   // Любая
   ANY = 3;
+}
+
+// Запрос на получение состава индекса
+message GetConstituentsRequest {
+  // Символьный код индекса (например, "SPX@_SP", "NDX@_SCI")
+  string symbol = 1;
+  // Курсор для пагинации. Указывает sec_id инструмента, с которого должен начинаться список.
+  // Для первого запроса оставьте поле пустым (значение 0).
+  // Для последующих запросов используйте значение next_cursor из предыдущего ответа.
+  int64 cursor = 2;
+}
+
+// Результат запроса состава индекса
+message GetConstituentsResponse {
+  // Список компонентов (ценных бумаг), входящих в базу расчета запрошенного индекса
+  repeated Constituents constituents = 1;
+  // Курсор для получения следующей страницы. Содержит sec_id последнего инструмента в текущем списке.
+  // Передайте это значение в поле cursor следующего запроса, чтобы получить следующую часть данных.
+  // Если значение 0 или отсутствует — это последняя страница
+  int64 next_cursor = 2;
+}
+
+// Информация о компоненте (ценной бумаге), входящем в индекс
+message Constituents {
+  // Символьный код инструмента
+  string symbol = 1;
+  // Полное наименование компании-эмитента
+  string name = 2;
+  // Глобальный сектор экономики, к которому относится компания (например, "Technology", "Healthcare")
+  string sector = 3;
+  // Отрасль (подотрасль) деятельности компании (например, "Software - Application")
+  string sub_sector = 4;
+  // Уникальный идентификатор компании в базе данных SEC США (Central Index Key)
+  string cik = 5;
 }
 

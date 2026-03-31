@@ -73,6 +73,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   ]
 };
 
+// Сервис для получения пользовательских отчетов.
 service ReportsService {
   // Запустить генерацию отчета по счету за период
   // Пример HTTP запроса:
