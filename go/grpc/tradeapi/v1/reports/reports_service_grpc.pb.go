@@ -27,6 +27,8 @@ const (
 // ReportsServiceClient is the client API for ReportsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// Сервис для получения пользовательских отчетов.
 type ReportsServiceClient interface {
 	// Запустить генерацию отчета по счету за период
 	// Пример HTTP запроса:
@@ -92,6 +94,8 @@ type ReportsService_SubscribeAccountReportInfoClient = grpc.ServerStreamingClien
 // ReportsServiceServer is the server API for ReportsService service.
 // All implementations must embed UnimplementedReportsServiceServer
 // for forward compatibility.
+//
+// Сервис для получения пользовательских отчетов.
 type ReportsServiceServer interface {
 	// Запустить генерацию отчета по счету за период
 	// Пример HTTP запроса:

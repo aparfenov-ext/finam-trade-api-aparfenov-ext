@@ -1083,6 +1083,8 @@ type Quote struct {
 	Close *decimal.Decimal `protobuf:"bytes,14,opt,name=close,proto3" json:"close,omitempty"`
 	// Изменение цены (last минус close)
 	Change *decimal.Decimal `protobuf:"bytes,15,opt,name=change,proto3" json:"change,omitempty"`
+	// Открытый интерес. Общее количество незакрытых (активных) контрактов по деривативу.
+	OpenInterest *decimal.Decimal `protobuf:"bytes,16,opt,name=open_interest,json=openInterest,proto3" json:"open_interest,omitempty"`
 	// Types that are valid to be assigned to Additions:
 	//
 	//	*Quote_Option_
@@ -1226,6 +1228,13 @@ func (x *Quote) GetChange() *decimal.Decimal {
 	return nil
 }
 
+func (x *Quote) GetOpenInterest() *decimal.Decimal {
+	if x != nil {
+		return x.OpenInterest
+	}
+	return nil
+}
+
 func (x *Quote) GetAdditions() isQuote_Additions {
 	if x != nil {
 		return x.Additions
@@ -1313,7 +1322,9 @@ type Trade struct {
 	// Размер сделки
 	Size *decimal.Decimal `protobuf:"bytes,5,opt,name=size,proto3" json:"size,omitempty"`
 	// Сторона сделки (buy или sell)
-	Side          v1.Side `protobuf:"varint,6,opt,name=side,proto3,enum=grpc.tradeapi.v1.Side" json:"side,omitempty"`
+	Side v1.Side `protobuf:"varint,6,opt,name=side,proto3,enum=grpc.tradeapi.v1.Side" json:"side,omitempty"`
+	// Открытый интерес на момент совершения сделки.
+	OpenInterest  *decimal.Decimal `protobuf:"bytes,7,opt,name=open_interest,json=openInterest,proto3" json:"open_interest,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1388,6 +1399,13 @@ func (x *Trade) GetSide() v1.Side {
 		return x.Side
 	}
 	return v1.Side(0)
+}
+
+func (x *Trade) GetOpenInterest() *decimal.Decimal {
+	if x != nil {
+		return x.OpenInterest
+	}
+	return nil
 }
 
 // Ошибка стрим сервиса
@@ -2001,7 +2019,7 @@ const file_grpc_tradeapi_v1_marketdata_marketdata_service_proto_rawDesc = "" +
 	"\x04high\x18\x03 \x01(\v2\x14.google.type.DecimalR\x04high\x12&\n" +
 	"\x03low\x18\x04 \x01(\v2\x14.google.type.DecimalR\x03low\x12*\n" +
 	"\x05close\x18\x05 \x01(\v2\x14.google.type.DecimalR\x05close\x12,\n" +
-	"\x06volume\x18\x06 \x01(\v2\x14.google.type.DecimalR\x06volume\"\x94\t\n" +
+	"\x06volume\x18\x06 \x01(\v2\x14.google.type.DecimalR\x06volume\"\xcf\t\n" +
 	"\x05Quote\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x128\n" +
 	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12&\n" +
@@ -2018,7 +2036,8 @@ const file_grpc_tradeapi_v1_marketdata_marketdata_service_proto_rawDesc = "" +
 	"\x04high\x18\f \x01(\v2\x14.google.type.DecimalR\x04high\x12&\n" +
 	"\x03low\x18\r \x01(\v2\x14.google.type.DecimalR\x03low\x12*\n" +
 	"\x05close\x18\x0e \x01(\v2\x14.google.type.DecimalR\x05close\x12,\n" +
-	"\x06change\x18\x0f \x01(\v2\x14.google.type.DecimalR\x06change\x12C\n" +
+	"\x06change\x18\x0f \x01(\v2\x14.google.type.DecimalR\x06change\x129\n" +
+	"\ropen_interest\x18\x10 \x01(\v2\x14.google.type.DecimalR\fopenInterest\x12C\n" +
 	"\x06option\x182 \x01(\v2).grpc.tradeapi.v1.marketdata.Quote.OptionH\x00R\x06option\x1a\xa1\x03\n" +
 	"\x06Option\x129\n" +
 	"\ropen_interest\x18\x01 \x01(\v2\x14.google.type.DecimalR\fopenInterest\x12C\n" +
@@ -2045,14 +2064,15 @@ const file_grpc_tradeapi_v1_marketdata_marketdata_service_proto_rawDesc = "" +
 	"\n" +
 	"ACTION_ADD\x10\x02\x12\x11\n" +
 	"\rACTION_UPDATE\x10\x03B\x06\n" +
-	"\x04side\"\xf2\x01\n" +
+	"\x04side\"\xad\x02\n" +
 	"\x05Trade\x12\x19\n" +
 	"\btrade_id\x18\x01 \x01(\tR\atradeId\x12\x12\n" +
 	"\x04mpid\x18\x02 \x01(\tR\x04mpid\x128\n" +
 	"\ttimestamp\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12*\n" +
 	"\x05price\x18\x04 \x01(\v2\x14.google.type.DecimalR\x05price\x12(\n" +
 	"\x04size\x18\x05 \x01(\v2\x14.google.type.DecimalR\x04size\x12*\n" +
-	"\x04side\x18\x06 \x01(\x0e2\x16.grpc.tradeapi.v1.SideR\x04side\"C\n" +
+	"\x04side\x18\x06 \x01(\x0e2\x16.grpc.tradeapi.v1.SideR\x04side\x129\n" +
+	"\ropen_interest\x18\a \x01(\v2\x14.google.type.DecimalR\fopenInterest\"C\n" +
 	"\vStreamError\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\x05R\x04code\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\"\x8a\x04\n" +
@@ -2211,53 +2231,55 @@ var file_grpc_tradeapi_v1_marketdata_marketdata_service_proto_depIdxs = []int32{
 	30, // 28: grpc.tradeapi.v1.marketdata.Quote.low:type_name -> google.type.Decimal
 	30, // 29: grpc.tradeapi.v1.marketdata.Quote.close:type_name -> google.type.Decimal
 	30, // 30: grpc.tradeapi.v1.marketdata.Quote.change:type_name -> google.type.Decimal
-	25, // 31: grpc.tradeapi.v1.marketdata.Quote.option:type_name -> grpc.tradeapi.v1.marketdata.Quote.Option
-	26, // 32: grpc.tradeapi.v1.marketdata.OrderBook.rows:type_name -> grpc.tradeapi.v1.marketdata.OrderBook.Row
-	29, // 33: grpc.tradeapi.v1.marketdata.Trade.timestamp:type_name -> google.protobuf.Timestamp
-	30, // 34: grpc.tradeapi.v1.marketdata.Trade.price:type_name -> google.type.Decimal
-	30, // 35: grpc.tradeapi.v1.marketdata.Trade.size:type_name -> google.type.Decimal
-	31, // 36: grpc.tradeapi.v1.marketdata.Trade.side:type_name -> grpc.tradeapi.v1.Side
-	27, // 37: grpc.tradeapi.v1.marketdata.StreamOrderBook.rows:type_name -> grpc.tradeapi.v1.marketdata.StreamOrderBook.Row
-	20, // 38: grpc.tradeapi.v1.marketdata.SubscribeLatestTradesResponse.trades:type_name -> grpc.tradeapi.v1.marketdata.Trade
-	30, // 39: grpc.tradeapi.v1.marketdata.Quote.Option.open_interest:type_name -> google.type.Decimal
-	30, // 40: grpc.tradeapi.v1.marketdata.Quote.Option.implied_volatility:type_name -> google.type.Decimal
-	30, // 41: grpc.tradeapi.v1.marketdata.Quote.Option.theoretical_price:type_name -> google.type.Decimal
-	30, // 42: grpc.tradeapi.v1.marketdata.Quote.Option.delta:type_name -> google.type.Decimal
-	30, // 43: grpc.tradeapi.v1.marketdata.Quote.Option.gamma:type_name -> google.type.Decimal
-	30, // 44: grpc.tradeapi.v1.marketdata.Quote.Option.theta:type_name -> google.type.Decimal
-	30, // 45: grpc.tradeapi.v1.marketdata.Quote.Option.vega:type_name -> google.type.Decimal
-	30, // 46: grpc.tradeapi.v1.marketdata.Quote.Option.rho:type_name -> google.type.Decimal
-	30, // 47: grpc.tradeapi.v1.marketdata.OrderBook.Row.price:type_name -> google.type.Decimal
-	30, // 48: grpc.tradeapi.v1.marketdata.OrderBook.Row.sell_size:type_name -> google.type.Decimal
-	30, // 49: grpc.tradeapi.v1.marketdata.OrderBook.Row.buy_size:type_name -> google.type.Decimal
-	1,  // 50: grpc.tradeapi.v1.marketdata.OrderBook.Row.action:type_name -> grpc.tradeapi.v1.marketdata.OrderBook.Row.Action
-	29, // 51: grpc.tradeapi.v1.marketdata.OrderBook.Row.timestamp:type_name -> google.protobuf.Timestamp
-	30, // 52: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.price:type_name -> google.type.Decimal
-	30, // 53: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.sell_size:type_name -> google.type.Decimal
-	30, // 54: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.buy_size:type_name -> google.type.Decimal
-	2,  // 55: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.action:type_name -> grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.Action
-	29, // 56: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.timestamp:type_name -> google.protobuf.Timestamp
-	3,  // 57: grpc.tradeapi.v1.marketdata.MarketDataService.Bars:input_type -> grpc.tradeapi.v1.marketdata.BarsRequest
-	5,  // 58: grpc.tradeapi.v1.marketdata.MarketDataService.LastQuote:input_type -> grpc.tradeapi.v1.marketdata.QuoteRequest
-	7,  // 59: grpc.tradeapi.v1.marketdata.MarketDataService.OrderBook:input_type -> grpc.tradeapi.v1.marketdata.OrderBookRequest
-	9,  // 60: grpc.tradeapi.v1.marketdata.MarketDataService.LatestTrades:input_type -> grpc.tradeapi.v1.marketdata.LatestTradesRequest
-	11, // 61: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeQuote:input_type -> grpc.tradeapi.v1.marketdata.SubscribeQuoteRequest
-	13, // 62: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeOrderBook:input_type -> grpc.tradeapi.v1.marketdata.SubscribeOrderBookRequest
-	23, // 63: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeLatestTrades:input_type -> grpc.tradeapi.v1.marketdata.SubscribeLatestTradesRequest
-	15, // 64: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeBars:input_type -> grpc.tradeapi.v1.marketdata.SubscribeBarsRequest
-	4,  // 65: grpc.tradeapi.v1.marketdata.MarketDataService.Bars:output_type -> grpc.tradeapi.v1.marketdata.BarsResponse
-	6,  // 66: grpc.tradeapi.v1.marketdata.MarketDataService.LastQuote:output_type -> grpc.tradeapi.v1.marketdata.QuoteResponse
-	8,  // 67: grpc.tradeapi.v1.marketdata.MarketDataService.OrderBook:output_type -> grpc.tradeapi.v1.marketdata.OrderBookResponse
-	10, // 68: grpc.tradeapi.v1.marketdata.MarketDataService.LatestTrades:output_type -> grpc.tradeapi.v1.marketdata.LatestTradesResponse
-	12, // 69: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeQuote:output_type -> grpc.tradeapi.v1.marketdata.SubscribeQuoteResponse
-	14, // 70: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeOrderBook:output_type -> grpc.tradeapi.v1.marketdata.SubscribeOrderBookResponse
-	24, // 71: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeLatestTrades:output_type -> grpc.tradeapi.v1.marketdata.SubscribeLatestTradesResponse
-	16, // 72: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeBars:output_type -> grpc.tradeapi.v1.marketdata.SubscribeBarsResponse
-	65, // [65:73] is the sub-list for method output_type
-	57, // [57:65] is the sub-list for method input_type
-	57, // [57:57] is the sub-list for extension type_name
-	57, // [57:57] is the sub-list for extension extendee
-	0,  // [0:57] is the sub-list for field type_name
+	30, // 31: grpc.tradeapi.v1.marketdata.Quote.open_interest:type_name -> google.type.Decimal
+	25, // 32: grpc.tradeapi.v1.marketdata.Quote.option:type_name -> grpc.tradeapi.v1.marketdata.Quote.Option
+	26, // 33: grpc.tradeapi.v1.marketdata.OrderBook.rows:type_name -> grpc.tradeapi.v1.marketdata.OrderBook.Row
+	29, // 34: grpc.tradeapi.v1.marketdata.Trade.timestamp:type_name -> google.protobuf.Timestamp
+	30, // 35: grpc.tradeapi.v1.marketdata.Trade.price:type_name -> google.type.Decimal
+	30, // 36: grpc.tradeapi.v1.marketdata.Trade.size:type_name -> google.type.Decimal
+	31, // 37: grpc.tradeapi.v1.marketdata.Trade.side:type_name -> grpc.tradeapi.v1.Side
+	30, // 38: grpc.tradeapi.v1.marketdata.Trade.open_interest:type_name -> google.type.Decimal
+	27, // 39: grpc.tradeapi.v1.marketdata.StreamOrderBook.rows:type_name -> grpc.tradeapi.v1.marketdata.StreamOrderBook.Row
+	20, // 40: grpc.tradeapi.v1.marketdata.SubscribeLatestTradesResponse.trades:type_name -> grpc.tradeapi.v1.marketdata.Trade
+	30, // 41: grpc.tradeapi.v1.marketdata.Quote.Option.open_interest:type_name -> google.type.Decimal
+	30, // 42: grpc.tradeapi.v1.marketdata.Quote.Option.implied_volatility:type_name -> google.type.Decimal
+	30, // 43: grpc.tradeapi.v1.marketdata.Quote.Option.theoretical_price:type_name -> google.type.Decimal
+	30, // 44: grpc.tradeapi.v1.marketdata.Quote.Option.delta:type_name -> google.type.Decimal
+	30, // 45: grpc.tradeapi.v1.marketdata.Quote.Option.gamma:type_name -> google.type.Decimal
+	30, // 46: grpc.tradeapi.v1.marketdata.Quote.Option.theta:type_name -> google.type.Decimal
+	30, // 47: grpc.tradeapi.v1.marketdata.Quote.Option.vega:type_name -> google.type.Decimal
+	30, // 48: grpc.tradeapi.v1.marketdata.Quote.Option.rho:type_name -> google.type.Decimal
+	30, // 49: grpc.tradeapi.v1.marketdata.OrderBook.Row.price:type_name -> google.type.Decimal
+	30, // 50: grpc.tradeapi.v1.marketdata.OrderBook.Row.sell_size:type_name -> google.type.Decimal
+	30, // 51: grpc.tradeapi.v1.marketdata.OrderBook.Row.buy_size:type_name -> google.type.Decimal
+	1,  // 52: grpc.tradeapi.v1.marketdata.OrderBook.Row.action:type_name -> grpc.tradeapi.v1.marketdata.OrderBook.Row.Action
+	29, // 53: grpc.tradeapi.v1.marketdata.OrderBook.Row.timestamp:type_name -> google.protobuf.Timestamp
+	30, // 54: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.price:type_name -> google.type.Decimal
+	30, // 55: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.sell_size:type_name -> google.type.Decimal
+	30, // 56: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.buy_size:type_name -> google.type.Decimal
+	2,  // 57: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.action:type_name -> grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.Action
+	29, // 58: grpc.tradeapi.v1.marketdata.StreamOrderBook.Row.timestamp:type_name -> google.protobuf.Timestamp
+	3,  // 59: grpc.tradeapi.v1.marketdata.MarketDataService.Bars:input_type -> grpc.tradeapi.v1.marketdata.BarsRequest
+	5,  // 60: grpc.tradeapi.v1.marketdata.MarketDataService.LastQuote:input_type -> grpc.tradeapi.v1.marketdata.QuoteRequest
+	7,  // 61: grpc.tradeapi.v1.marketdata.MarketDataService.OrderBook:input_type -> grpc.tradeapi.v1.marketdata.OrderBookRequest
+	9,  // 62: grpc.tradeapi.v1.marketdata.MarketDataService.LatestTrades:input_type -> grpc.tradeapi.v1.marketdata.LatestTradesRequest
+	11, // 63: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeQuote:input_type -> grpc.tradeapi.v1.marketdata.SubscribeQuoteRequest
+	13, // 64: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeOrderBook:input_type -> grpc.tradeapi.v1.marketdata.SubscribeOrderBookRequest
+	23, // 65: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeLatestTrades:input_type -> grpc.tradeapi.v1.marketdata.SubscribeLatestTradesRequest
+	15, // 66: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeBars:input_type -> grpc.tradeapi.v1.marketdata.SubscribeBarsRequest
+	4,  // 67: grpc.tradeapi.v1.marketdata.MarketDataService.Bars:output_type -> grpc.tradeapi.v1.marketdata.BarsResponse
+	6,  // 68: grpc.tradeapi.v1.marketdata.MarketDataService.LastQuote:output_type -> grpc.tradeapi.v1.marketdata.QuoteResponse
+	8,  // 69: grpc.tradeapi.v1.marketdata.MarketDataService.OrderBook:output_type -> grpc.tradeapi.v1.marketdata.OrderBookResponse
+	10, // 70: grpc.tradeapi.v1.marketdata.MarketDataService.LatestTrades:output_type -> grpc.tradeapi.v1.marketdata.LatestTradesResponse
+	12, // 71: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeQuote:output_type -> grpc.tradeapi.v1.marketdata.SubscribeQuoteResponse
+	14, // 72: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeOrderBook:output_type -> grpc.tradeapi.v1.marketdata.SubscribeOrderBookResponse
+	24, // 73: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeLatestTrades:output_type -> grpc.tradeapi.v1.marketdata.SubscribeLatestTradesResponse
+	16, // 74: grpc.tradeapi.v1.marketdata.MarketDataService.SubscribeBars:output_type -> grpc.tradeapi.v1.marketdata.SubscribeBarsResponse
+	67, // [67:75] is the sub-list for method output_type
+	59, // [59:67] is the sub-list for method input_type
+	59, // [59:59] is the sub-list for extension type_name
+	59, // [59:59] is the sub-list for extension extendee
+	0,  // [0:59] is the sub-list for field type_name
 }
 
 func init() { file_grpc_tradeapi_v1_marketdata_marketdata_service_proto_init() }

@@ -623,9 +623,17 @@ type GetAssetResponse struct {
 	// Кол-во штук в лоте
 	LotSize *decimal.Decimal `protobuf:"bytes,9,opt,name=lot_size,json=lotSize,proto3" json:"lot_size,omitempty"`
 	// Дата экспирации фьючерса
+	//
+	// Deprecated: Marked as deprecated in grpc/tradeapi/v1/assets/assets_service.proto.
 	ExpirationDate *date.Date `protobuf:"bytes,12,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
 	// Валюта котировки, может не совпадать с валютой режима торгов инструмента
 	QuoteCurrency string `protobuf:"bytes,13,opt,name=quote_currency,json=quoteCurrency,proto3" json:"quote_currency,omitempty"`
+	// Types that are valid to be assigned to AssetDetails:
+	//
+	//	*GetAssetResponse_FutureDetails_
+	//	*GetAssetResponse_OptionDetails_
+	//	*GetAssetResponse_BondDetails_
+	AssetDetails  isGetAssetResponse_AssetDetails `protobuf_oneof:"asset_details"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -730,6 +738,7 @@ func (x *GetAssetResponse) GetLotSize() *decimal.Decimal {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in grpc/tradeapi/v1/assets/assets_service.proto.
 func (x *GetAssetResponse) GetExpirationDate() *date.Date {
 	if x != nil {
 		return x.ExpirationDate
@@ -743,6 +752,65 @@ func (x *GetAssetResponse) GetQuoteCurrency() string {
 	}
 	return ""
 }
+
+func (x *GetAssetResponse) GetAssetDetails() isGetAssetResponse_AssetDetails {
+	if x != nil {
+		return x.AssetDetails
+	}
+	return nil
+}
+
+func (x *GetAssetResponse) GetFutureDetails() *GetAssetResponse_FutureDetails {
+	if x != nil {
+		if x, ok := x.AssetDetails.(*GetAssetResponse_FutureDetails_); ok {
+			return x.FutureDetails
+		}
+	}
+	return nil
+}
+
+func (x *GetAssetResponse) GetOptionDetails() *GetAssetResponse_OptionDetails {
+	if x != nil {
+		if x, ok := x.AssetDetails.(*GetAssetResponse_OptionDetails_); ok {
+			return x.OptionDetails
+		}
+	}
+	return nil
+}
+
+func (x *GetAssetResponse) GetBondDetails() *GetAssetResponse_BondDetails {
+	if x != nil {
+		if x, ok := x.AssetDetails.(*GetAssetResponse_BondDetails_); ok {
+			return x.BondDetails
+		}
+	}
+	return nil
+}
+
+type isGetAssetResponse_AssetDetails interface {
+	isGetAssetResponse_AssetDetails()
+}
+
+type GetAssetResponse_FutureDetails_ struct {
+	// Специфичные параметры для инструмента типа "Фьючерс"
+	FutureDetails *GetAssetResponse_FutureDetails `protobuf:"bytes,14,opt,name=future_details,json=futureDetails,proto3,oneof"`
+}
+
+type GetAssetResponse_OptionDetails_ struct {
+	// Специфичные параметры для инструмента типа "Опцион"
+	OptionDetails *GetAssetResponse_OptionDetails `protobuf:"bytes,15,opt,name=option_details,json=optionDetails,proto3,oneof"`
+}
+
+type GetAssetResponse_BondDetails_ struct {
+	// Специфичные параметры для инструмента типа "Облигация"
+	BondDetails *GetAssetResponse_BondDetails `protobuf:"bytes,16,opt,name=bond_details,json=bondDetails,proto3,oneof"`
+}
+
+func (*GetAssetResponse_FutureDetails_) isGetAssetResponse_AssetDetails() {}
+
+func (*GetAssetResponse_OptionDetails_) isGetAssetResponse_AssetDetails() {}
+
+func (*GetAssetResponse_BondDetails_) isGetAssetResponse_AssetDetails() {}
 
 // Запрос торговых параметров инструмента
 type GetAssetParamsRequest struct {
@@ -1662,6 +1730,376 @@ func (x *Shortable) GetHaltedDays() int32 {
 	return 0
 }
 
+// Запрос на получение состава индекса
+type GetConstituentsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символьный код индекса (например, "SPX@_SP", "NDX@_SCI")
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Курсор для пагинации. Указывает sec_id инструмента, с которого должен начинаться список.
+	// Для первого запроса оставьте поле пустым (значение 0).
+	// Для последующих запросов используйте значение next_cursor из предыдущего ответа.
+	Cursor        int64 `protobuf:"varint,2,opt,name=cursor,proto3" json:"cursor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetConstituentsRequest) Reset() {
+	*x = GetConstituentsRequest{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetConstituentsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetConstituentsRequest) ProtoMessage() {}
+
+func (x *GetConstituentsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetConstituentsRequest.ProtoReflect.Descriptor instead.
+func (*GetConstituentsRequest) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *GetConstituentsRequest) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *GetConstituentsRequest) GetCursor() int64 {
+	if x != nil {
+		return x.Cursor
+	}
+	return 0
+}
+
+// Результат запроса состава индекса
+type GetConstituentsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Список компонентов (ценных бумаг), входящих в базу расчета запрошенного индекса
+	Constituents []*Constituents `protobuf:"bytes,1,rep,name=constituents,proto3" json:"constituents,omitempty"`
+	// Курсор для получения следующей страницы. Содержит sec_id последнего инструмента в текущем списке.
+	// Передайте это значение в поле cursor следующего запроса, чтобы получить следующую часть данных.
+	// Если значение 0 или отсутствует — это последняя страница
+	NextCursor    int64 `protobuf:"varint,2,opt,name=next_cursor,json=nextCursor,proto3" json:"next_cursor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetConstituentsResponse) Reset() {
+	*x = GetConstituentsResponse{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetConstituentsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetConstituentsResponse) ProtoMessage() {}
+
+func (x *GetConstituentsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetConstituentsResponse.ProtoReflect.Descriptor instead.
+func (*GetConstituentsResponse) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *GetConstituentsResponse) GetConstituents() []*Constituents {
+	if x != nil {
+		return x.Constituents
+	}
+	return nil
+}
+
+func (x *GetConstituentsResponse) GetNextCursor() int64 {
+	if x != nil {
+		return x.NextCursor
+	}
+	return 0
+}
+
+// Информация о компоненте (ценной бумаге), входящем в индекс
+type Constituents struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символьный код инструмента
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Полное наименование компании-эмитента
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// Глобальный сектор экономики, к которому относится компания (например, "Technology", "Healthcare")
+	Sector string `protobuf:"bytes,3,opt,name=sector,proto3" json:"sector,omitempty"`
+	// Отрасль (подотрасль) деятельности компании (например, "Software - Application")
+	SubSector string `protobuf:"bytes,4,opt,name=sub_sector,json=subSector,proto3" json:"sub_sector,omitempty"`
+	// Уникальный идентификатор компании в базе данных SEC США (Central Index Key)
+	Cik           string `protobuf:"bytes,5,opt,name=cik,proto3" json:"cik,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Constituents) Reset() {
+	*x = Constituents{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Constituents) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Constituents) ProtoMessage() {}
+
+func (x *Constituents) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Constituents.ProtoReflect.Descriptor instead.
+func (*Constituents) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *Constituents) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *Constituents) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Constituents) GetSector() string {
+	if x != nil {
+		return x.Sector
+	}
+	return ""
+}
+
+func (x *Constituents) GetSubSector() string {
+	if x != nil {
+		return x.SubSector
+	}
+	return ""
+}
+
+func (x *Constituents) GetCik() string {
+	if x != nil {
+		return x.Cik
+	}
+	return ""
+}
+
+// Специфичные параметры для инструмента типа "Фьючерс"
+type GetAssetResponse_FutureDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Дата и время экспирации (исполнения) фьючерсного контракта.
+	ExpirationDate *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
+	// Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте.
+	ContractSize  *decimal.Decimal `protobuf:"bytes,2,opt,name=contract_size,json=contractSize,proto3" json:"contract_size,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAssetResponse_FutureDetails) Reset() {
+	*x = GetAssetResponse_FutureDetails{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAssetResponse_FutureDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAssetResponse_FutureDetails) ProtoMessage() {}
+
+func (x *GetAssetResponse_FutureDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAssetResponse_FutureDetails.ProtoReflect.Descriptor instead.
+func (*GetAssetResponse_FutureDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{7, 0}
+}
+
+func (x *GetAssetResponse_FutureDetails) GetExpirationDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpirationDate
+	}
+	return nil
+}
+
+func (x *GetAssetResponse_FutureDetails) GetContractSize() *decimal.Decimal {
+	if x != nil {
+		return x.ContractSize
+	}
+	return nil
+}
+
+// Специфичные параметры для инструмента типа "Опцион"
+type GetAssetResponse_OptionDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Дата и время экспирации (исполнения) опционного контракта.
+	ExpirationDate *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=expiration_date,json=expirationDate,proto3" json:"expiration_date,omitempty"`
+	// Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте.
+	ContractSize *decimal.Decimal `protobuf:"bytes,2,opt,name=contract_size,json=contractSize,proto3" json:"contract_size,omitempty"`
+	// Цена исполнения (страйк) опциона.
+	Strike        *decimal.Decimal `protobuf:"bytes,3,opt,name=strike,proto3" json:"strike,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAssetResponse_OptionDetails) Reset() {
+	*x = GetAssetResponse_OptionDetails{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAssetResponse_OptionDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAssetResponse_OptionDetails) ProtoMessage() {}
+
+func (x *GetAssetResponse_OptionDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAssetResponse_OptionDetails.ProtoReflect.Descriptor instead.
+func (*GetAssetResponse_OptionDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{7, 1}
+}
+
+func (x *GetAssetResponse_OptionDetails) GetExpirationDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpirationDate
+	}
+	return nil
+}
+
+func (x *GetAssetResponse_OptionDetails) GetContractSize() *decimal.Decimal {
+	if x != nil {
+		return x.ContractSize
+	}
+	return nil
+}
+
+func (x *GetAssetResponse_OptionDetails) GetStrike() *decimal.Decimal {
+	if x != nil {
+		return x.Strike
+	}
+	return nil
+}
+
+// Специфичные параметры для инструмента типа "Облигация"
+type GetAssetResponse_BondDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Текущая номинальная стоимость одной облигации.
+	BondFaceValue *decimal.Decimal `protobuf:"bytes,1,opt,name=bond_face_value,json=bondFaceValue,proto3" json:"bond_face_value,omitempty"`
+	// Символьный код валюты номинала облигации (например, RUB, USD).
+	Currency      string `protobuf:"bytes,2,opt,name=currency,proto3" json:"currency,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetAssetResponse_BondDetails) Reset() {
+	*x = GetAssetResponse_BondDetails{}
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetAssetResponse_BondDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetAssetResponse_BondDetails) ProtoMessage() {}
+
+func (x *GetAssetResponse_BondDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetAssetResponse_BondDetails.ProtoReflect.Descriptor instead.
+func (*GetAssetResponse_BondDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP(), []int{7, 2}
+}
+
+func (x *GetAssetResponse_BondDetails) GetBondFaceValue() *decimal.Decimal {
+	if x != nil {
+		return x.BondFaceValue
+	}
+	return nil
+}
+
+func (x *GetAssetResponse_BondDetails) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
 // Сессии
 type ScheduleResponse_Sessions struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1675,7 +2113,7 @@ type ScheduleResponse_Sessions struct {
 
 func (x *ScheduleResponse_Sessions) Reset() {
 	*x = ScheduleResponse_Sessions{}
-	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[21]
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1687,7 +2125,7 @@ func (x *ScheduleResponse_Sessions) String() string {
 func (*ScheduleResponse_Sessions) ProtoMessage() {}
 
 func (x *ScheduleResponse_Sessions) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[21]
+	mi := &file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1740,7 +2178,7 @@ const file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc = "" +
 	"\x0fGetAssetRequest\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x1d\n" +
 	"\n" +
-	"account_id\x18\x02 \x01(\tR\taccountId\"\xe9\x02\n" +
+	"account_id\x18\x02 \x01(\tR\taccountId\"\xd9\b\n" +
 	"\x10GetAssetResponse\x12\x14\n" +
 	"\x05board\x18\x01 \x01(\tR\x05board\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\x12\x16\n" +
@@ -1752,9 +2190,23 @@ const file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc = "" +
 	"\bdecimals\x18\n" +
 	" \x01(\x05R\bdecimals\x12\x19\n" +
 	"\bmin_step\x18\v \x01(\x03R\aminStep\x12/\n" +
-	"\blot_size\x18\t \x01(\v2\x14.google.type.DecimalR\alotSize\x12:\n" +
-	"\x0fexpiration_date\x18\f \x01(\v2\x11.google.type.DateR\x0eexpirationDate\x12%\n" +
-	"\x0equote_currency\x18\r \x01(\tR\rquoteCurrency\"N\n" +
+	"\blot_size\x18\t \x01(\v2\x14.google.type.DecimalR\alotSize\x12>\n" +
+	"\x0fexpiration_date\x18\f \x01(\v2\x11.google.type.DateB\x02\x18\x01R\x0eexpirationDate\x12%\n" +
+	"\x0equote_currency\x18\r \x01(\tR\rquoteCurrency\x12`\n" +
+	"\x0efuture_details\x18\x0e \x01(\v27.grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetailsH\x00R\rfutureDetails\x12`\n" +
+	"\x0eoption_details\x18\x0f \x01(\v27.grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetailsH\x00R\roptionDetails\x12Z\n" +
+	"\fbond_details\x18\x10 \x01(\v25.grpc.tradeapi.v1.assets.GetAssetResponse.BondDetailsH\x00R\vbondDetails\x1a\x8f\x01\n" +
+	"\rFutureDetails\x12C\n" +
+	"\x0fexpiration_date\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x0eexpirationDate\x129\n" +
+	"\rcontract_size\x18\x02 \x01(\v2\x14.google.type.DecimalR\fcontractSize\x1a\xbd\x01\n" +
+	"\rOptionDetails\x12C\n" +
+	"\x0fexpiration_date\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x0eexpirationDate\x129\n" +
+	"\rcontract_size\x18\x02 \x01(\v2\x14.google.type.DecimalR\fcontractSize\x12,\n" +
+	"\x06strike\x18\x03 \x01(\v2\x14.google.type.DecimalR\x06strike\x1ag\n" +
+	"\vBondDetails\x12<\n" +
+	"\x0fbond_face_value\x18\x01 \x01(\v2\x14.google.type.DecimalR\rbondFaceValue\x12\x1a\n" +
+	"\bcurrency\x18\x02 \x01(\tR\bcurrencyB\x0f\n" +
+	"\rasset_details\"N\n" +
 	"\x15GetAssetParamsRequest\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x1d\n" +
 	"\n" +
@@ -1842,12 +2294,26 @@ const file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc = "" +
 	"\tAVAILABLE\x10\x01\x12\a\n" +
 	"\x03HTB\x10\x02\x12\x18\n" +
 	"\x14ACCOUNT_NOT_APPROVED\x10\x03\x12\x16\n" +
-	"\x12AVAILABLE_STRATEGY\x10\x04*A\n" +
+	"\x12AVAILABLE_STRATEGY\x10\x04\"H\n" +
+	"\x16GetConstituentsRequest\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x16\n" +
+	"\x06cursor\x18\x02 \x01(\x03R\x06cursor\"\x85\x01\n" +
+	"\x17GetConstituentsResponse\x12I\n" +
+	"\fconstituents\x18\x01 \x03(\v2%.grpc.tradeapi.v1.assets.ConstituentsR\fconstituents\x12\x1f\n" +
+	"\vnext_cursor\x18\x02 \x01(\x03R\n" +
+	"nextCursor\"\x83\x01\n" +
+	"\fConstituents\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
+	"\x06sector\x18\x03 \x01(\tR\x06sector\x12\x1d\n" +
+	"\n" +
+	"sub_sector\x18\x04 \x01(\tR\tsubSector\x12\x10\n" +
+	"\x03cik\x18\x05 \x01(\tR\x03cik*A\n" +
 	"\tPriceType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\f\n" +
 	"\bPOSITIVE\x10\x01\x12\x10\n" +
 	"\fNON_NEGATIVE\x10\x02\x12\a\n" +
-	"\x03ANY\x10\x032\x9f\x10\n" +
+	"\x03ANY\x10\x032\xd8\x11\n" +
 	"\rAssetsService\x12\x91\x01\n" +
 	"\tExchanges\x12).grpc.tradeapi.v1.assets.ExchangesRequest\x1a*.grpc.tradeapi.v1.assets.ExchangesResponse\"-\x92A\x15b\x13\n" +
 	"\x11\n" +
@@ -1881,7 +2347,10 @@ const file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc = "" +
 	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x1e\x12\x1c/v1/assets/{symbol}/schedule\x12\x88\x01\n" +
 	"\x05Clock\x12%.grpc.tradeapi.v1.assets.ClockRequest\x1a&.grpc.tradeapi.v1.assets.ClockResponse\"0\x92A\x15b\x13\n" +
 	"\x11\n" +
-	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/assets/clockB\xb5\x06\x92A\xef\x05\x12?\n" +
+	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/assets/clock\x12\xb6\x01\n" +
+	"\x0fGetConstituents\x12/.grpc.tradeapi.v1.assets.GetConstituentsRequest\x1a0.grpc.tradeapi.v1.assets.GetConstituentsResponse\"@\x92A\x15b\x13\n" +
+	"\x11\n" +
+	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\"\x12 /v1/assets/{symbol}/constituentsB\xb5\x06\x92A\xef\x05\x12?\n" +
 	"\x0fFinam Trade-API\x12,API для торговых операций*\x02\x01\x02Ri\n" +
 	"\x03401\x12b\n" +
 	"`Срок действия токена истек или токен недействителенR/\n" +
@@ -1913,93 +2382,111 @@ func file_grpc_tradeapi_v1_assets_assets_service_proto_rawDescGZIP() []byte {
 }
 
 var file_grpc_tradeapi_v1_assets_assets_service_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_grpc_tradeapi_v1_assets_assets_service_proto_goTypes = []any{
-	(PriceType)(0),                    // 0: grpc.tradeapi.v1.assets.PriceType
-	(Option_Type)(0),                  // 1: grpc.tradeapi.v1.assets.Option.Type
-	(Longable_Status)(0),              // 2: grpc.tradeapi.v1.assets.Longable.Status
-	(Shortable_Status)(0),             // 3: grpc.tradeapi.v1.assets.Shortable.Status
-	(*ExchangesRequest)(nil),          // 4: grpc.tradeapi.v1.assets.ExchangesRequest
-	(*ExchangesResponse)(nil),         // 5: grpc.tradeapi.v1.assets.ExchangesResponse
-	(*AssetsRequest)(nil),             // 6: grpc.tradeapi.v1.assets.AssetsRequest
-	(*AssetsResponse)(nil),            // 7: grpc.tradeapi.v1.assets.AssetsResponse
-	(*AllAssetsRequest)(nil),          // 8: grpc.tradeapi.v1.assets.AllAssetsRequest
-	(*AllAssetsResponse)(nil),         // 9: grpc.tradeapi.v1.assets.AllAssetsResponse
-	(*GetAssetRequest)(nil),           // 10: grpc.tradeapi.v1.assets.GetAssetRequest
-	(*GetAssetResponse)(nil),          // 11: grpc.tradeapi.v1.assets.GetAssetResponse
-	(*GetAssetParamsRequest)(nil),     // 12: grpc.tradeapi.v1.assets.GetAssetParamsRequest
-	(*GetAssetParamsResponse)(nil),    // 13: grpc.tradeapi.v1.assets.GetAssetParamsResponse
-	(*OptionsChainRequest)(nil),       // 14: grpc.tradeapi.v1.assets.OptionsChainRequest
-	(*OptionsChainResponse)(nil),      // 15: grpc.tradeapi.v1.assets.OptionsChainResponse
-	(*ScheduleRequest)(nil),           // 16: grpc.tradeapi.v1.assets.ScheduleRequest
-	(*ScheduleResponse)(nil),          // 17: grpc.tradeapi.v1.assets.ScheduleResponse
-	(*ClockRequest)(nil),              // 18: grpc.tradeapi.v1.assets.ClockRequest
-	(*ClockResponse)(nil),             // 19: grpc.tradeapi.v1.assets.ClockResponse
-	(*Exchange)(nil),                  // 20: grpc.tradeapi.v1.assets.Exchange
-	(*Asset)(nil),                     // 21: grpc.tradeapi.v1.assets.Asset
-	(*Option)(nil),                    // 22: grpc.tradeapi.v1.assets.Option
-	(*Longable)(nil),                  // 23: grpc.tradeapi.v1.assets.Longable
-	(*Shortable)(nil),                 // 24: grpc.tradeapi.v1.assets.Shortable
-	(*ScheduleResponse_Sessions)(nil), // 25: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions
-	(*decimal.Decimal)(nil),           // 26: google.type.Decimal
-	(*date.Date)(nil),                 // 27: google.type.Date
-	(*money.Money)(nil),               // 28: google.type.Money
-	(*wrapperspb.BoolValue)(nil),      // 29: google.protobuf.BoolValue
-	(*timestamppb.Timestamp)(nil),     // 30: google.protobuf.Timestamp
-	(*interval.Interval)(nil),         // 31: google.type.Interval
+	(PriceType)(0),                         // 0: grpc.tradeapi.v1.assets.PriceType
+	(Option_Type)(0),                       // 1: grpc.tradeapi.v1.assets.Option.Type
+	(Longable_Status)(0),                   // 2: grpc.tradeapi.v1.assets.Longable.Status
+	(Shortable_Status)(0),                  // 3: grpc.tradeapi.v1.assets.Shortable.Status
+	(*ExchangesRequest)(nil),               // 4: grpc.tradeapi.v1.assets.ExchangesRequest
+	(*ExchangesResponse)(nil),              // 5: grpc.tradeapi.v1.assets.ExchangesResponse
+	(*AssetsRequest)(nil),                  // 6: grpc.tradeapi.v1.assets.AssetsRequest
+	(*AssetsResponse)(nil),                 // 7: grpc.tradeapi.v1.assets.AssetsResponse
+	(*AllAssetsRequest)(nil),               // 8: grpc.tradeapi.v1.assets.AllAssetsRequest
+	(*AllAssetsResponse)(nil),              // 9: grpc.tradeapi.v1.assets.AllAssetsResponse
+	(*GetAssetRequest)(nil),                // 10: grpc.tradeapi.v1.assets.GetAssetRequest
+	(*GetAssetResponse)(nil),               // 11: grpc.tradeapi.v1.assets.GetAssetResponse
+	(*GetAssetParamsRequest)(nil),          // 12: grpc.tradeapi.v1.assets.GetAssetParamsRequest
+	(*GetAssetParamsResponse)(nil),         // 13: grpc.tradeapi.v1.assets.GetAssetParamsResponse
+	(*OptionsChainRequest)(nil),            // 14: grpc.tradeapi.v1.assets.OptionsChainRequest
+	(*OptionsChainResponse)(nil),           // 15: grpc.tradeapi.v1.assets.OptionsChainResponse
+	(*ScheduleRequest)(nil),                // 16: grpc.tradeapi.v1.assets.ScheduleRequest
+	(*ScheduleResponse)(nil),               // 17: grpc.tradeapi.v1.assets.ScheduleResponse
+	(*ClockRequest)(nil),                   // 18: grpc.tradeapi.v1.assets.ClockRequest
+	(*ClockResponse)(nil),                  // 19: grpc.tradeapi.v1.assets.ClockResponse
+	(*Exchange)(nil),                       // 20: grpc.tradeapi.v1.assets.Exchange
+	(*Asset)(nil),                          // 21: grpc.tradeapi.v1.assets.Asset
+	(*Option)(nil),                         // 22: grpc.tradeapi.v1.assets.Option
+	(*Longable)(nil),                       // 23: grpc.tradeapi.v1.assets.Longable
+	(*Shortable)(nil),                      // 24: grpc.tradeapi.v1.assets.Shortable
+	(*GetConstituentsRequest)(nil),         // 25: grpc.tradeapi.v1.assets.GetConstituentsRequest
+	(*GetConstituentsResponse)(nil),        // 26: grpc.tradeapi.v1.assets.GetConstituentsResponse
+	(*Constituents)(nil),                   // 27: grpc.tradeapi.v1.assets.Constituents
+	(*GetAssetResponse_FutureDetails)(nil), // 28: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails
+	(*GetAssetResponse_OptionDetails)(nil), // 29: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails
+	(*GetAssetResponse_BondDetails)(nil),   // 30: grpc.tradeapi.v1.assets.GetAssetResponse.BondDetails
+	(*ScheduleResponse_Sessions)(nil),      // 31: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions
+	(*decimal.Decimal)(nil),                // 32: google.type.Decimal
+	(*date.Date)(nil),                      // 33: google.type.Date
+	(*money.Money)(nil),                    // 34: google.type.Money
+	(*wrapperspb.BoolValue)(nil),           // 35: google.protobuf.BoolValue
+	(*timestamppb.Timestamp)(nil),          // 36: google.protobuf.Timestamp
+	(*interval.Interval)(nil),              // 37: google.type.Interval
 }
 var file_grpc_tradeapi_v1_assets_assets_service_proto_depIdxs = []int32{
 	20, // 0: grpc.tradeapi.v1.assets.ExchangesResponse.exchanges:type_name -> grpc.tradeapi.v1.assets.Exchange
 	21, // 1: grpc.tradeapi.v1.assets.AssetsResponse.assets:type_name -> grpc.tradeapi.v1.assets.Asset
 	21, // 2: grpc.tradeapi.v1.assets.AllAssetsResponse.assets:type_name -> grpc.tradeapi.v1.assets.Asset
-	26, // 3: grpc.tradeapi.v1.assets.GetAssetResponse.lot_size:type_name -> google.type.Decimal
-	27, // 4: grpc.tradeapi.v1.assets.GetAssetResponse.expiration_date:type_name -> google.type.Date
-	23, // 5: grpc.tradeapi.v1.assets.GetAssetParamsResponse.longable:type_name -> grpc.tradeapi.v1.assets.Longable
-	24, // 6: grpc.tradeapi.v1.assets.GetAssetParamsResponse.shortable:type_name -> grpc.tradeapi.v1.assets.Shortable
-	26, // 7: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_risk_rate:type_name -> google.type.Decimal
-	28, // 8: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_collateral:type_name -> google.type.Money
-	26, // 9: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_risk_rate:type_name -> google.type.Decimal
-	28, // 10: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_collateral:type_name -> google.type.Money
-	28, // 11: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_initial_margin:type_name -> google.type.Money
-	28, // 12: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_initial_margin:type_name -> google.type.Money
-	29, // 13: grpc.tradeapi.v1.assets.GetAssetParamsResponse.is_tradable:type_name -> google.protobuf.BoolValue
-	0,  // 14: grpc.tradeapi.v1.assets.GetAssetParamsResponse.price_type:type_name -> grpc.tradeapi.v1.assets.PriceType
-	27, // 15: grpc.tradeapi.v1.assets.OptionsChainRequest.expiration_date:type_name -> google.type.Date
-	22, // 16: grpc.tradeapi.v1.assets.OptionsChainResponse.options:type_name -> grpc.tradeapi.v1.assets.Option
-	25, // 17: grpc.tradeapi.v1.assets.ScheduleResponse.sessions:type_name -> grpc.tradeapi.v1.assets.ScheduleResponse.Sessions
-	30, // 18: grpc.tradeapi.v1.assets.ClockResponse.timestamp:type_name -> google.protobuf.Timestamp
-	1,  // 19: grpc.tradeapi.v1.assets.Option.type:type_name -> grpc.tradeapi.v1.assets.Option.Type
-	26, // 20: grpc.tradeapi.v1.assets.Option.contract_size:type_name -> google.type.Decimal
-	27, // 21: grpc.tradeapi.v1.assets.Option.trade_first_day:type_name -> google.type.Date
-	27, // 22: grpc.tradeapi.v1.assets.Option.trade_last_day:type_name -> google.type.Date
-	26, // 23: grpc.tradeapi.v1.assets.Option.strike:type_name -> google.type.Decimal
-	26, // 24: grpc.tradeapi.v1.assets.Option.multiplier:type_name -> google.type.Decimal
-	27, // 25: grpc.tradeapi.v1.assets.Option.expiration_first_day:type_name -> google.type.Date
-	27, // 26: grpc.tradeapi.v1.assets.Option.expiration_last_day:type_name -> google.type.Date
-	2,  // 27: grpc.tradeapi.v1.assets.Longable.value:type_name -> grpc.tradeapi.v1.assets.Longable.Status
-	3,  // 28: grpc.tradeapi.v1.assets.Shortable.value:type_name -> grpc.tradeapi.v1.assets.Shortable.Status
-	31, // 29: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions.interval:type_name -> google.type.Interval
-	4,  // 30: grpc.tradeapi.v1.assets.AssetsService.Exchanges:input_type -> grpc.tradeapi.v1.assets.ExchangesRequest
-	6,  // 31: grpc.tradeapi.v1.assets.AssetsService.Assets:input_type -> grpc.tradeapi.v1.assets.AssetsRequest
-	8,  // 32: grpc.tradeapi.v1.assets.AssetsService.AllAssets:input_type -> grpc.tradeapi.v1.assets.AllAssetsRequest
-	10, // 33: grpc.tradeapi.v1.assets.AssetsService.GetAsset:input_type -> grpc.tradeapi.v1.assets.GetAssetRequest
-	12, // 34: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:input_type -> grpc.tradeapi.v1.assets.GetAssetParamsRequest
-	14, // 35: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:input_type -> grpc.tradeapi.v1.assets.OptionsChainRequest
-	16, // 36: grpc.tradeapi.v1.assets.AssetsService.Schedule:input_type -> grpc.tradeapi.v1.assets.ScheduleRequest
-	18, // 37: grpc.tradeapi.v1.assets.AssetsService.Clock:input_type -> grpc.tradeapi.v1.assets.ClockRequest
-	5,  // 38: grpc.tradeapi.v1.assets.AssetsService.Exchanges:output_type -> grpc.tradeapi.v1.assets.ExchangesResponse
-	7,  // 39: grpc.tradeapi.v1.assets.AssetsService.Assets:output_type -> grpc.tradeapi.v1.assets.AssetsResponse
-	9,  // 40: grpc.tradeapi.v1.assets.AssetsService.AllAssets:output_type -> grpc.tradeapi.v1.assets.AllAssetsResponse
-	11, // 41: grpc.tradeapi.v1.assets.AssetsService.GetAsset:output_type -> grpc.tradeapi.v1.assets.GetAssetResponse
-	13, // 42: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:output_type -> grpc.tradeapi.v1.assets.GetAssetParamsResponse
-	15, // 43: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:output_type -> grpc.tradeapi.v1.assets.OptionsChainResponse
-	17, // 44: grpc.tradeapi.v1.assets.AssetsService.Schedule:output_type -> grpc.tradeapi.v1.assets.ScheduleResponse
-	19, // 45: grpc.tradeapi.v1.assets.AssetsService.Clock:output_type -> grpc.tradeapi.v1.assets.ClockResponse
-	38, // [38:46] is the sub-list for method output_type
-	30, // [30:38] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	32, // 3: grpc.tradeapi.v1.assets.GetAssetResponse.lot_size:type_name -> google.type.Decimal
+	33, // 4: grpc.tradeapi.v1.assets.GetAssetResponse.expiration_date:type_name -> google.type.Date
+	28, // 5: grpc.tradeapi.v1.assets.GetAssetResponse.future_details:type_name -> grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails
+	29, // 6: grpc.tradeapi.v1.assets.GetAssetResponse.option_details:type_name -> grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails
+	30, // 7: grpc.tradeapi.v1.assets.GetAssetResponse.bond_details:type_name -> grpc.tradeapi.v1.assets.GetAssetResponse.BondDetails
+	23, // 8: grpc.tradeapi.v1.assets.GetAssetParamsResponse.longable:type_name -> grpc.tradeapi.v1.assets.Longable
+	24, // 9: grpc.tradeapi.v1.assets.GetAssetParamsResponse.shortable:type_name -> grpc.tradeapi.v1.assets.Shortable
+	32, // 10: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_risk_rate:type_name -> google.type.Decimal
+	34, // 11: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_collateral:type_name -> google.type.Money
+	32, // 12: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_risk_rate:type_name -> google.type.Decimal
+	34, // 13: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_collateral:type_name -> google.type.Money
+	34, // 14: grpc.tradeapi.v1.assets.GetAssetParamsResponse.long_initial_margin:type_name -> google.type.Money
+	34, // 15: grpc.tradeapi.v1.assets.GetAssetParamsResponse.short_initial_margin:type_name -> google.type.Money
+	35, // 16: grpc.tradeapi.v1.assets.GetAssetParamsResponse.is_tradable:type_name -> google.protobuf.BoolValue
+	0,  // 17: grpc.tradeapi.v1.assets.GetAssetParamsResponse.price_type:type_name -> grpc.tradeapi.v1.assets.PriceType
+	33, // 18: grpc.tradeapi.v1.assets.OptionsChainRequest.expiration_date:type_name -> google.type.Date
+	22, // 19: grpc.tradeapi.v1.assets.OptionsChainResponse.options:type_name -> grpc.tradeapi.v1.assets.Option
+	31, // 20: grpc.tradeapi.v1.assets.ScheduleResponse.sessions:type_name -> grpc.tradeapi.v1.assets.ScheduleResponse.Sessions
+	36, // 21: grpc.tradeapi.v1.assets.ClockResponse.timestamp:type_name -> google.protobuf.Timestamp
+	1,  // 22: grpc.tradeapi.v1.assets.Option.type:type_name -> grpc.tradeapi.v1.assets.Option.Type
+	32, // 23: grpc.tradeapi.v1.assets.Option.contract_size:type_name -> google.type.Decimal
+	33, // 24: grpc.tradeapi.v1.assets.Option.trade_first_day:type_name -> google.type.Date
+	33, // 25: grpc.tradeapi.v1.assets.Option.trade_last_day:type_name -> google.type.Date
+	32, // 26: grpc.tradeapi.v1.assets.Option.strike:type_name -> google.type.Decimal
+	32, // 27: grpc.tradeapi.v1.assets.Option.multiplier:type_name -> google.type.Decimal
+	33, // 28: grpc.tradeapi.v1.assets.Option.expiration_first_day:type_name -> google.type.Date
+	33, // 29: grpc.tradeapi.v1.assets.Option.expiration_last_day:type_name -> google.type.Date
+	2,  // 30: grpc.tradeapi.v1.assets.Longable.value:type_name -> grpc.tradeapi.v1.assets.Longable.Status
+	3,  // 31: grpc.tradeapi.v1.assets.Shortable.value:type_name -> grpc.tradeapi.v1.assets.Shortable.Status
+	27, // 32: grpc.tradeapi.v1.assets.GetConstituentsResponse.constituents:type_name -> grpc.tradeapi.v1.assets.Constituents
+	36, // 33: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.expiration_date:type_name -> google.protobuf.Timestamp
+	32, // 34: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.contract_size:type_name -> google.type.Decimal
+	36, // 35: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.expiration_date:type_name -> google.protobuf.Timestamp
+	32, // 36: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.contract_size:type_name -> google.type.Decimal
+	32, // 37: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.strike:type_name -> google.type.Decimal
+	32, // 38: grpc.tradeapi.v1.assets.GetAssetResponse.BondDetails.bond_face_value:type_name -> google.type.Decimal
+	37, // 39: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions.interval:type_name -> google.type.Interval
+	4,  // 40: grpc.tradeapi.v1.assets.AssetsService.Exchanges:input_type -> grpc.tradeapi.v1.assets.ExchangesRequest
+	6,  // 41: grpc.tradeapi.v1.assets.AssetsService.Assets:input_type -> grpc.tradeapi.v1.assets.AssetsRequest
+	8,  // 42: grpc.tradeapi.v1.assets.AssetsService.AllAssets:input_type -> grpc.tradeapi.v1.assets.AllAssetsRequest
+	10, // 43: grpc.tradeapi.v1.assets.AssetsService.GetAsset:input_type -> grpc.tradeapi.v1.assets.GetAssetRequest
+	12, // 44: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:input_type -> grpc.tradeapi.v1.assets.GetAssetParamsRequest
+	14, // 45: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:input_type -> grpc.tradeapi.v1.assets.OptionsChainRequest
+	16, // 46: grpc.tradeapi.v1.assets.AssetsService.Schedule:input_type -> grpc.tradeapi.v1.assets.ScheduleRequest
+	18, // 47: grpc.tradeapi.v1.assets.AssetsService.Clock:input_type -> grpc.tradeapi.v1.assets.ClockRequest
+	25, // 48: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:input_type -> grpc.tradeapi.v1.assets.GetConstituentsRequest
+	5,  // 49: grpc.tradeapi.v1.assets.AssetsService.Exchanges:output_type -> grpc.tradeapi.v1.assets.ExchangesResponse
+	7,  // 50: grpc.tradeapi.v1.assets.AssetsService.Assets:output_type -> grpc.tradeapi.v1.assets.AssetsResponse
+	9,  // 51: grpc.tradeapi.v1.assets.AssetsService.AllAssets:output_type -> grpc.tradeapi.v1.assets.AllAssetsResponse
+	11, // 52: grpc.tradeapi.v1.assets.AssetsService.GetAsset:output_type -> grpc.tradeapi.v1.assets.GetAssetResponse
+	13, // 53: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:output_type -> grpc.tradeapi.v1.assets.GetAssetParamsResponse
+	15, // 54: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:output_type -> grpc.tradeapi.v1.assets.OptionsChainResponse
+	17, // 55: grpc.tradeapi.v1.assets.AssetsService.Schedule:output_type -> grpc.tradeapi.v1.assets.ScheduleResponse
+	19, // 56: grpc.tradeapi.v1.assets.AssetsService.Clock:output_type -> grpc.tradeapi.v1.assets.ClockResponse
+	26, // 57: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:output_type -> grpc.tradeapi.v1.assets.GetConstituentsResponse
+	49, // [49:58] is the sub-list for method output_type
+	40, // [40:49] is the sub-list for method input_type
+	40, // [40:40] is the sub-list for extension type_name
+	40, // [40:40] is the sub-list for extension extendee
+	0,  // [0:40] is the sub-list for field type_name
 }
 
 func init() { file_grpc_tradeapi_v1_assets_assets_service_proto_init() }
@@ -2007,13 +2494,18 @@ func file_grpc_tradeapi_v1_assets_assets_service_proto_init() {
 	if File_grpc_tradeapi_v1_assets_assets_service_proto != nil {
 		return
 	}
+	file_grpc_tradeapi_v1_assets_assets_service_proto_msgTypes[7].OneofWrappers = []any{
+		(*GetAssetResponse_FutureDetails_)(nil),
+		(*GetAssetResponse_OptionDetails_)(nil),
+		(*GetAssetResponse_BondDetails_)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc), len(file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   22,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

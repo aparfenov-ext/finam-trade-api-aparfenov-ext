@@ -39,7 +39,7 @@
     "application/json"
   ],
   "paths": {
-    "/v1/accounts/{accountId}": {
+    "/v1/accounts/{account_id}": {
       "get": {
         "summary": "Получение информации по конкретному аккаунту\nПример HTTP запроса:\nGET /v1/accounts/A12345\nAuthorization: \u003ctoken\u003e",
         "operationId": "AccountsService_GetAccount",
@@ -83,7 +83,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -100,7 +100,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/orders": {
+    "/v1/accounts/{account_id}/orders": {
       "get": {
         "summary": "Получение списка заявок для аккаунта\nПример HTTP запроса:\nGET /v1/accounts/A12345/orders\nAuthorization: \u003ctoken\u003e",
         "operationId": "OrdersService_GetOrders",
@@ -144,7 +144,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -208,7 +208,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -233,7 +233,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/orders/{orderId}": {
+    "/v1/accounts/{account_id}/orders/{order_id}": {
       "get": {
         "summary": "Получение информации о конкретном ордере\nПример HTTP запроса:\nGET /v1/accounts/A12345/orders/ORD789012\nAuthorization: \u003ctoken\u003e",
         "operationId": "OrdersService_GetOrder",
@@ -277,14 +277,14 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "orderId",
+            "name": "order_id",
             "description": "Идентификатор заявки",
             "in": "path",
             "required": true,
@@ -347,14 +347,14 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "orderId",
+            "name": "order_id",
             "description": "Идентификатор заявки",
             "in": "path",
             "required": true,
@@ -371,7 +371,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/sltp-orders": {
+    "/v1/accounts/{account_id}/sltp-orders": {
       "post": {
         "summary": "Выставление SL/TP заявки\nПример HTTP запроса:\nPOST /v1/accounts/A12345/sltp-orders\nContent-Type: application/json\nAuthorization: \u003ctoken\u003e",
         "description": "{\n  \"symbol\": \"SBER@MISX\",\n  \"side\": \"SIDE_BUY\",\n  \"quantity_sl\": {\n    \"value\": \"10\"\n  },\n  \"sl_price\": {\n    \"value\": \"270.00\"\n  },\n  \"limit_price\": {\n    \"value\": \"269.50\"\n  },\n  \"quantity_tp\": {\n    \"value\": \"10\"\n  },\n  \"tp_price\": {\n    \"value\": \"295.50\"\n  },\n  \"tp_guard_spread\": {\n    \"value\": \"0.5\"  },\n  \"tp_spread_measure\": \"TP_SPREAD_MEASURE_VALUE\",\n  \"valid_before\": \"VALID_BEFORE_GOOD_TILL_DATE\",\n  \"valid_expiry_time\": \"2026-12-31T23:59:59Z\",\n  \"comment\": \"my SL/TP order\"\n }\n\n Поле account_id берется из URL-пути, остальные поля передаются в теле запроса",
@@ -420,7 +420,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -445,7 +445,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/trades": {
+    "/v1/accounts/{account_id}/trades": {
       "get": {
         "summary": "Получение истории по сделкам аккаунта\nПример HTTP запроса:\nGET /v1/accounts/A12345/trades?limit=50\u0026interval.start_time=2023-01-01T00:00:00Z\u0026interval.end_time=2023-01-31T23:59:59Z\nAuthorization: \u003ctoken\u003e",
         "description": "Параметры:\n- account_id - передается в URL пути\n- limit и interval - передаются как query-параметры",
@@ -494,7 +494,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -509,7 +509,7 @@
             "format": "int32"
           },
           {
-            "name": "interval.startTime",
+            "name": "interval.start_time",
             "description": "Optional. Inclusive start of the interval.\n\nIf specified, a Timestamp matching this interval will have to be the same\nor after the start.",
             "in": "query",
             "required": false,
@@ -517,7 +517,7 @@
             "format": "date-time"
           },
           {
-            "name": "interval.endTime",
+            "name": "interval.end_time",
             "description": "Optional. Exclusive end of the interval.\n\nIf specified, a Timestamp matching this interval will have to be before the\nend.",
             "in": "query",
             "required": false,
@@ -535,7 +535,7 @@
         ]
       }
     },
-    "/v1/accounts/{accountId}/transactions": {
+    "/v1/accounts/{account_id}/transactions": {
       "get": {
         "summary": "Получение списка транзакций аккаунта\nПример HTTP запроса:\nGET /v1/accounts/A12345/transactions?limit=50\u0026interval.start_time=2023-01-01T00:00:00Z\u0026interval.end_time=2023-01-31T23:59:59Z\nAuthorization: \u003ctoken\u003e",
         "description": "Параметры:\n- account_id - передается в URL пути\n- limit и interval - передаются как query-параметры",
@@ -584,7 +584,7 @@
         },
         "parameters": [
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "Идентификатор аккаунта",
             "in": "path",
             "required": true,
@@ -599,7 +599,7 @@
             "format": "int32"
           },
           {
-            "name": "interval.startTime",
+            "name": "interval.start_time",
             "description": "Optional. Inclusive start of the interval.\n\nIf specified, a Timestamp matching this interval will have to be the same\nor after the start.",
             "in": "query",
             "required": false,
@@ -607,7 +607,7 @@
             "format": "date-time"
           },
           {
-            "name": "interval.endTime",
+            "name": "interval.end_time",
             "description": "Optional. Exclusive end of the interval.\n\nIf specified, a Timestamp matching this interval will have to be before the\nend.",
             "in": "query",
             "required": false,
@@ -627,7 +627,7 @@
     },
     "/v1/assets": {
       "get": {
-        "summary": "Получение списка доступных инструментов, их описание\nПример HTTP запроса:\nGET /v1/assets\nAuthorization: \u003ctoken\u003e",
+        "summary": "Получение списка доступных для торговли инструментов, их описание\nПример HTTP запроса:\nGET /v1/assets\nAuthorization: \u003ctoken\u003e",
         "operationId": "AssetsService_Assets",
         "responses": {
           "200": {
@@ -679,7 +679,7 @@
     },
     "/v1/assets/all": {
       "get": {
-        "summary": "Получение списка всех инструментов, их описание\nПример HTTP запроса:\nGET /v1/assets/all?cursor=56658\u0026only_disabled=true\nAuthorization: \u003ctoken\u003e",
+        "summary": "Получение списка всех инструментов, в том числе индикативных и архивных, их описание\nПример HTTP запроса:\nGET /v1/assets/all?cursor=56658\u0026only_disabled=true\nAuthorization: \u003ctoken\u003e",
         "operationId": "AssetsService_AllAssets",
         "responses": {
           "200": {
@@ -729,14 +729,14 @@
             "format": "int64"
           },
           {
-            "name": "onlyActive",
+            "name": "only_active",
             "description": "Фильтрация по статусу инструмента: выбираются только активные(неархивные) инструменты\nПо умолчанию: false.",
             "in": "query",
             "required": false,
             "type": "boolean"
           },
           {
-            "name": "onlyDisabled",
+            "name": "only_disabled",
             "description": "Фильтрация по статусу инструмента: выбираются только неактивные(архивные) инструменты\nПо умолчанию: false.",
             "in": "query",
             "required": false,
@@ -861,11 +861,80 @@
             "type": "string"
           },
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "ID аккаунта для которого будет подбираться информация по инструменту",
             "in": "query",
             "required": false,
             "type": "string"
+          }
+        ],
+        "tags": [
+          "AssetsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/assets/{symbol}/constituents": {
+      "get": {
+        "summary": "Получить состав биржевого индекса по его символу",
+        "operationId": "AssetsService_GetConstituents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/assetsGetConstituentsResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символьный код индекса (например, \"SPX@_SP\", \"NDX@_SCI\")",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "cursor",
+            "description": "Курсор для пагинации. Указывает sec_id инструмента, с которого должен начинаться список.\nДля первого запроса оставьте поле пустым (значение 0).\nДля последующих запросов используйте значение next_cursor из предыдущего ответа.",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
           }
         ],
         "tags": [
@@ -934,7 +1003,7 @@
             "type": "string"
           },
           {
-            "name": "accountId",
+            "name": "account_id",
             "description": "ID аккаунта для которого будут подбираться торговые параметры",
             "in": "query",
             "required": false,
@@ -1016,7 +1085,7 @@
         ]
       }
     },
-    "/v1/assets/{underlyingSymbol}/options": {
+    "/v1/assets/{underlying_symbol}/options": {
       "get": {
         "summary": "Получение цепочки опционов для базового актива\nПример HTTP запроса:\nGET /v1/assets/SBER@MISX/options\nAuthorization: \u003ctoken\u003e",
         "operationId": "AssetsService_OptionsChain",
@@ -1064,7 +1133,7 @@
         },
         "parameters": [
           {
-            "name": "underlyingSymbol",
+            "name": "underlying_symbol",
             "description": "Символ базового актива опциона",
             "in": "path",
             "required": true,
@@ -1078,7 +1147,7 @@
             "type": "string"
           },
           {
-            "name": "expirationDate.year",
+            "name": "expiration_date.year",
             "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
             "in": "query",
             "required": false,
@@ -1086,7 +1155,7 @@
             "format": "int32"
           },
           {
-            "name": "expirationDate.month",
+            "name": "expiration_date.month",
             "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
             "in": "query",
             "required": false,
@@ -1094,7 +1163,7 @@
             "format": "int32"
           },
           {
-            "name": "expirationDate.day",
+            "name": "expiration_date.day",
             "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
             "in": "query",
             "required": false,
@@ -1243,7 +1312,7 @@
             "default": "TIME_FRAME_UNSPECIFIED"
           },
           {
-            "name": "interval.startTime",
+            "name": "interval.start_time",
             "description": "Optional. Inclusive start of the interval.\n\nIf specified, a Timestamp matching this interval will have to be the same\nor after the start.",
             "in": "query",
             "required": false,
@@ -1251,7 +1320,7 @@
             "format": "date-time"
           },
           {
-            "name": "interval.endTime",
+            "name": "interval.end_time",
             "description": "Optional. Exclusive end of the interval.\n\nIf specified, a Timestamp matching this interval will have to be before the\nend.",
             "in": "query",
             "required": false,
@@ -1514,7 +1583,7 @@
         ]
       }
     },
-    "/v1/report/{reportId}/info": {
+    "/v1/report/{report_id}/info": {
       "get": {
         "summary": "Получение информации о результате генерации отчета по счету\nПример HTTP запроса:\nGET /v1/report/01KBMPQ3CEZ4BBCVGBW5JS8S8Y/info\nAuthorization: \u003ctoken\u003e",
         "operationId": "ReportsService_GetAccountReportInfo",
@@ -1558,7 +1627,7 @@
         },
         "parameters": [
           {
-            "name": "reportId",
+            "name": "report_id",
             "description": "Идентификатор отчёта",
             "in": "path",
             "required": true,
@@ -1745,6 +1814,54 @@
     }
   },
   "definitions": {
+    "GetAssetResponseBondDetails": {
+      "type": "object",
+      "properties": {
+        "bond_face_value": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Текущая номинальная стоимость одной облигации."
+        },
+        "currency": {
+          "type": "string",
+          "description": "Символьный код валюты номинала облигации (например, RUB, USD)."
+        }
+      },
+      "title": "Специфичные параметры для инструмента типа \"Облигация\""
+    },
+    "GetAssetResponseFutureDetails": {
+      "type": "object",
+      "properties": {
+        "expiration_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Дата и время экспирации (исполнения) фьючерсного контракта."
+        },
+        "contract_size": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте."
+        }
+      },
+      "title": "Специфичные параметры для инструмента типа \"Фьючерс\""
+    },
+    "GetAssetResponseOptionDetails": {
+      "type": "object",
+      "properties": {
+        "expiration_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Дата и время экспирации (исполнения) опционного контракта."
+        },
+        "contract_size": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Размер контракта (мультипликатор) — количество единиц базового актива в одном контракте."
+        },
+        "strike": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Цена исполнения (страйк) опциона."
+        }
+      },
+      "title": "Специфичные параметры для инструмента типа \"Опцион\""
+    },
     "GetUsageMetricsResponseQuotaUsage": {
       "type": "object",
       "properties": {
@@ -1762,7 +1879,7 @@
           "format": "int64",
           "description": "Сколько осталось доступных единиц в текущем окне."
         },
-        "resetTime": {
+        "reset_time": {
           "type": "string",
           "format": "date-time",
           "description": "Время, когда счетчик квоты будет сброшен (начало нового окна)."
@@ -1814,19 +1931,19 @@
           "$ref": "#/definitions/ordersOrderType",
           "title": "Тип заявки"
         },
-        "timeInForce": {
+        "time_in_force": {
           "$ref": "#/definitions/ordersTimeInForce",
           "title": "Срок действия заявки"
         },
-        "limitPrice": {
+        "limit_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Необходимо для лимитной и стоп лимитной заявки"
         },
-        "stopPrice": {
+        "stop_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Необходимо для стоп рыночной и стоп лимитной заявки"
         },
-        "stopCondition": {
+        "stop_condition": {
           "$ref": "#/definitions/ordersStopCondition",
           "title": "Необходимо для стоп рыночной и стоп лимитной заявки"
         },
@@ -1838,11 +1955,11 @@
           },
           "title": "Необходимо для мульти лег заявки"
         },
-        "clientOrderId": {
+        "client_order_id": {
           "type": "string",
           "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
         },
-        "validBefore": {
+        "valid_before": {
           "$ref": "#/definitions/ordersValidBefore",
           "title": "Срок действия условной заявки. Заполняется для заявок с типом ORDER_TYPE_STOP, ORDER_TYPE_STOP_LIMIT"
         },
@@ -1864,43 +1981,43 @@
           "$ref": "#/definitions/v1Side",
           "title": "Сторона для обеих заявок"
         },
-        "quantitySl": {
+        "quantity_sl": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Количество в шт для SL"
         },
-        "slPrice": {
+        "sl_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Параметр условия цены для SL части"
         },
-        "limitPrice": {
+        "limit_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Если указано, после активации SL будет выставлена лимитная заявка с этой ценой"
         },
-        "quantityTp": {
+        "quantity_tp": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Количество в шт для TP"
         },
-        "tpPrice": {
+        "tp_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Параметр условия цены для TP части"
         },
-        "tpGuardSpread": {
+        "tp_guard_spread": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Если указано, после активации TP будет выставлена лимитная заявка с учетом защитного спрэда"
         },
-        "tpSpreadMeasure": {
+        "tp_spread_measure": {
           "$ref": "#/definitions/ordersTPSpreadMeasure",
           "title": "Единица измерения величины защитного спреда"
         },
-        "clientOrderId": {
+        "client_order_id": {
           "type": "string",
           "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
         },
-        "validBefore": {
+        "valid_before": {
           "$ref": "#/definitions/ordersValidBefore",
           "title": "Срок действия условной заявки. Если не заполнено, то по умолчанию выставляется VALID_BEFORE_GOOD_TILL_CANCEL"
         },
-        "validExpiryTime": {
+        "valid_expiry_time": {
           "type": "string",
           "format": "date-time",
           "title": "Временная метка прекращения действия SL/TP заявки"
@@ -1948,11 +2065,11 @@
     "accountsFORTS": {
       "type": "object",
       "properties": {
-        "availableCash": {
+        "available_cash": {
           "$ref": "#/definitions/typeDecimal",
           "description": "Сумма собственных денежных средств на счете, доступная для торговли. Включает маржинальные средства."
         },
-        "moneyReserved": {
+        "money_reserved": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Минимальная маржа (необходимая сумма обеспечения под открытые позиции)"
         }
@@ -1962,7 +2079,7 @@
     "accountsGetAccountResponse": {
       "type": "object",
       "properties": {
-        "accountId": {
+        "account_id": {
           "type": "string",
           "title": "Идентификатор аккаунта"
         },
@@ -1978,7 +2095,7 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Доступные средства плюс стоимость открытых позиций"
         },
-        "unrealizedProfit": {
+        "unrealized_profit": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Нереализованная прибыль"
         },
@@ -1998,29 +2115,29 @@
           },
           "description": "Сумма собственных денежных средств на счете, доступная для торговли. Не включает маржинальные средства."
         },
-        "portfolioMc": {
+        "portfolio_mc": {
           "$ref": "#/definitions/accountsMC",
           "description": "Общий тип для счетов Московской Биржи. Включает в себя как единые, так и моно счета."
         },
-        "portfolioMct": {
+        "portfolio_mct": {
           "$ref": "#/definitions/accountsMCT",
           "description": "Тип портфеля для счетов на американских рынках."
         },
-        "portfolioForts": {
+        "portfolio_forts": {
           "$ref": "#/definitions/accountsFORTS",
           "description": "Тип портфеля для торговли на срочном рынке Московской Биржи."
         },
-        "openAccountDate": {
+        "open_account_date": {
           "type": "string",
           "format": "date-time",
           "title": "Дата открытия счета"
         },
-        "firstTradeDate": {
+        "first_trade_date": {
           "type": "string",
           "format": "date-time",
           "title": "Дата первой торговой транзакции"
         },
-        "firstNonTradeDate": {
+        "first_non_trade_date": {
           "type": "string",
           "format": "date-time",
           "title": "Дата первой неторговой транзакции"
@@ -2031,15 +2148,15 @@
     "accountsMC": {
       "type": "object",
       "properties": {
-        "availableCash": {
+        "available_cash": {
           "$ref": "#/definitions/typeDecimal",
           "description": "Сумма собственных денежных средств на счете, доступная для торговли. Включает маржинальные средства."
         },
-        "initialMargin": {
+        "initial_margin": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Начальная маржа"
         },
-        "maintenanceMargin": {
+        "maintenance_margin": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Минимальная маржа"
         }
@@ -2061,23 +2178,23 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Количество в шт., значение со знаком определяющее (long-short)"
         },
-        "averagePrice": {
+        "average_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Средняя цена. Не заполняется для FORTS позиций"
         },
-        "currentPrice": {
+        "current_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Текущая цена"
         },
-        "maintenanceMargin": {
+        "maintenance_margin": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Поддерживающее гарантийное обеспечение. Заполняется только для FORTS позиций"
         },
-        "dailyPnl": {
+        "daily_pnl": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Прибыль или убыток за текущий день (PnL). Не заполняется для FORTS позиций"
         },
-        "unrealizedPnl": {
+        "unrealized_pnl": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Суммарная нереализованная прибыль или убыток (PnL) текущей позиции"
         }
@@ -2126,15 +2243,15 @@
           "$ref": "#/definitions/accountsTransactionTrade",
           "title": "Информация о сделке"
         },
-        "transactionCategory": {
+        "transaction_category": {
           "$ref": "#/definitions/TransactionTransactionCategory",
           "description": "Категория транзакции из TransactionCategory."
         },
-        "transactionName": {
+        "transaction_name": {
           "type": "string",
           "title": "Наименование транзакции"
         },
-        "changeQty": {
+        "change_qty": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Изменение в штуках, только для трансфера бумаг (для TransactionCategory = TRANSFER)"
         }
@@ -2152,7 +2269,7 @@
           "$ref": "#/definitions/typeDecimal",
           "description": "Цена сделки за штуку. Цена исполнения/Размер премии по опциону. Это цена заключения, значение берется из сделки."
         },
-        "accruedInterest": {
+        "accrued_interest": {
           "$ref": "#/definitions/typeDecimal",
           "title": "НКД. Заполнено если в сделке есть НКД"
         }
@@ -2184,7 +2301,7 @@
           },
           "title": "Часть списка инструментов"
         },
-        "nextCursor": {
+        "next_cursor": {
           "type": "string",
           "format": "int64",
           "description": "Курсор для получения следующей страницы. Содержит sec_id последнего инструмента в текущем списке.\nПередайте это значение в поле cursor следующего запроса, чтобы получить следующую часть данных.\nЕсли значение 0 или отсутствует — это последняя страница."
@@ -2223,7 +2340,7 @@
           "type": "string",
           "title": "Наименование инструмента"
         },
-        "isArchived": {
+        "is_archived": {
           "type": "boolean",
           "title": "Архивный инструмент или нет"
         }
@@ -2254,6 +2371,32 @@
         }
       },
       "title": "Время на сервере"
+    },
+    "assetsConstituents": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символьный код инструмента"
+        },
+        "name": {
+          "type": "string",
+          "title": "Полное наименование компании-эмитента"
+        },
+        "sector": {
+          "type": "string",
+          "title": "Глобальный сектор экономики, к которому относится компания (например, \"Technology\", \"Healthcare\")"
+        },
+        "sub_sector": {
+          "type": "string",
+          "title": "Отрасль (подотрасль) деятельности компании (например, \"Software - Application\")"
+        },
+        "cik": {
+          "type": "string",
+          "title": "Уникальный идентификатор компании в базе данных SEC США (Central Index Key)"
+        }
+      },
+      "title": "Информация о компоненте (ценной бумаге), входящем в индекс"
     },
     "assetsExchange": {
       "type": "object",
@@ -2290,7 +2433,7 @@
           "type": "string",
           "title": "Символ инструмента"
         },
-        "accountId": {
+        "account_id": {
           "type": "string",
           "title": "ID аккаунта для которого подбираются торговые параметры"
         },
@@ -2306,35 +2449,35 @@
           "$ref": "#/definitions/assetsShortable",
           "title": "Доступны ли операции в Шорт"
         },
-        "longRiskRate": {
+        "long_risk_rate": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Ставка риска для операции в Лонг"
         },
-        "longCollateral": {
+        "long_collateral": {
           "$ref": "#/definitions/typeMoney",
           "title": "Сумма обеспечения для поддержания позиции Лонг"
         },
-        "shortRiskRate": {
+        "short_risk_rate": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Ставка риска для операции в Шорт"
         },
-        "shortCollateral": {
+        "short_collateral": {
           "$ref": "#/definitions/typeMoney",
           "title": "Сумма обеспечения для поддержания позиции Шорт"
         },
-        "longInitialMargin": {
+        "long_initial_margin": {
           "$ref": "#/definitions/typeMoney",
           "title": "Начальные требования, сколько на счету должно быть свободных денежных средств, чтобы открыть лонг позицию, для FORTS счетов равен биржевому ГО"
         },
-        "shortInitialMargin": {
+        "short_initial_margin": {
           "$ref": "#/definitions/typeMoney",
           "title": "Начальные требования, сколько на счету должно быть свободных денежных средств, чтобы открыть шорт позицию, для FORTS счетов равен биржевому ГО"
         },
-        "isTradable": {
+        "is_tradable": {
           "type": "boolean",
           "description": "Доступны ли торговые операции\nНовое поле. Позволяет различать false и \"не установлено\"."
         },
-        "priceType": {
+        "price_type": {
           "$ref": "#/definitions/assetsPriceType",
           "title": "Допустимая цена. Помогает определить можно ли выставлять ордера с отрицательной ценой для финансового инструмента"
         }
@@ -2377,25 +2520,56 @@
           "format": "int32",
           "title": "Кол-во десятичных знаков в цене"
         },
-        "minStep": {
+        "min_step": {
           "type": "string",
           "format": "int64",
           "title": "Минимальный шаг цены. Для расчета финального ценового шага: min_step/(10ˆdecimals)"
         },
-        "lotSize": {
+        "lot_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Кол-во штук в лоте"
         },
-        "expirationDate": {
+        "expiration_date": {
           "$ref": "#/definitions/typeDate",
           "title": "Дата экспирации фьючерса"
         },
-        "quoteCurrency": {
+        "quote_currency": {
           "type": "string",
           "title": "Валюта котировки, может не совпадать с валютой режима торгов инструмента"
+        },
+        "future_details": {
+          "$ref": "#/definitions/GetAssetResponseFutureDetails",
+          "title": "Специфичные параметры для инструмента типа \"Фьючерс\""
+        },
+        "option_details": {
+          "$ref": "#/definitions/GetAssetResponseOptionDetails",
+          "title": "Специфичные параметры для инструмента типа \"Опцион\""
+        },
+        "bond_details": {
+          "$ref": "#/definitions/GetAssetResponseBondDetails",
+          "title": "Специфичные параметры для инструмента типа \"Облигация\""
         }
       },
       "title": "Список информации по конкретному инструменту"
+    },
+    "assetsGetConstituentsResponse": {
+      "type": "object",
+      "properties": {
+        "constituents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/assetsConstituents"
+          },
+          "title": "Список компонентов (ценных бумаг), входящих в базу расчета запрошенного индекса"
+        },
+        "next_cursor": {
+          "type": "string",
+          "format": "int64",
+          "title": "Курсор для получения следующей страницы. Содержит sec_id последнего инструмента в текущем списке.\nПередайте это значение в поле cursor следующего запроса, чтобы получить следующую часть данных.\nЕсли значение 0 или отсутствует — это последняя страница"
+        }
+      },
+      "title": "Результат запроса состава индекса"
     },
     "assetsLongable": {
       "type": "object",
@@ -2404,7 +2578,7 @@
           "$ref": "#/definitions/assetsLongableStatus",
           "title": "Статус инструмента"
         },
-        "haltedDays": {
+        "halted_days": {
           "type": "integer",
           "format": "int32",
           "title": "Сколько дней действует запрет на операции в Лонг (если есть)"
@@ -2489,7 +2663,7 @@
           "$ref": "#/definitions/assetsShortableStatus",
           "title": "Статус инструмента"
         },
-        "haltedDays": {
+        "halted_days": {
           "type": "integer",
           "format": "int32",
           "title": "Сколько дней действует запрет на операции в Шорт (если есть)"
@@ -2533,11 +2707,11 @@
     "authMDPermission": {
       "type": "object",
       "properties": {
-        "quoteLevel": {
+        "quote_level": {
           "$ref": "#/definitions/MDPermissionQuoteLevel",
           "title": "Уровень котировок"
         },
-        "delayMinutes": {
+        "delay_minutes": {
           "type": "integer",
           "format": "int32",
           "title": "Задержка в минутах"
@@ -2584,17 +2758,17 @@
     "authTokenDetailsResponse": {
       "type": "object",
       "properties": {
-        "createdAt": {
+        "created_at": {
           "type": "string",
           "format": "date-time",
           "title": "Дата и время создания"
         },
-        "expiresAt": {
+        "expires_at": {
           "type": "string",
           "format": "date-time",
           "title": "Дата и время экспирации"
         },
-        "mdPermissions": {
+        "md_permissions": {
           "type": "array",
           "items": {
             "type": "object",
@@ -2602,7 +2776,7 @@
           },
           "title": "Информация о доступе к рыночным данным"
         },
-        "accountIds": {
+        "account_ids": {
           "type": "array",
           "items": {
             "type": "string"
@@ -2723,11 +2897,11 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Цена"
         },
-        "sellSize": {
+        "sell_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер на продажу"
         },
-        "buySize": {
+        "buy_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер на покупку"
         },
@@ -2775,7 +2949,7 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Аск. 0 при отсутствии активного аска"
         },
-        "askSize": {
+        "ask_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер аска"
         },
@@ -2783,7 +2957,7 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Бид. 0 при отсутствии активного бида"
         },
-        "bidSize": {
+        "bid_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер бида"
         },
@@ -2791,7 +2965,7 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Цена последней сделки"
         },
-        "lastSize": {
+        "last_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер последней сделки"
         },
@@ -2823,6 +2997,10 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Изменение цены (last минус close)"
         },
+        "open_interest": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Открытый интерес. Общее количество незакрытых (активных) контрактов по деривативу."
+        },
         "option": {
           "$ref": "#/definitions/marketdataQuoteOption",
           "title": "Информация об опционе"
@@ -2833,15 +3011,15 @@
     "marketdataQuoteOption": {
       "type": "object",
       "properties": {
-        "openInterest": {
+        "open_interest": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Открытый интерес"
         },
-        "impliedVolatility": {
+        "implied_volatility": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Подразумеваемая волатильность"
         },
-        "theoreticalPrice": {
+        "theoretical_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Теоретическая цена"
         },
@@ -2922,11 +3100,11 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Цена"
         },
-        "sellSize": {
+        "sell_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер на продажу"
         },
-        "buySize": {
+        "buy_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Размер на покупку"
         },
@@ -2997,7 +3175,7 @@
     "marketdataSubscribeOrderBookResponse": {
       "type": "object",
       "properties": {
-        "orderBook": {
+        "order_book": {
           "type": "array",
           "items": {
             "type": "object",
@@ -3082,7 +3260,7 @@
     "ordersOrder": {
       "type": "object",
       "properties": {
-        "accountId": {
+        "account_id": {
           "type": "string",
           "title": "Идентификатор аккаунта"
         },
@@ -3102,19 +3280,19 @@
           "$ref": "#/definitions/ordersOrderType",
           "title": "Тип заявки"
         },
-        "timeInForce": {
+        "time_in_force": {
           "$ref": "#/definitions/ordersTimeInForce",
           "title": "Срок действия заявки"
         },
-        "limitPrice": {
+        "limit_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Необходимо для лимитной и стоп лимитной заявки"
         },
-        "stopPrice": {
+        "stop_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Необходимо для стоп рыночной и стоп лимитной заявки"
         },
-        "stopCondition": {
+        "stop_condition": {
           "$ref": "#/definitions/ordersStopCondition",
           "title": "Необходимо для стоп рыночной и стоп лимитной заявки"
         },
@@ -3126,11 +3304,11 @@
           },
           "title": "Необходимо для мульти лег заявки"
         },
-        "clientOrderId": {
+        "client_order_id": {
           "type": "string",
           "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
         },
-        "validBefore": {
+        "valid_before": {
           "$ref": "#/definitions/ordersValidBefore",
           "title": "Срок действия условной заявки. Заполняется для заявок с типом ORDER_TYPE_STOP, ORDER_TYPE_STOP_LIMIT"
         },
@@ -3144,11 +3322,11 @@
     "ordersOrderState": {
       "type": "object",
       "properties": {
-        "orderId": {
+        "order_id": {
           "type": "string",
           "title": "Идентификатор заявки"
         },
-        "execId": {
+        "exec_id": {
           "type": "string",
           "title": "Идентификатор исполнения"
         },
@@ -3160,34 +3338,34 @@
           "$ref": "#/definitions/ordersOrder",
           "title": "Заявка"
         },
-        "transactAt": {
+        "transact_at": {
           "type": "string",
           "format": "date-time",
           "title": "Дата и время выставления заявки"
         },
-        "acceptAt": {
+        "accept_at": {
           "type": "string",
           "format": "date-time",
           "title": "Дата и время принятия заявки"
         },
-        "withdrawAt": {
+        "withdraw_at": {
           "type": "string",
           "format": "date-time",
           "title": "Дата и время  отмены заявки"
         },
-        "initialQuantity": {
+        "initial_quantity": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Начальный объем (заполняется только для биржевой заявки)"
         },
-        "executedQuantity": {
+        "executed_quantity": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Исполненный объем (заполняется только для биржевой заявки)"
         },
-        "remainingQuantity": {
+        "remaining_quantity": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Оставшийся объем (заполняется только для биржевой заявки)"
         },
-        "sltpOrder": {
+        "sltp_order": {
           "$ref": "#/definitions/ordersSLTPOrder",
           "title": "Информация о SL/TP заявке"
         }
@@ -3294,7 +3472,7 @@
     "ordersSLTPOrder": {
       "type": "object",
       "properties": {
-        "accountId": {
+        "account_id": {
           "type": "string",
           "title": "Идентификатор аккаунта"
         },
@@ -3306,43 +3484,43 @@
           "$ref": "#/definitions/v1Side",
           "title": "Сторона для обеих заявок"
         },
-        "quantitySl": {
+        "quantity_sl": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Количество в шт для SL"
         },
-        "slPrice": {
+        "sl_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Параметр условия цены для SL части"
         },
-        "limitPrice": {
+        "limit_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Если указано, после активации SL будет выставлена лимитная заявка с этой ценой"
         },
-        "quantityTp": {
+        "quantity_tp": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Количество в шт для TP"
         },
-        "tpPrice": {
+        "tp_price": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Параметр условия цены для TP части"
         },
-        "tpGuardSpread": {
+        "tp_guard_spread": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Если указано, после активации TP будет выставлена лимитная заявка с учетом защитного спрэда"
         },
-        "tpSpreadMeasure": {
+        "tp_spread_measure": {
           "$ref": "#/definitions/ordersTPSpreadMeasure",
           "title": "Единица измерения величины защитного спреда"
         },
-        "clientOrderId": {
+        "client_order_id": {
           "type": "string",
           "title": "Уникальный идентификатор заявки. Автоматически генерируется, если не отправлен. (максимум 20 символов)"
         },
-        "validBefore": {
+        "valid_before": {
           "$ref": "#/definitions/ordersValidBefore",
           "title": "Срок действия условной заявки. Если не заполнено, то по умолчанию выставляется VALID_BEFORE_GOOD_TILL_CANCEL"
         },
-        "validExpiryTime": {
+        "valid_expiry_time": {
           "type": "string",
           "format": "date-time",
           "title": "Временная метка прекращения действия SL/TP заявки"
@@ -3445,7 +3623,7 @@
     "reportsAccountReportInfo": {
       "type": "object",
       "properties": {
-        "reportId": {
+        "report_id": {
           "type": "string",
           "title": "Идентификатор отчёта"
         },
@@ -3453,15 +3631,15 @@
           "$ref": "#/definitions/reportsReportCreationStatus",
           "title": "Статус генерации отчёта"
         },
-        "dateRange": {
+        "date_range": {
           "$ref": "#/definitions/reportsDateRange",
           "title": "Временной интервал отчёта. Берётся из запроса на генерацию отчёта"
         },
-        "reportForm": {
+        "report_form": {
           "$ref": "#/definitions/reportsReportForm",
           "title": "Форма отчета. Берётся из запроса на генерацию отчёта"
         },
-        "accountId": {
+        "account_id": {
           "type": "string",
           "format": "int64",
           "title": "Идентификатор счета. Берётся из запроса на генерацию отчёта"
@@ -3476,15 +3654,15 @@
     "reportsCreateAccountReportRequest": {
       "type": "object",
       "properties": {
-        "dateRange": {
+        "date_range": {
           "$ref": "#/definitions/reportsDateRange",
           "title": "Временной интервал. Максимальный интервал дат - 92 дня"
         },
-        "reportForm": {
+        "report_form": {
           "$ref": "#/definitions/reportsReportForm",
           "title": "Форма отчета"
         },
-        "accountId": {
+        "account_id": {
           "type": "string",
           "format": "int64",
           "title": "Идентификатор счета"
@@ -3495,7 +3673,7 @@
     "reportsCreateAccountReportResponse": {
       "type": "object",
       "properties": {
-        "reportId": {
+        "report_id": {
           "type": "string",
           "title": "Идентификатор отчёта"
         }
@@ -3505,12 +3683,12 @@
     "reportsDateRange": {
       "type": "object",
       "properties": {
-        "dateBegin": {
+        "date_begin": {
           "type": "string",
           "format": "date-time",
           "title": "Дата начала временного интервала"
         },
-        "dateEnd": {
+        "date_end": {
           "type": "string",
           "format": "date-time",
           "title": "Дата конца временного интервала"
@@ -3597,12 +3775,12 @@
     "typeInterval": {
       "type": "object",
       "properties": {
-        "startTime": {
+        "start_time": {
           "type": "string",
           "format": "date-time",
           "description": "Optional. Inclusive start of the interval.\n\nIf specified, a Timestamp matching this interval will have to be the same\nor after the start."
         },
-        "endTime": {
+        "end_time": {
           "type": "string",
           "format": "date-time",
           "description": "Optional. Exclusive end of the interval.\n\nIf specified, a Timestamp matching this interval will have to be before the\nend."
@@ -3613,7 +3791,7 @@
     "typeMoney": {
       "type": "object",
       "properties": {
-        "currencyCode": {
+        "currency_code": {
           "type": "string",
           "description": "The three-letter currency code defined in ISO 4217."
         },
@@ -3633,7 +3811,7 @@
     "v1AccountTrade": {
       "type": "object",
       "properties": {
-        "tradeId": {
+        "trade_id": {
           "type": "string",
           "title": "Идентификатор сделки"
         },
@@ -3658,11 +3836,11 @@
           "format": "date-time",
           "title": "Метка времени"
         },
-        "orderId": {
+        "order_id": {
           "type": "string",
           "title": "Идентификатор заявки"
         },
-        "accountId": {
+        "account_id": {
           "type": "string",
           "title": "Идентификатор аккаунта"
         },
@@ -3695,15 +3873,15 @@
           "$ref": "#/definitions/assetsOptionType",
           "title": "Тип инструмента"
         },
-        "contractSize": {
+        "contract_size": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Лот, количество базового актива в инструменте"
         },
-        "tradeFirstDay": {
+        "trade_first_day": {
           "$ref": "#/definitions/typeDate",
           "title": "Дата старта торговли"
         },
-        "tradeLastDay": {
+        "trade_last_day": {
           "$ref": "#/definitions/typeDate",
           "title": "Дата окончания торговли"
         },
@@ -3715,11 +3893,11 @@
           "$ref": "#/definitions/typeDecimal",
           "title": "Множитель опциона"
         },
-        "expirationFirstDay": {
+        "expiration_first_day": {
           "$ref": "#/definitions/typeDate",
           "title": "Дата начала экспирации"
         },
-        "expirationLastDay": {
+        "expiration_last_day": {
           "$ref": "#/definitions/typeDate",
           "title": "Дата окончания экспирации"
         }
@@ -3743,7 +3921,7 @@
     "v1marketdataTrade": {
       "type": "object",
       "properties": {
-        "tradeId": {
+        "trade_id": {
           "type": "string",
           "title": "Идентификатор сделки, отправленный биржей"
         },
@@ -3767,6 +3945,10 @@
         "side": {
           "$ref": "#/definitions/v1Side",
           "title": "Сторона сделки (buy или sell)"
+        },
+        "open_interest": {
+          "$ref": "#/definitions/typeDecimal",
+          "description": "Открытый интерес на момент совершения сделки."
         }
       },
       "title": "Информация о сделке"

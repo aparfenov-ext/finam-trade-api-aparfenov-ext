@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AssetsService_Exchanges_FullMethodName      = "/grpc.tradeapi.v1.assets.AssetsService/Exchanges"
-	AssetsService_Assets_FullMethodName         = "/grpc.tradeapi.v1.assets.AssetsService/Assets"
-	AssetsService_AllAssets_FullMethodName      = "/grpc.tradeapi.v1.assets.AssetsService/AllAssets"
-	AssetsService_GetAsset_FullMethodName       = "/grpc.tradeapi.v1.assets.AssetsService/GetAsset"
-	AssetsService_GetAssetParams_FullMethodName = "/grpc.tradeapi.v1.assets.AssetsService/GetAssetParams"
-	AssetsService_OptionsChain_FullMethodName   = "/grpc.tradeapi.v1.assets.AssetsService/OptionsChain"
-	AssetsService_Schedule_FullMethodName       = "/grpc.tradeapi.v1.assets.AssetsService/Schedule"
-	AssetsService_Clock_FullMethodName          = "/grpc.tradeapi.v1.assets.AssetsService/Clock"
+	AssetsService_Exchanges_FullMethodName       = "/grpc.tradeapi.v1.assets.AssetsService/Exchanges"
+	AssetsService_Assets_FullMethodName          = "/grpc.tradeapi.v1.assets.AssetsService/Assets"
+	AssetsService_AllAssets_FullMethodName       = "/grpc.tradeapi.v1.assets.AssetsService/AllAssets"
+	AssetsService_GetAsset_FullMethodName        = "/grpc.tradeapi.v1.assets.AssetsService/GetAsset"
+	AssetsService_GetAssetParams_FullMethodName  = "/grpc.tradeapi.v1.assets.AssetsService/GetAssetParams"
+	AssetsService_OptionsChain_FullMethodName    = "/grpc.tradeapi.v1.assets.AssetsService/OptionsChain"
+	AssetsService_Schedule_FullMethodName        = "/grpc.tradeapi.v1.assets.AssetsService/Schedule"
+	AssetsService_Clock_FullMethodName           = "/grpc.tradeapi.v1.assets.AssetsService/Clock"
+	AssetsService_GetConstituents_FullMethodName = "/grpc.tradeapi.v1.assets.AssetsService/GetConstituents"
 )
 
 // AssetsServiceClient is the client API for AssetsService service.
@@ -41,12 +42,12 @@ type AssetsServiceClient interface {
 	// Authorization: <token>
 	Exchanges(ctx context.Context, in *ExchangesRequest, opts ...grpc.CallOption) (*ExchangesResponse, error)
 	// Deprecated: Do not use.
-	// Получение списка доступных инструментов, их описание
+	// Получение списка доступных для торговли инструментов, их описание
 	// Пример HTTP запроса:
 	// GET /v1/assets
 	// Authorization: <token>
 	Assets(ctx context.Context, in *AssetsRequest, opts ...grpc.CallOption) (*AssetsResponse, error)
-	// Получение списка всех инструментов, их описание
+	// Получение списка всех инструментов, в том числе индикативных и архивных, их описание
 	// Пример HTTP запроса:
 	// GET /v1/assets/all?cursor=56658&only_disabled=true
 	// Authorization: <token>
@@ -84,6 +85,8 @@ type AssetsServiceClient interface {
 	// GET /v1/assets/clock
 	// Authorization: <token>
 	Clock(ctx context.Context, in *ClockRequest, opts ...grpc.CallOption) (*ClockResponse, error)
+	// Получить состав биржевого индекса по его символу
+	GetConstituents(ctx context.Context, in *GetConstituentsRequest, opts ...grpc.CallOption) (*GetConstituentsResponse, error)
 }
 
 type assetsServiceClient struct {
@@ -175,6 +178,16 @@ func (c *assetsServiceClient) Clock(ctx context.Context, in *ClockRequest, opts 
 	return out, nil
 }
 
+func (c *assetsServiceClient) GetConstituents(ctx context.Context, in *GetConstituentsRequest, opts ...grpc.CallOption) (*GetConstituentsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetConstituentsResponse)
+	err := c.cc.Invoke(ctx, AssetsService_GetConstituents_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AssetsServiceServer is the server API for AssetsService service.
 // All implementations must embed UnimplementedAssetsServiceServer
 // for forward compatibility.
@@ -187,12 +200,12 @@ type AssetsServiceServer interface {
 	// Authorization: <token>
 	Exchanges(context.Context, *ExchangesRequest) (*ExchangesResponse, error)
 	// Deprecated: Do not use.
-	// Получение списка доступных инструментов, их описание
+	// Получение списка доступных для торговли инструментов, их описание
 	// Пример HTTP запроса:
 	// GET /v1/assets
 	// Authorization: <token>
 	Assets(context.Context, *AssetsRequest) (*AssetsResponse, error)
-	// Получение списка всех инструментов, их описание
+	// Получение списка всех инструментов, в том числе индикативных и архивных, их описание
 	// Пример HTTP запроса:
 	// GET /v1/assets/all?cursor=56658&only_disabled=true
 	// Authorization: <token>
@@ -230,6 +243,8 @@ type AssetsServiceServer interface {
 	// GET /v1/assets/clock
 	// Authorization: <token>
 	Clock(context.Context, *ClockRequest) (*ClockResponse, error)
+	// Получить состав биржевого индекса по его символу
+	GetConstituents(context.Context, *GetConstituentsRequest) (*GetConstituentsResponse, error)
 	mustEmbedUnimplementedAssetsServiceServer()
 }
 
@@ -263,6 +278,9 @@ func (UnimplementedAssetsServiceServer) Schedule(context.Context, *ScheduleReque
 }
 func (UnimplementedAssetsServiceServer) Clock(context.Context, *ClockRequest) (*ClockResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Clock not implemented")
+}
+func (UnimplementedAssetsServiceServer) GetConstituents(context.Context, *GetConstituentsRequest) (*GetConstituentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetConstituents not implemented")
 }
 func (UnimplementedAssetsServiceServer) mustEmbedUnimplementedAssetsServiceServer() {}
 func (UnimplementedAssetsServiceServer) testEmbeddedByValue()                       {}
@@ -429,6 +447,24 @@ func _AssetsService_Clock_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AssetsService_GetConstituents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetConstituentsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetsServiceServer).GetConstituents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetsService_GetConstituents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetsServiceServer).GetConstituents(ctx, req.(*GetConstituentsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AssetsService_ServiceDesc is the grpc.ServiceDesc for AssetsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -467,6 +503,10 @@ var AssetsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Clock",
 			Handler:    _AssetsService_Clock_Handler,
+		},
+		{
+			MethodName: "GetConstituents",
+			Handler:    _AssetsService_GetConstituents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
