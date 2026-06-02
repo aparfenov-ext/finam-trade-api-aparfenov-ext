@@ -109,8 +109,7 @@ service CorporateActionsService {
   };
 
 
-
-
+  // Получить список предстоящих (будущих) дивидендных выплат по инструменту.
   rpc GetFutureDividends(GetFutureDividendsRequest) returns (GetFutureDividendsResponse) {
     option (google.api.http) = {
       get: "/v1/future-dividends"
