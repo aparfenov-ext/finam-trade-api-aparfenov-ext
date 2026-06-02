@@ -93,7 +93,9 @@ func (MDPermission_QuoteLevel) EnumDescriptor() ([]byte, []int) {
 type AuthRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// API токен (secret key)
-	Secret        string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	Secret string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	// Идентификатор приложения-источника запроса
+	SourceAppId   string `protobuf:"bytes,2,opt,name=source_app_id,json=sourceAppId,proto3" json:"source_app_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -131,6 +133,13 @@ func (*AuthRequest) Descriptor() ([]byte, []int) {
 func (x *AuthRequest) GetSecret() string {
 	if x != nil {
 		return x.Secret
+	}
+	return ""
+}
+
+func (x *AuthRequest) GetSourceAppId() string {
+	if x != nil {
+		return x.SourceAppId
 	}
 	return ""
 }
@@ -450,7 +459,9 @@ func (*MDPermission_Worldwide) isMDPermission_Condition() {}
 type SubscribeJwtRenewalRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// API токен (secret key)
-	Secret        string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	Secret string `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	// Идентификатор приложения-источника запроса
+	SourceAppId   string `protobuf:"bytes,2,opt,name=source_app_id,json=sourceAppId,proto3" json:"source_app_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -488,6 +499,13 @@ func (*SubscribeJwtRenewalRequest) Descriptor() ([]byte, []int) {
 func (x *SubscribeJwtRenewalRequest) GetSecret() string {
 	if x != nil {
 		return x.Secret
+	}
+	return ""
+}
+
+func (x *SubscribeJwtRenewalRequest) GetSourceAppId() string {
+	if x != nil {
+		return x.SourceAppId
 	}
 	return ""
 }
@@ -542,9 +560,10 @@ var File_grpc_tradeapi_v1_auth_auth_service_proto protoreflect.FileDescriptor
 
 const file_grpc_tradeapi_v1_auth_auth_service_proto_rawDesc = "" +
 	"\n" +
-	"(grpc/tradeapi/v1/auth/auth_service.proto\x12\x15grpc.tradeapi.v1.auth\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a;grpc/gateway/protoc_gen_openapiv2/options/annotations.proto\"%\n" +
+	"(grpc/tradeapi/v1/auth/auth_service.proto\x12\x15grpc.tradeapi.v1.auth\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a;grpc/gateway/protoc_gen_openapiv2/options/annotations.proto\"I\n" +
 	"\vAuthRequest\x12\x16\n" +
-	"\x06secret\x18\x01 \x01(\tR\x06secret\"$\n" +
+	"\x06secret\x18\x01 \x01(\tR\x06secret\x12\"\n" +
+	"\rsource_app_id\x18\x02 \x01(\tR\vsourceAppId\"$\n" +
 	"\fAuthResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"+\n" +
 	"\x13TokenDetailsRequest\x12\x14\n" +
@@ -574,9 +593,10 @@ const file_grpc_tradeapi_v1_auth_auth_service_proto_rawDesc = "" +
 	"\x1bQUOTE_LEVEL_DEPTH_OF_MARKET\x10\x03\x12\x1d\n" +
 	"\x19QUOTE_LEVEL_DEPTH_OF_BOOK\x10\x04\x12 \n" +
 	"\x1cQUOTE_LEVEL_ACCESS_FORBIDDEN\x10\x05B\v\n" +
-	"\tcondition\"4\n" +
+	"\tcondition\"X\n" +
 	"\x1aSubscribeJwtRenewalRequest\x12\x16\n" +
-	"\x06secret\x18\x01 \x01(\tR\x06secret\"3\n" +
+	"\x06secret\x18\x01 \x01(\tR\x06secret\x12\"\n" +
+	"\rsource_app_id\x18\x02 \x01(\tR\vsourceAppId\"3\n" +
 	"\x1bSubscribeJwtRenewalResponse\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token2\x82\x03\n" +
 	"\vAuthService\x12h\n" +

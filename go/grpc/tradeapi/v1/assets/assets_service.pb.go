@@ -1856,9 +1856,11 @@ type Constituents struct {
 	// Отрасль (подотрасль) деятельности компании (например, "Software - Application")
 	SubSector string `protobuf:"bytes,4,opt,name=sub_sector,json=subSector,proto3" json:"sub_sector,omitempty"`
 	// Уникальный идентификатор компании в базе данных SEC США (Central Index Key)
-	Cik           string `protobuf:"bytes,5,opt,name=cik,proto3" json:"cik,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Cik string `protobuf:"bytes,5,opt,name=cik,proto3" json:"cik,omitempty"`
+	// Дата добавления бумаги в индекс
+	IndexInclusionDate *date.Date `protobuf:"bytes,6,opt,name=index_inclusion_date,json=indexInclusionDate,proto3" json:"index_inclusion_date,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *Constituents) Reset() {
@@ -1924,6 +1926,13 @@ func (x *Constituents) GetCik() string {
 		return x.Cik
 	}
 	return ""
+}
+
+func (x *Constituents) GetIndexInclusionDate() *date.Date {
+	if x != nil {
+		return x.IndexInclusionDate
+	}
+	return nil
 }
 
 // Специфичные параметры для инструмента типа "Фьючерс"
@@ -2301,14 +2310,15 @@ const file_grpc_tradeapi_v1_assets_assets_service_proto_rawDesc = "" +
 	"\x17GetConstituentsResponse\x12I\n" +
 	"\fconstituents\x18\x01 \x03(\v2%.grpc.tradeapi.v1.assets.ConstituentsR\fconstituents\x12\x1f\n" +
 	"\vnext_cursor\x18\x02 \x01(\x03R\n" +
-	"nextCursor\"\x83\x01\n" +
+	"nextCursor\"\xc8\x01\n" +
 	"\fConstituents\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x16\n" +
 	"\x06sector\x18\x03 \x01(\tR\x06sector\x12\x1d\n" +
 	"\n" +
 	"sub_sector\x18\x04 \x01(\tR\tsubSector\x12\x10\n" +
-	"\x03cik\x18\x05 \x01(\tR\x03cik*A\n" +
+	"\x03cik\x18\x05 \x01(\tR\x03cik\x12C\n" +
+	"\x14index_inclusion_date\x18\x06 \x01(\v2\x11.google.type.DateR\x12indexInclusionDate*A\n" +
 	"\tPriceType\x12\v\n" +
 	"\aUNKNOWN\x10\x00\x12\f\n" +
 	"\bPOSITIVE\x10\x01\x12\x10\n" +
@@ -2457,36 +2467,37 @@ var file_grpc_tradeapi_v1_assets_assets_service_proto_depIdxs = []int32{
 	2,  // 30: grpc.tradeapi.v1.assets.Longable.value:type_name -> grpc.tradeapi.v1.assets.Longable.Status
 	3,  // 31: grpc.tradeapi.v1.assets.Shortable.value:type_name -> grpc.tradeapi.v1.assets.Shortable.Status
 	27, // 32: grpc.tradeapi.v1.assets.GetConstituentsResponse.constituents:type_name -> grpc.tradeapi.v1.assets.Constituents
-	36, // 33: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.expiration_date:type_name -> google.protobuf.Timestamp
-	32, // 34: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.contract_size:type_name -> google.type.Decimal
-	36, // 35: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.expiration_date:type_name -> google.protobuf.Timestamp
-	32, // 36: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.contract_size:type_name -> google.type.Decimal
-	32, // 37: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.strike:type_name -> google.type.Decimal
-	32, // 38: grpc.tradeapi.v1.assets.GetAssetResponse.BondDetails.bond_face_value:type_name -> google.type.Decimal
-	37, // 39: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions.interval:type_name -> google.type.Interval
-	4,  // 40: grpc.tradeapi.v1.assets.AssetsService.Exchanges:input_type -> grpc.tradeapi.v1.assets.ExchangesRequest
-	6,  // 41: grpc.tradeapi.v1.assets.AssetsService.Assets:input_type -> grpc.tradeapi.v1.assets.AssetsRequest
-	8,  // 42: grpc.tradeapi.v1.assets.AssetsService.AllAssets:input_type -> grpc.tradeapi.v1.assets.AllAssetsRequest
-	10, // 43: grpc.tradeapi.v1.assets.AssetsService.GetAsset:input_type -> grpc.tradeapi.v1.assets.GetAssetRequest
-	12, // 44: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:input_type -> grpc.tradeapi.v1.assets.GetAssetParamsRequest
-	14, // 45: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:input_type -> grpc.tradeapi.v1.assets.OptionsChainRequest
-	16, // 46: grpc.tradeapi.v1.assets.AssetsService.Schedule:input_type -> grpc.tradeapi.v1.assets.ScheduleRequest
-	18, // 47: grpc.tradeapi.v1.assets.AssetsService.Clock:input_type -> grpc.tradeapi.v1.assets.ClockRequest
-	25, // 48: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:input_type -> grpc.tradeapi.v1.assets.GetConstituentsRequest
-	5,  // 49: grpc.tradeapi.v1.assets.AssetsService.Exchanges:output_type -> grpc.tradeapi.v1.assets.ExchangesResponse
-	7,  // 50: grpc.tradeapi.v1.assets.AssetsService.Assets:output_type -> grpc.tradeapi.v1.assets.AssetsResponse
-	9,  // 51: grpc.tradeapi.v1.assets.AssetsService.AllAssets:output_type -> grpc.tradeapi.v1.assets.AllAssetsResponse
-	11, // 52: grpc.tradeapi.v1.assets.AssetsService.GetAsset:output_type -> grpc.tradeapi.v1.assets.GetAssetResponse
-	13, // 53: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:output_type -> grpc.tradeapi.v1.assets.GetAssetParamsResponse
-	15, // 54: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:output_type -> grpc.tradeapi.v1.assets.OptionsChainResponse
-	17, // 55: grpc.tradeapi.v1.assets.AssetsService.Schedule:output_type -> grpc.tradeapi.v1.assets.ScheduleResponse
-	19, // 56: grpc.tradeapi.v1.assets.AssetsService.Clock:output_type -> grpc.tradeapi.v1.assets.ClockResponse
-	26, // 57: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:output_type -> grpc.tradeapi.v1.assets.GetConstituentsResponse
-	49, // [49:58] is the sub-list for method output_type
-	40, // [40:49] is the sub-list for method input_type
-	40, // [40:40] is the sub-list for extension type_name
-	40, // [40:40] is the sub-list for extension extendee
-	0,  // [0:40] is the sub-list for field type_name
+	33, // 33: grpc.tradeapi.v1.assets.Constituents.index_inclusion_date:type_name -> google.type.Date
+	36, // 34: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.expiration_date:type_name -> google.protobuf.Timestamp
+	32, // 35: grpc.tradeapi.v1.assets.GetAssetResponse.FutureDetails.contract_size:type_name -> google.type.Decimal
+	36, // 36: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.expiration_date:type_name -> google.protobuf.Timestamp
+	32, // 37: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.contract_size:type_name -> google.type.Decimal
+	32, // 38: grpc.tradeapi.v1.assets.GetAssetResponse.OptionDetails.strike:type_name -> google.type.Decimal
+	32, // 39: grpc.tradeapi.v1.assets.GetAssetResponse.BondDetails.bond_face_value:type_name -> google.type.Decimal
+	37, // 40: grpc.tradeapi.v1.assets.ScheduleResponse.Sessions.interval:type_name -> google.type.Interval
+	4,  // 41: grpc.tradeapi.v1.assets.AssetsService.Exchanges:input_type -> grpc.tradeapi.v1.assets.ExchangesRequest
+	6,  // 42: grpc.tradeapi.v1.assets.AssetsService.Assets:input_type -> grpc.tradeapi.v1.assets.AssetsRequest
+	8,  // 43: grpc.tradeapi.v1.assets.AssetsService.AllAssets:input_type -> grpc.tradeapi.v1.assets.AllAssetsRequest
+	10, // 44: grpc.tradeapi.v1.assets.AssetsService.GetAsset:input_type -> grpc.tradeapi.v1.assets.GetAssetRequest
+	12, // 45: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:input_type -> grpc.tradeapi.v1.assets.GetAssetParamsRequest
+	14, // 46: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:input_type -> grpc.tradeapi.v1.assets.OptionsChainRequest
+	16, // 47: grpc.tradeapi.v1.assets.AssetsService.Schedule:input_type -> grpc.tradeapi.v1.assets.ScheduleRequest
+	18, // 48: grpc.tradeapi.v1.assets.AssetsService.Clock:input_type -> grpc.tradeapi.v1.assets.ClockRequest
+	25, // 49: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:input_type -> grpc.tradeapi.v1.assets.GetConstituentsRequest
+	5,  // 50: grpc.tradeapi.v1.assets.AssetsService.Exchanges:output_type -> grpc.tradeapi.v1.assets.ExchangesResponse
+	7,  // 51: grpc.tradeapi.v1.assets.AssetsService.Assets:output_type -> grpc.tradeapi.v1.assets.AssetsResponse
+	9,  // 52: grpc.tradeapi.v1.assets.AssetsService.AllAssets:output_type -> grpc.tradeapi.v1.assets.AllAssetsResponse
+	11, // 53: grpc.tradeapi.v1.assets.AssetsService.GetAsset:output_type -> grpc.tradeapi.v1.assets.GetAssetResponse
+	13, // 54: grpc.tradeapi.v1.assets.AssetsService.GetAssetParams:output_type -> grpc.tradeapi.v1.assets.GetAssetParamsResponse
+	15, // 55: grpc.tradeapi.v1.assets.AssetsService.OptionsChain:output_type -> grpc.tradeapi.v1.assets.OptionsChainResponse
+	17, // 56: grpc.tradeapi.v1.assets.AssetsService.Schedule:output_type -> grpc.tradeapi.v1.assets.ScheduleResponse
+	19, // 57: grpc.tradeapi.v1.assets.AssetsService.Clock:output_type -> grpc.tradeapi.v1.assets.ClockResponse
+	26, // 58: grpc.tradeapi.v1.assets.AssetsService.GetConstituents:output_type -> grpc.tradeapi.v1.assets.GetConstituentsResponse
+	50, // [50:59] is the sub-list for method output_type
+	41, // [41:50] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_grpc_tradeapi_v1_assets_assets_service_proto_init() }

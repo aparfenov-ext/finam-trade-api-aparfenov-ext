@@ -16,6 +16,9 @@
       "name": "AuthService"
     },
     {
+      "name": "CorporateActionsService"
+    },
+    {
       "name": "MarketDataService"
     },
     {
@@ -1233,6 +1236,98 @@
         ]
       }
     },
+    "/v1/future-dividends": {
+      "get": {
+        "operationId": "CorporateActionsService_GetFutureDividends",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetFutureDividendsResponse"
+            }
+          },
+          "400": {
+            "description": "Неверно передан символ. Символ должен быть в виде ticker@mic. Где ticker - это, например, SBER. А mic, например, MISX",
+            "schema": {}
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым.\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых элементов",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество элементов, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/v1/instruments/{symbol}/bars": {
       "get": {
         "summary": "Получение исторических данных по инструменту (агрегированные свечи)\nПример HTTP запроса:\nGET /v1/instruments/SBER@MISX/bars?timeframe=TIME_FRAME_D\u0026interval.start_time=2023-01-01T00:00:00Z\u0026interval.end_time=2023-01-31T23:59:59Z\nAuthorization: \u003ctoken\u003e",
@@ -1521,6 +1616,147 @@
         ]
       }
     },
+    "/v1/past-dividends": {
+      "get": {
+        "summary": "Получить исторические данные по выплаченным дивидендам инструмента",
+        "operationId": "CorporateActionsService_GetPastDividends",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetPastDividendsResponse"
+            }
+          },
+          "400": {
+            "description": "Неверно передан символ или интервал. Символ должен быть в виде ticker@mic. Где ticker - это, например, SBER. А mic, например, MISX",
+            "schema": {}
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым.\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "date_from.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых элементов",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество элементов, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/v1/report": {
       "post": {
         "summary": "Запустить генерацию отчета по счету за период\nПример HTTP запроса:\nPOST /v1/report\nAuthorization: \u003ctoken\u003e",
@@ -1757,6 +1993,232 @@
         ],
         "tags": [
           "AuthService"
+        ]
+      }
+    },
+    "/v1/splits/future": {
+      "get": {
+        "summary": "Получить предстоящие события сплитов по инструменту",
+        "operationId": "CorporateActionsService_GetFutureSplits",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetFutureSplitsResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых сплитов в списке",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество сплитов, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/splits/past": {
+      "get": {
+        "summary": "Получить историю сплитов по инструменту",
+        "operationId": "CorporateActionsService_GetPastSplits",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetPastSplitsResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date_from.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых сплитов в списке",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество сплитов, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
         ]
       }
     },
@@ -2394,6 +2856,10 @@
         "cik": {
           "type": "string",
           "title": "Уникальный идентификатор компании в базе данных SEC США (Central Index Key)"
+        },
+        "index_inclusion_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата добавления бумаги в индекс"
         }
       },
       "title": "Информация о компоненте (ценной бумаге), входящем в индекс"
@@ -2690,6 +3156,10 @@
         "secret": {
           "type": "string",
           "title": "API токен (secret key)"
+        },
+        "source_app_id": {
+          "type": "string",
+          "title": "Идентификатор приложения-источника запроса"
         }
       },
       "title": "Запрос авторизации"
@@ -2789,6 +3259,184 @@
         }
       },
       "title": "Информация о токене"
+    },
+    "corporateactionsConvertationType": {
+      "type": "string",
+      "enum": [
+        "CONVTYPE_UNKNOWN",
+        "BUYBACK",
+        "CALL_OPTION_EXERCISED",
+        "DRAWINGS",
+        "DRAWINGS_BY_LOTTERY",
+        "EARLY_CONVERSION",
+        "MATURITY",
+        "ORDINARY",
+        "PUT_OPTION_EXERCISED",
+        "TENDER_OFFER"
+      ],
+      "default": "CONVTYPE_UNKNOWN",
+      "description": "- CONVTYPE_UNKNOWN: Неизвестный тип события/конвертации. Используется по умолчанию\n - BUYBACK: Обратный выкуп акций. Приобретение компанией-эмитентом собственных акций\n - CALL_OPTION_EXERCISED: Исполнение Call-оферты. Досрочное погашение (отзыв) ценной бумаги по инициативе эмитента\n - DRAWINGS: Частичное погашение номинала (амортизация) или плановый тираж без проведения лотереи\n - DRAWINGS_BY_LOTTERY: Погашение по жребию(тираж). Досрочное погашение части выпуска облигаций, где погашаемые бумаги выбираются путем лотереи\n - EARLY_CONVERSION: Досрочная конвертация. Обмен одних ценных бумаг на другие до наступления планового срока (например, конвертируемых облигаций в акции)\n - MATURITY: Погашение по сроку. Плановое полное погашение ценной бумаги по истечении срока её обращения\n - ORDINARY: Плановая (обычная) конвертация. Стандартное корпоративное действие: сплит, консолидация или плановый обмен бумаг\n - PUT_OPTION_EXERCISED: Исполнение Put-оферты. Досрочный выкуп ценной бумаги эмитентом по требованию инвестора (владельца)\n - TENDER_OFFER: Тендерное предложение. Публичное предложение акционерам о выкупе их бумаг (часто при слияниях/поглощениях)",
+      "title": "Возможные типы событий"
+    },
+    "corporateactionsDividend": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата закрытия реестра"
+        },
+        "amount": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Размер дивиденда на одну акцию"
+        },
+        "currency": {
+          "type": "string",
+          "title": "Валюта выплаты дивиденда"
+        }
+      },
+      "title": "Информация о дивидендной выплате"
+    },
+    "corporateactionsGetFutureDividendsResponse": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "title": "Параметры пагинации"
+        },
+        "dividends": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsDividend"
+          },
+          "title": "Список дивидендов"
+        }
+      },
+      "title": "Список предстоящих выплат дивидендов по инструменту с пагинацией"
+    },
+    "corporateactionsGetFutureSplitsResponse": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "title": "Параметры пагинации"
+        },
+        "splits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsSplitInfo"
+          },
+          "title": "Информация о сплитах"
+        }
+      },
+      "title": "Предстоящие события сплитов по инструменту"
+    },
+    "corporateactionsGetPastDividendsResponse": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "title": "Параметры пагинации"
+        },
+        "dividends": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsDividend"
+          },
+          "title": "Список дивидендов"
+        }
+      },
+      "title": "Исторические данные о выплаченных дивидендах по инструменту с пагинацией"
+    },
+    "corporateactionsGetPastSplitsResponse": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "title": "Параметры пагинации"
+        },
+        "splits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsSplitInfo"
+          },
+          "title": "Информация о сплитах"
+        }
+      },
+      "title": "История сплитов по инструменту"
+    },
+    "corporateactionsPagination": {
+      "type": "object",
+      "properties": {
+        "total": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Общее количество элементов"
+        },
+        "limit": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Лимит. Ограничивает количество возвращаемых элементов"
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Смещение. Указывает количество элементов, которые нужно пропустить перед тем, как начать возвращать результат"
+        },
+        "has_next": {
+          "type": "boolean",
+          "title": "Флаг следующей страницы. Указывает, существует ли следующая страница данных"
+        }
+      },
+      "title": "Параметры пагинации"
+    },
+    "corporateactionsSortDirection": {
+      "type": "string",
+      "enum": [
+        "ASC",
+        "DESC"
+      ],
+      "default": "ASC",
+      "description": "- ASC: По возрастанию\n - DESC: По убыванию",
+      "title": "Направление сортировки"
+    },
+    "corporateactionsSplitInfo": {
+      "type": "object",
+      "properties": {
+        "exec_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата вступления в силу корпоративного действия (дата исполнения)"
+        },
+        "old_ratio": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество ценных бумаг до проведения конвертации (числитель коэффициента)"
+        },
+        "new_ratio": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Количество ценных бумаг после проведения конвертации (знаменатель коэффициента)"
+        },
+        "new_lot": {
+          "type": "integer",
+          "format": "int32",
+          "title": "Новый размер лота инструмента после исполнения корпоративного действия"
+        },
+        "convertation_type": {
+          "$ref": "#/definitions/corporateactionsConvertationType",
+          "title": "Тип события (сплит / консолидация и т.д.)"
+        }
+      },
+      "title": "Информация о корпоративном действии"
     },
     "googlerpcStatus": {
       "type": "object",
