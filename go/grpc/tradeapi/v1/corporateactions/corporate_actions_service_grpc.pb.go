@@ -35,6 +35,7 @@ type CorporateActionsServiceClient interface {
 	GetFutureSplits(ctx context.Context, in *GetFutureSplitsRequest, opts ...grpc.CallOption) (*GetFutureSplitsResponse, error)
 	// Получить историю сплитов по инструменту
 	GetPastSplits(ctx context.Context, in *GetPastSplitsRequest, opts ...grpc.CallOption) (*GetPastSplitsResponse, error)
+	// Получить список предстоящих (будущих) дивидендных выплат по инструменту.
 	GetFutureDividends(ctx context.Context, in *GetFutureDividendsRequest, opts ...grpc.CallOption) (*GetFutureDividendsResponse, error)
 	// Получить исторические данные по выплаченным дивидендам инструмента
 	GetPastDividends(ctx context.Context, in *GetPastDividendsRequest, opts ...grpc.CallOption) (*GetPastDividendsResponse, error)
@@ -98,6 +99,7 @@ type CorporateActionsServiceServer interface {
 	GetFutureSplits(context.Context, *GetFutureSplitsRequest) (*GetFutureSplitsResponse, error)
 	// Получить историю сплитов по инструменту
 	GetPastSplits(context.Context, *GetPastSplitsRequest) (*GetPastSplitsResponse, error)
+	// Получить список предстоящих (будущих) дивидендных выплат по инструменту.
 	GetFutureDividends(context.Context, *GetFutureDividendsRequest) (*GetFutureDividendsResponse, error)
 	// Получить исторические данные по выплаченным дивидендам инструмента
 	GetPastDividends(context.Context, *GetPastDividendsRequest) (*GetPastDividendsResponse, error)

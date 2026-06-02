@@ -1238,6 +1238,7 @@
     },
     "/v1/future-dividends": {
       "get": {
+        "summary": "Получить список предстоящих (будущих) дивидендных выплат по инструменту.",
         "operationId": "CorporateActionsService_GetFutureDividends",
         "responses": {
           "200": {
