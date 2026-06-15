@@ -15,7 +15,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from queue import Queue
-from typing import Any, Iterable, Iterator, Optional
+from typing import Any, Iterator, Optional
 
 import grpc
 

@@ -35,7 +35,6 @@ from .fakes import (
     FakeAuthService,
     FakeMarketDataService,
     FakeOrdersService,
-    await_for,
     fake_server,
 )
 

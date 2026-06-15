@@ -66,6 +66,10 @@ include = ["finam_trade_api*", "finam_trade_api.proto*"]
 [tool.ruff]
 line-length = 100
 target-version = "py39"
+# Generated gRPC stubs (protoc output) carry lint noise we don't control —
+# E402, unused re-exports, long alias names. They're excluded from coverage
+# too (see [tool.coverage.run]); exclude them from linting for the same reason.
+extend-exclude = ["finam_trade_api/proto"]
 
 [tool.mypy]
 python_version = "3.9"
