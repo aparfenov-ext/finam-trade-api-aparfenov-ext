@@ -56,8 +56,8 @@ without ceremony.
    new `[0.2.0rc1] — YYYY-MM-DD` section. Update the link references at the
    bottom.
 3. Commit, push, merge to `main`.
-4. Create a GitHub Release with tag `v0.2.0rc1`, target `main`. Mark it
-   *Pre-release*.
+4. Create a GitHub Release with tag `2.16.0rc1` (bare version, no prefix),
+   target `main`. Mark it *Pre-release*.
 5. The `publish_python.yml` workflow detects the prerelease marker in the
    tag and pushes to TestPyPI.
 6. Verify in a clean venv:
@@ -65,7 +65,7 @@ without ceremony.
    python -m venv /tmp/finam-verify && source /tmp/finam-verify/bin/activate
    pip install -i https://test.pypi.org/simple/ \
      --extra-index-url https://pypi.org/simple/ \
-     finam-sdk==0.2.0rc1
+     finam-sdk==2.16.0rc1
    python -c "from finam_trade_api import FinamClient; print('ok')"
    ```
    The `--extra-index-url` is needed because TestPyPI doesn't mirror
@@ -78,14 +78,14 @@ without ceremony.
 2. Update [CHANGELOG.md](CHANGELOG.md) similarly — final section, link
    references.
 3. Commit, push, merge to `main`.
-4. Create a GitHub Release with tag `v0.2.0`, target `main`. **Do not**
-   mark it pre-release.
+4. Create a GitHub Release with tag `2.16.0` (bare version, no prefix),
+   target `main`. **Do not** mark it pre-release.
 5. The workflow detects a final tag, requires environment approval (per
    the `pypi` environment config), and on approval pushes to PyPI.
 6. Verify:
    ```sh
    python -m venv /tmp/finam-verify && source /tmp/finam-verify/bin/activate
-   pip install finam-sdk==0.2.0
+   pip install finam-sdk==2.16.0
    python -c "from finam_trade_api import FinamClient; print('ok')"
    ```
 
@@ -109,8 +109,8 @@ clearly noted in the changelog.
 
 ### "Tag does not match pyproject.toml version"
 
-The `build` job validates that the release tag (`v0.2.0`) and the
-`pyproject.toml` version (`0.2.0`) agree. If you tagged before bumping
+The `build` job validates that the release tag (`2.16.0`) and the
+`pyproject.toml` version (`2.16.0`) agree. If you tagged before bumping
 the version: delete the release + tag, bump the version, push, and
 recreate the release.
 

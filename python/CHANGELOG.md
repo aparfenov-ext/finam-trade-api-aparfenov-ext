@@ -9,6 +9,12 @@ The PyPI distribution is `finam-sdk`; the Python import name is
 
 ## [Unreleased]
 
+## [2.16.0] — 2026-06-05
+
+Version unified with the other Finam Trade API SDKs (JS, Kotlin) so a single
+release tag publishes every SDK at the same version. No API changes since
+`0.1.0`.
+
 ## [0.1.0] — 2026-05-26
 
 Initial public release.
@@ -48,5 +54,6 @@ Initial public release.
   `finam-trade-api` name is held by an unrelated third-party REST client.
   Import name stays `finam_trade_api`.
 
-[Unreleased]: https://github.com/FinamWeb/finam-trade-api/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/FinamWeb/finam-trade-api/compare/2.16.0...HEAD
+[2.16.0]: https://github.com/FinamWeb/finam-trade-api/releases/tag/2.16.0
 [0.1.0]: https://github.com/FinamWeb/finam-trade-api/releases/tag/v0.1.0

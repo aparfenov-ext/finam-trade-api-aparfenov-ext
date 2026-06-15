@@ -1,9 +1,10 @@
 name: Publish Python SDK to PyPI
 
-# Triggered when a GitHub Release is published. Tag format determines the
-# target index:
-#   v0.1.0           → real PyPI
-#   v0.1.0a1, rc1, … → TestPyPI (any tag containing a/b/rc/dev marker)
+# Triggered when a GitHub Release is published. Tags are bare versions,
+# unified across all SDKs (a legacy v-prefix is also accepted). The marker
+# in the tag determines the target index:
+#   2.16.0          → real PyPI
+#   2.16.0a1, rc1, … → TestPyPI (any tag containing a/b/rc/dev marker)
 #
 # Authentication uses PyPI trusted publishing (OIDC) — no API tokens are
 # stored as repo secrets. Both PyPI and TestPyPI need a one-time trusted
@@ -40,6 +41,8 @@ jobs:
         # leaving the release in a half-cut state.
         run: |
           TAG="${GITHUB_REF#refs/tags/}"
+          # Release tags are bare versions (e.g. 2.16.0), unified across all
+          # SDKs. A legacy v-prefix is tolerated so v2.16.0 also resolves.
           TAG_VERSION="${TAG#v}"
           PYPROJECT_VERSION=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb'))['project']['version'])")
           if [ "$TAG_VERSION" != "$PYPROJECT_VERSION" ]; then
