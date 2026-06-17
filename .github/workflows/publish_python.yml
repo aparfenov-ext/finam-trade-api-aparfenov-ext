@@ -41,7 +41,8 @@ jobs:
         # upload but only after the publish job ran, wasting minutes and
         # leaving the release in a half-cut state.
         run: |
-          TAG="${GITHUB_REF#refs/tags/}"
+          git fetch --tags
+          TAG="${git describe --tags --exact-match HEAD 2>/dev/null || echo ""}"
           # Release tags are bare versions (e.g. 2.16.0), unified across all
           # SDKs. A legacy v-prefix is tolerated so v2.16.0 also resolves.
           TAG_VERSION="${TAG#v}"
