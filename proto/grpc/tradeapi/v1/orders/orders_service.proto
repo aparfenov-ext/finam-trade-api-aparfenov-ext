@@ -528,6 +528,8 @@ message OrderState {
   google.type.Decimal remaining_quantity = 10;
   // Информация о SL/TP заявке
   SLTPOrder sltp_order = 11;
+  // Идентификатор биржевой заявки, порожденной в результате срабатывания условия или достижения стоп-цены.
+  string triggered_order_id = 12;
 }
 
 // Запрос получения списка торговых заявок
