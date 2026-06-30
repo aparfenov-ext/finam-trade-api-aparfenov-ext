@@ -1194,9 +1194,11 @@ type OrderState struct {
 	// Оставшийся объем (заполняется только для биржевой заявки)
 	RemainingQuantity *decimal.Decimal `protobuf:"bytes,10,opt,name=remaining_quantity,json=remainingQuantity,proto3" json:"remaining_quantity,omitempty"`
 	// Информация о SL/TP заявке
-	SltpOrder     *SLTPOrder `protobuf:"bytes,11,opt,name=sltp_order,json=sltpOrder,proto3" json:"sltp_order,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	SltpOrder *SLTPOrder `protobuf:"bytes,11,opt,name=sltp_order,json=sltpOrder,proto3" json:"sltp_order,omitempty"`
+	// Идентификатор биржевой заявки, порожденной в результате срабатывания условия или достижения стоп-цены.
+	TriggeredOrderId string `protobuf:"bytes,12,opt,name=triggered_order_id,json=triggeredOrderId,proto3" json:"triggered_order_id,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *OrderState) Reset() {
@@ -1304,6 +1306,13 @@ func (x *OrderState) GetSltpOrder() *SLTPOrder {
 		return x.SltpOrder
 	}
 	return nil
+}
+
+func (x *OrderState) GetTriggeredOrderId() string {
+	if x != nil {
+		return x.TriggeredOrderId
+	}
+	return ""
 }
 
 // Запрос получения списка торговых заявок
@@ -1671,7 +1680,7 @@ const file_grpc_tradeapi_v1_orders_orders_service_proto_rawDesc = "" +
 	"\x03Leg\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x120\n" +
 	"\bquantity\x18\x02 \x01(\v2\x14.google.type.DecimalR\bquantity\x12*\n" +
-	"\x04side\x18\x03 \x01(\x0e2\x16.grpc.tradeapi.v1.SideR\x04side\"\xf3\x04\n" +
+	"\x04side\x18\x03 \x01(\x0e2\x16.grpc.tradeapi.v1.SideR\x04side\"\xa1\x05\n" +
 	"\n" +
 	"OrderState\x12\x19\n" +
 	"\border_id\x18\x01 \x01(\tR\aorderId\x12\x17\n" +
@@ -1688,7 +1697,8 @@ const file_grpc_tradeapi_v1_orders_orders_service_proto_rawDesc = "" +
 	"\x12remaining_quantity\x18\n" +
 	" \x01(\v2\x14.google.type.DecimalR\x11remainingQuantity\x12A\n" +
 	"\n" +
-	"sltp_order\x18\v \x01(\v2\".grpc.tradeapi.v1.orders.SLTPOrderR\tsltpOrder\".\n" +
+	"sltp_order\x18\v \x01(\v2\".grpc.tradeapi.v1.orders.SLTPOrderR\tsltpOrder\x12,\n" +
+	"\x12triggered_order_id\x18\f \x01(\tR\x10triggeredOrderId\".\n" +
 	"\rOrdersRequest\x12\x1d\n" +
 	"\n" +
 	"account_id\x18\x01 \x01(\tR\taccountId\"M\n" +

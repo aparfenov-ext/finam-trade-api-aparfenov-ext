@@ -1184,6 +1184,280 @@
         ]
       }
     },
+    "/v1/bonds/future": {
+      "get": {
+        "summary": "Получить календарь будущих событий по облигациям",
+        "operationId": "CorporateActionsService_GetFutureBondsEvents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetFutureBondsEventsResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date_from.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых событий по облигациям в списке",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество событий по облигациям, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/v1/bonds/past": {
+      "get": {
+        "summary": "Получить календарь исторических событий по облигациям",
+        "operationId": "CorporateActionsService_GetPastBondsEvents",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/corporateactionsGetPastBondsEventsResponse"
+            }
+          },
+          "401": {
+            "description": "Срок действия токена истек или токен недействителен",
+            "schema": {}
+          },
+          "404": {
+            "description": "Счёт не был найден в токене",
+            "schema": {}
+          },
+          "429": {
+            "description": "Слишком много запросов. Доступный лимит - 200 запросов в минуту",
+            "schema": {}
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервиса. Попробуйте позже",
+            "schema": {}
+          },
+          "503": {
+            "description": "Сервис на данный момент не доступен. Попробуйте позже",
+            "schema": {}
+          },
+          "504": {
+            "description": "Крайний срок истек до завершения операции",
+            "schema": {}
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/googlerpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "symbol",
+            "description": "Символ инструмента",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "date_from.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_from.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.year",
+            "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without\na year.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.month",
+            "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a\nmonth and day.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "date_to.day",
+            "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0\nto specify a year by itself or a year and month where the day isn't\nsignificant.",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "sort_direction",
+            "description": "Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым\n\n - ASC: По возрастанию\n - DESC: По убыванию",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ASC",
+              "DESC"
+            ],
+            "default": "ASC"
+          },
+          {
+            "name": "limit",
+            "description": "Лимит. Ограничивает количество возвращаемых событий по облигациям в списке",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "offset",
+            "description": "Смещение. Указывает количество событий по облигациям, которые нужно пропустить перед тем, как начать возвращать результат",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "CorporateActionsService"
+        ],
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/v1/exchanges": {
       "get": {
         "summary": "Получение списка доступных бирж, названия и mic коды\nПример HTTP запроса:\nGET /v1/exchanges\nAuthorization: \u003ctoken\u003e",
@@ -3261,6 +3535,69 @@
       },
       "title": "Информация о токене"
     },
+    "corporateactionsAmortizationEventDetails": {
+      "type": "object",
+      "properties": {
+        "new_face_value": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Остаточный номинал после амортизации"
+        },
+        "initial_face_value": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Первоначальный номинал бумаги"
+        },
+        "amortization_percent": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Доля амортизации от номинала в процентах"
+        }
+      },
+      "title": "Детали амортизации (частичного погашения номинала облигации)"
+    },
+    "corporateactionsBondEvent": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата события"
+        },
+        "type": {
+          "$ref": "#/definitions/corporateactionsBondEventType",
+          "title": "Тип события"
+        },
+        "value": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Сумма выплаты (опционально: для оферты может отсутствовать, если важна только цена)"
+        },
+        "currency": {
+          "type": "string",
+          "title": "Валюта выплаты"
+        },
+        "coupon_details": {
+          "$ref": "#/definitions/corporateactionsCouponEventDetails",
+          "title": "Детали купонной выплаты"
+        },
+        "amortization_details": {
+          "$ref": "#/definitions/corporateactionsAmortizationEventDetails",
+          "title": "Детали амортизации (частичного погашения номинала облигации)"
+        },
+        "offer_details": {
+          "$ref": "#/definitions/corporateactionsOfferEventDetails",
+          "title": "Детали оферты (событие досрочного выкупа или погашения)"
+        }
+      },
+      "title": "Событие по облигации"
+    },
+    "corporateactionsBondEventType": {
+      "type": "string",
+      "enum": [
+        "UNSPECIFIED",
+        "COUPON",
+        "AMORTIZATION",
+        "OFFER"
+      ],
+      "default": "UNSPECIFIED",
+      "title": "Тип события по облигациям"
+    },
     "corporateactionsConvertationType": {
       "type": "string",
       "enum": [
@@ -3279,6 +3616,28 @@
       "description": "- CONVTYPE_UNKNOWN: Неизвестный тип события/конвертации. Используется по умолчанию\n - BUYBACK: Обратный выкуп акций. Приобретение компанией-эмитентом собственных акций\n - CALL_OPTION_EXERCISED: Исполнение Call-оферты. Досрочное погашение (отзыв) ценной бумаги по инициативе эмитента\n - DRAWINGS: Частичное погашение номинала (амортизация) или плановый тираж без проведения лотереи\n - DRAWINGS_BY_LOTTERY: Погашение по жребию(тираж). Досрочное погашение части выпуска облигаций, где погашаемые бумаги выбираются путем лотереи\n - EARLY_CONVERSION: Досрочная конвертация. Обмен одних ценных бумаг на другие до наступления планового срока (например, конвертируемых облигаций в акции)\n - MATURITY: Погашение по сроку. Плановое полное погашение ценной бумаги по истечении срока её обращения\n - ORDINARY: Плановая (обычная) конвертация. Стандартное корпоративное действие: сплит, консолидация или плановый обмен бумаг\n - PUT_OPTION_EXERCISED: Исполнение Put-оферты. Досрочный выкуп ценной бумаги эмитентом по требованию инвестора (владельца)\n - TENDER_OFFER: Тендерное предложение. Публичное предложение акционерам о выкупе их бумаг (часто при слияниях/поглощениях)",
       "title": "Возможные типы событий"
     },
+    "corporateactionsCouponEventDetails": {
+      "type": "object",
+      "properties": {
+        "record_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата фиксации реестра (Record Date)"
+        },
+        "start_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата начала купонного периода"
+        },
+        "face_value": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Номинал, на который начисляется купон"
+        },
+        "value_percent": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Ставка купона в процентах"
+        }
+      },
+      "title": "Детали купонной выплаты"
+    },
     "corporateactionsDividend": {
       "type": "object",
       "properties": {
@@ -3296,6 +3655,28 @@
         }
       },
       "title": "Информация о дивидендной выплате"
+    },
+    "corporateactionsGetFutureBondsEventsResponse": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "description": "Параметры пагинации. Параметр total игнорируется."
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsBondEvent"
+          },
+          "title": "События по облигациям"
+        }
+      },
+      "title": "Календарь будущих событий по облигациям"
     },
     "corporateactionsGetFutureDividendsResponse": {
       "type": "object",
@@ -3337,6 +3718,28 @@
       },
       "title": "Предстоящие события сплитов по инструменту"
     },
+    "corporateactionsGetPastBondsEventsResponse": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string",
+          "title": "Символ инструмента"
+        },
+        "pagination": {
+          "$ref": "#/definitions/corporateactionsPagination",
+          "description": "Параметры пагинации. Параметр total игнорируется."
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/corporateactionsBondEvent"
+          },
+          "title": "События по облигациям"
+        }
+      },
+      "title": "Календарь исторических событий по облигациям"
+    },
     "corporateactionsGetPastDividendsResponse": {
       "type": "object",
       "properties": {
@@ -3376,6 +3779,32 @@
         }
       },
       "title": "История сплитов по инструменту"
+    },
+    "corporateactionsOfferEventDetails": {
+      "type": "object",
+      "properties": {
+        "offer_type": {
+          "type": "string",
+          "title": "PUT или CALL"
+        },
+        "price": {
+          "$ref": "#/definitions/typeDecimal",
+          "title": "Цена оферты в процентах от номинала (или в валюте)"
+        },
+        "start_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата начала периода предъявления к оферте"
+        },
+        "end_date": {
+          "$ref": "#/definitions/typeDate",
+          "title": "Дата окончания периода предъявления к оферте"
+        },
+        "agent": {
+          "type": "string",
+          "title": "Агент по оферте"
+        }
+      },
+      "title": "Детали оферты (событие досрочного выкупа или погашения)"
     },
     "corporateactionsPagination": {
       "type": "object",
@@ -4017,6 +4446,10 @@
         "sltp_order": {
           "$ref": "#/definitions/ordersSLTPOrder",
           "title": "Информация о SL/TP заявке"
+        },
+        "triggered_order_id": {
+          "type": "string",
+          "description": "Идентификатор биржевой заявки, порожденной в результате срабатывания условия или достижения стоп-цены."
         }
       },
       "title": "Состояние заявки"

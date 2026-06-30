@@ -26,6 +26,59 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Тип события по облигациям
+type BondEventType int32
+
+const (
+	BondEventType_UNSPECIFIED  BondEventType = 0
+	BondEventType_COUPON       BondEventType = 1
+	BondEventType_AMORTIZATION BondEventType = 2
+	BondEventType_OFFER        BondEventType = 3
+)
+
+// Enum value maps for BondEventType.
+var (
+	BondEventType_name = map[int32]string{
+		0: "UNSPECIFIED",
+		1: "COUPON",
+		2: "AMORTIZATION",
+		3: "OFFER",
+	}
+	BondEventType_value = map[string]int32{
+		"UNSPECIFIED":  0,
+		"COUPON":       1,
+		"AMORTIZATION": 2,
+		"OFFER":        3,
+	}
+)
+
+func (x BondEventType) Enum() *BondEventType {
+	p := new(BondEventType)
+	*p = x
+	return p
+}
+
+func (x BondEventType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BondEventType) Descriptor() protoreflect.EnumDescriptor {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[0].Descriptor()
+}
+
+func (BondEventType) Type() protoreflect.EnumType {
+	return &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[0]
+}
+
+func (x BondEventType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BondEventType.Descriptor instead.
+func (BondEventType) EnumDescriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{0}
+}
+
 // Возможные типы событий
 type ConvertationType int32
 
@@ -91,11 +144,11 @@ func (x ConvertationType) String() string {
 }
 
 func (ConvertationType) Descriptor() protoreflect.EnumDescriptor {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[0].Descriptor()
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[1].Descriptor()
 }
 
 func (ConvertationType) Type() protoreflect.EnumType {
-	return &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[0]
+	return &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[1]
 }
 
 func (x ConvertationType) Number() protoreflect.EnumNumber {
@@ -104,7 +157,7 @@ func (x ConvertationType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ConvertationType.Descriptor instead.
 func (ConvertationType) EnumDescriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{0}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{1}
 }
 
 // Направление сортировки
@@ -140,11 +193,11 @@ func (x SortDirection) String() string {
 }
 
 func (SortDirection) Descriptor() protoreflect.EnumDescriptor {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[1].Descriptor()
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[2].Descriptor()
 }
 
 func (SortDirection) Type() protoreflect.EnumType {
-	return &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[1]
+	return &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes[2]
 }
 
 func (x SortDirection) Number() protoreflect.EnumNumber {
@@ -153,7 +206,7 @@ func (x SortDirection) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SortDirection.Descriptor instead.
 func (SortDirection) EnumDescriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{1}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{2}
 }
 
 // Запрос предстоящих событий сплитов по инструменту
@@ -448,6 +501,675 @@ func (x *GetPastSplitsResponse) GetSplits() []*SplitInfo {
 	return nil
 }
 
+// Запрос календаря будущих событий по облигациям
+type GetFutureBondsEventsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символ инструмента
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Начало временного интервала
+	DateFrom *date.Date `protobuf:"bytes,2,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
+	// Конец временного интервала. По умолчанию отдаются данные за год.
+	DateTo *date.Date `protobuf:"bytes,3,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
+	// Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым
+	SortDirection SortDirection `protobuf:"varint,4,opt,name=sort_direction,json=sortDirection,proto3,enum=grpc.tradeapi.v1.corporateactions.SortDirection" json:"sort_direction,omitempty"`
+	// Лимит. Ограничивает количество возвращаемых событий по облигациям в списке
+	Limit int32 `protobuf:"varint,5,opt,name=limit,proto3" json:"limit,omitempty"`
+	// Смещение. Указывает количество событий по облигациям, которые нужно пропустить перед тем, как начать возвращать результат
+	Offset        int32 `protobuf:"varint,6,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetFutureBondsEventsRequest) Reset() {
+	*x = GetFutureBondsEventsRequest{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetFutureBondsEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetFutureBondsEventsRequest) ProtoMessage() {}
+
+func (x *GetFutureBondsEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetFutureBondsEventsRequest.ProtoReflect.Descriptor instead.
+func (*GetFutureBondsEventsRequest) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetFutureBondsEventsRequest) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *GetFutureBondsEventsRequest) GetDateFrom() *date.Date {
+	if x != nil {
+		return x.DateFrom
+	}
+	return nil
+}
+
+func (x *GetFutureBondsEventsRequest) GetDateTo() *date.Date {
+	if x != nil {
+		return x.DateTo
+	}
+	return nil
+}
+
+func (x *GetFutureBondsEventsRequest) GetSortDirection() SortDirection {
+	if x != nil {
+		return x.SortDirection
+	}
+	return SortDirection_ASC
+}
+
+func (x *GetFutureBondsEventsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *GetFutureBondsEventsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+// Календарь будущих событий по облигациям
+type GetFutureBondsEventsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символ инструмента
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Параметры пагинации. Параметр total игнорируется.
+	Pagination *Pagination `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	// События по облигациям
+	Events        []*BondEvent `protobuf:"bytes,3,rep,name=events,proto3" json:"events,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetFutureBondsEventsResponse) Reset() {
+	*x = GetFutureBondsEventsResponse{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetFutureBondsEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetFutureBondsEventsResponse) ProtoMessage() {}
+
+func (x *GetFutureBondsEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetFutureBondsEventsResponse.ProtoReflect.Descriptor instead.
+func (*GetFutureBondsEventsResponse) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetFutureBondsEventsResponse) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *GetFutureBondsEventsResponse) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *GetFutureBondsEventsResponse) GetEvents() []*BondEvent {
+	if x != nil {
+		return x.Events
+	}
+	return nil
+}
+
+// Запрос календаря исторических событий по облигациям
+type GetPastBondsEventsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символ инструмента
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Начало временного интервала
+	DateFrom *date.Date `protobuf:"bytes,2,opt,name=date_from,json=dateFrom,proto3" json:"date_from,omitempty"`
+	// Конец временного интервала. По умолчанию отдаются данные за год.
+	DateTo *date.Date `protobuf:"bytes,3,opt,name=date_to,json=dateTo,proto3" json:"date_to,omitempty"`
+	// Направление сортировки по дате: asc — от старых к новым, desc — от новых к старым
+	SortDirection SortDirection `protobuf:"varint,4,opt,name=sort_direction,json=sortDirection,proto3,enum=grpc.tradeapi.v1.corporateactions.SortDirection" json:"sort_direction,omitempty"`
+	// Лимит. Ограничивает количество возвращаемых событий по облигациям в списке
+	Limit int32 `protobuf:"varint,5,opt,name=limit,proto3" json:"limit,omitempty"`
+	// Смещение. Указывает количество событий по облигациям, которые нужно пропустить перед тем, как начать возвращать результат
+	Offset        int32 `protobuf:"varint,6,opt,name=offset,proto3" json:"offset,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPastBondsEventsRequest) Reset() {
+	*x = GetPastBondsEventsRequest{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPastBondsEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPastBondsEventsRequest) ProtoMessage() {}
+
+func (x *GetPastBondsEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPastBondsEventsRequest.ProtoReflect.Descriptor instead.
+func (*GetPastBondsEventsRequest) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetPastBondsEventsRequest) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *GetPastBondsEventsRequest) GetDateFrom() *date.Date {
+	if x != nil {
+		return x.DateFrom
+	}
+	return nil
+}
+
+func (x *GetPastBondsEventsRequest) GetDateTo() *date.Date {
+	if x != nil {
+		return x.DateTo
+	}
+	return nil
+}
+
+func (x *GetPastBondsEventsRequest) GetSortDirection() SortDirection {
+	if x != nil {
+		return x.SortDirection
+	}
+	return SortDirection_ASC
+}
+
+func (x *GetPastBondsEventsRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *GetPastBondsEventsRequest) GetOffset() int32 {
+	if x != nil {
+		return x.Offset
+	}
+	return 0
+}
+
+// Календарь исторических событий по облигациям
+type GetPastBondsEventsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Символ инструмента
+	Symbol string `protobuf:"bytes,1,opt,name=symbol,proto3" json:"symbol,omitempty"`
+	// Параметры пагинации. Параметр total игнорируется.
+	Pagination *Pagination `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	// События по облигациям
+	Events        []*BondEvent `protobuf:"bytes,3,rep,name=events,proto3" json:"events,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPastBondsEventsResponse) Reset() {
+	*x = GetPastBondsEventsResponse{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPastBondsEventsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPastBondsEventsResponse) ProtoMessage() {}
+
+func (x *GetPastBondsEventsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPastBondsEventsResponse.ProtoReflect.Descriptor instead.
+func (*GetPastBondsEventsResponse) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetPastBondsEventsResponse) GetSymbol() string {
+	if x != nil {
+		return x.Symbol
+	}
+	return ""
+}
+
+func (x *GetPastBondsEventsResponse) GetPagination() *Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *GetPastBondsEventsResponse) GetEvents() []*BondEvent {
+	if x != nil {
+		return x.Events
+	}
+	return nil
+}
+
+// Событие по облигации
+type BondEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Дата события
+	Date *date.Date `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	// Тип события
+	Type BondEventType `protobuf:"varint,2,opt,name=type,proto3,enum=grpc.tradeapi.v1.corporateactions.BondEventType" json:"type,omitempty"`
+	// Сумма выплаты (опционально: для оферты может отсутствовать, если важна только цена)
+	Value *decimal.Decimal `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	// Валюта выплаты
+	Currency *wrapperspb.StringValue `protobuf:"bytes,4,opt,name=currency,proto3" json:"currency,omitempty"`
+	// Специфичные детали события
+	//
+	// Types that are valid to be assigned to EventDetails:
+	//
+	//	*BondEvent_CouponDetails
+	//	*BondEvent_AmortizationDetails
+	//	*BondEvent_OfferDetails
+	EventDetails  isBondEvent_EventDetails `protobuf_oneof:"event_details"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BondEvent) Reset() {
+	*x = BondEvent{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BondEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BondEvent) ProtoMessage() {}
+
+func (x *BondEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BondEvent.ProtoReflect.Descriptor instead.
+func (*BondEvent) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *BondEvent) GetDate() *date.Date {
+	if x != nil {
+		return x.Date
+	}
+	return nil
+}
+
+func (x *BondEvent) GetType() BondEventType {
+	if x != nil {
+		return x.Type
+	}
+	return BondEventType_UNSPECIFIED
+}
+
+func (x *BondEvent) GetValue() *decimal.Decimal {
+	if x != nil {
+		return x.Value
+	}
+	return nil
+}
+
+func (x *BondEvent) GetCurrency() *wrapperspb.StringValue {
+	if x != nil {
+		return x.Currency
+	}
+	return nil
+}
+
+func (x *BondEvent) GetEventDetails() isBondEvent_EventDetails {
+	if x != nil {
+		return x.EventDetails
+	}
+	return nil
+}
+
+func (x *BondEvent) GetCouponDetails() *CouponEventDetails {
+	if x != nil {
+		if x, ok := x.EventDetails.(*BondEvent_CouponDetails); ok {
+			return x.CouponDetails
+		}
+	}
+	return nil
+}
+
+func (x *BondEvent) GetAmortizationDetails() *AmortizationEventDetails {
+	if x != nil {
+		if x, ok := x.EventDetails.(*BondEvent_AmortizationDetails); ok {
+			return x.AmortizationDetails
+		}
+	}
+	return nil
+}
+
+func (x *BondEvent) GetOfferDetails() *OfferEventDetails {
+	if x != nil {
+		if x, ok := x.EventDetails.(*BondEvent_OfferDetails); ok {
+			return x.OfferDetails
+		}
+	}
+	return nil
+}
+
+type isBondEvent_EventDetails interface {
+	isBondEvent_EventDetails()
+}
+
+type BondEvent_CouponDetails struct {
+	// Детали купонной выплаты
+	CouponDetails *CouponEventDetails `protobuf:"bytes,5,opt,name=coupon_details,json=couponDetails,proto3,oneof"`
+}
+
+type BondEvent_AmortizationDetails struct {
+	// Детали амортизации (частичного погашения номинала облигации)
+	AmortizationDetails *AmortizationEventDetails `protobuf:"bytes,6,opt,name=amortization_details,json=amortizationDetails,proto3,oneof"`
+}
+
+type BondEvent_OfferDetails struct {
+	// Детали оферты (событие досрочного выкупа или погашения)
+	OfferDetails *OfferEventDetails `protobuf:"bytes,7,opt,name=offer_details,json=offerDetails,proto3,oneof"`
+}
+
+func (*BondEvent_CouponDetails) isBondEvent_EventDetails() {}
+
+func (*BondEvent_AmortizationDetails) isBondEvent_EventDetails() {}
+
+func (*BondEvent_OfferDetails) isBondEvent_EventDetails() {}
+
+// Детали купонной выплаты
+type CouponEventDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Дата фиксации реестра (Record Date)
+	RecordDate *date.Date `protobuf:"bytes,1,opt,name=record_date,json=recordDate,proto3" json:"record_date,omitempty"`
+	// Дата начала купонного периода
+	StartDate *date.Date `protobuf:"bytes,2,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	// Номинал, на который начисляется купон
+	FaceValue *decimal.Decimal `protobuf:"bytes,3,opt,name=face_value,json=faceValue,proto3" json:"face_value,omitempty"`
+	// Ставка купона в процентах
+	ValuePercent  *decimal.Decimal `protobuf:"bytes,4,opt,name=value_percent,json=valuePercent,proto3" json:"value_percent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CouponEventDetails) Reset() {
+	*x = CouponEventDetails{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CouponEventDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CouponEventDetails) ProtoMessage() {}
+
+func (x *CouponEventDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CouponEventDetails.ProtoReflect.Descriptor instead.
+func (*CouponEventDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CouponEventDetails) GetRecordDate() *date.Date {
+	if x != nil {
+		return x.RecordDate
+	}
+	return nil
+}
+
+func (x *CouponEventDetails) GetStartDate() *date.Date {
+	if x != nil {
+		return x.StartDate
+	}
+	return nil
+}
+
+func (x *CouponEventDetails) GetFaceValue() *decimal.Decimal {
+	if x != nil {
+		return x.FaceValue
+	}
+	return nil
+}
+
+func (x *CouponEventDetails) GetValuePercent() *decimal.Decimal {
+	if x != nil {
+		return x.ValuePercent
+	}
+	return nil
+}
+
+// Детали амортизации (частичного погашения номинала облигации)
+type AmortizationEventDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Остаточный номинал после амортизации
+	NewFaceValue *decimal.Decimal `protobuf:"bytes,1,opt,name=new_face_value,json=newFaceValue,proto3" json:"new_face_value,omitempty"`
+	// Первоначальный номинал бумаги
+	InitialFaceValue *decimal.Decimal `protobuf:"bytes,2,opt,name=initial_face_value,json=initialFaceValue,proto3" json:"initial_face_value,omitempty"`
+	// Доля амортизации от номинала в процентах
+	AmortizationPercent *decimal.Decimal `protobuf:"bytes,3,opt,name=amortization_percent,json=amortizationPercent,proto3" json:"amortization_percent,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *AmortizationEventDetails) Reset() {
+	*x = AmortizationEventDetails{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AmortizationEventDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AmortizationEventDetails) ProtoMessage() {}
+
+func (x *AmortizationEventDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AmortizationEventDetails.ProtoReflect.Descriptor instead.
+func (*AmortizationEventDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AmortizationEventDetails) GetNewFaceValue() *decimal.Decimal {
+	if x != nil {
+		return x.NewFaceValue
+	}
+	return nil
+}
+
+func (x *AmortizationEventDetails) GetInitialFaceValue() *decimal.Decimal {
+	if x != nil {
+		return x.InitialFaceValue
+	}
+	return nil
+}
+
+func (x *AmortizationEventDetails) GetAmortizationPercent() *decimal.Decimal {
+	if x != nil {
+		return x.AmortizationPercent
+	}
+	return nil
+}
+
+// Детали оферты (событие досрочного выкупа или погашения)
+type OfferEventDetails struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// PUT или CALL
+	OfferType *wrapperspb.StringValue `protobuf:"bytes,1,opt,name=offer_type,json=offerType,proto3" json:"offer_type,omitempty"`
+	// Цена оферты в процентах от номинала (или в валюте)
+	Price *decimal.Decimal `protobuf:"bytes,2,opt,name=price,proto3" json:"price,omitempty"`
+	// Дата начала периода предъявления к оферте
+	StartDate *date.Date `protobuf:"bytes,3,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	// Дата окончания периода предъявления к оферте
+	EndDate *date.Date `protobuf:"bytes,4,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	// Агент по оферте
+	Agent         *wrapperspb.StringValue `protobuf:"bytes,5,opt,name=agent,proto3" json:"agent,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OfferEventDetails) Reset() {
+	*x = OfferEventDetails{}
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OfferEventDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OfferEventDetails) ProtoMessage() {}
+
+func (x *OfferEventDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OfferEventDetails.ProtoReflect.Descriptor instead.
+func (*OfferEventDetails) Descriptor() ([]byte, []int) {
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *OfferEventDetails) GetOfferType() *wrapperspb.StringValue {
+	if x != nil {
+		return x.OfferType
+	}
+	return nil
+}
+
+func (x *OfferEventDetails) GetPrice() *decimal.Decimal {
+	if x != nil {
+		return x.Price
+	}
+	return nil
+}
+
+func (x *OfferEventDetails) GetStartDate() *date.Date {
+	if x != nil {
+		return x.StartDate
+	}
+	return nil
+}
+
+func (x *OfferEventDetails) GetEndDate() *date.Date {
+	if x != nil {
+		return x.EndDate
+	}
+	return nil
+}
+
+func (x *OfferEventDetails) GetAgent() *wrapperspb.StringValue {
+	if x != nil {
+		return x.Agent
+	}
+	return nil
+}
+
 // Информация о корпоративном действии
 type SplitInfo struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -467,7 +1189,7 @@ type SplitInfo struct {
 
 func (x *SplitInfo) Reset() {
 	*x = SplitInfo{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[4]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -479,7 +1201,7 @@ func (x *SplitInfo) String() string {
 func (*SplitInfo) ProtoMessage() {}
 
 func (x *SplitInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[4]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +1214,7 @@ func (x *SplitInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SplitInfo.ProtoReflect.Descriptor instead.
 func (*SplitInfo) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{4}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SplitInfo) GetExecDate() *date.Date {
@@ -547,7 +1269,7 @@ type GetFutureDividendsRequest struct {
 
 func (x *GetFutureDividendsRequest) Reset() {
 	*x = GetFutureDividendsRequest{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[5]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -559,7 +1281,7 @@ func (x *GetFutureDividendsRequest) String() string {
 func (*GetFutureDividendsRequest) ProtoMessage() {}
 
 func (x *GetFutureDividendsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[5]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +1294,7 @@ func (x *GetFutureDividendsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFutureDividendsRequest.ProtoReflect.Descriptor instead.
 func (*GetFutureDividendsRequest) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{5}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetFutureDividendsRequest) GetSymbol() string {
@@ -616,7 +1338,7 @@ type GetFutureDividendsResponse struct {
 
 func (x *GetFutureDividendsResponse) Reset() {
 	*x = GetFutureDividendsResponse{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[6]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -628,7 +1350,7 @@ func (x *GetFutureDividendsResponse) String() string {
 func (*GetFutureDividendsResponse) ProtoMessage() {}
 
 func (x *GetFutureDividendsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[6]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -641,7 +1363,7 @@ func (x *GetFutureDividendsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFutureDividendsResponse.ProtoReflect.Descriptor instead.
 func (*GetFutureDividendsResponse) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{6}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetFutureDividendsResponse) GetPagination() *Pagination {
@@ -679,7 +1401,7 @@ type GetPastDividendsRequest struct {
 
 func (x *GetPastDividendsRequest) Reset() {
 	*x = GetPastDividendsRequest{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[7]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -691,7 +1413,7 @@ func (x *GetPastDividendsRequest) String() string {
 func (*GetPastDividendsRequest) ProtoMessage() {}
 
 func (x *GetPastDividendsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[7]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +1426,7 @@ func (x *GetPastDividendsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPastDividendsRequest.ProtoReflect.Descriptor instead.
 func (*GetPastDividendsRequest) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{7}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetPastDividendsRequest) GetSymbol() string {
@@ -762,7 +1484,7 @@ type GetPastDividendsResponse struct {
 
 func (x *GetPastDividendsResponse) Reset() {
 	*x = GetPastDividendsResponse{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[8]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -774,7 +1496,7 @@ func (x *GetPastDividendsResponse) String() string {
 func (*GetPastDividendsResponse) ProtoMessage() {}
 
 func (x *GetPastDividendsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[8]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -787,7 +1509,7 @@ func (x *GetPastDividendsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPastDividendsResponse.ProtoReflect.Descriptor instead.
 func (*GetPastDividendsResponse) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{8}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetPastDividendsResponse) GetPagination() *Pagination {
@@ -819,7 +1541,7 @@ type Dividend struct {
 
 func (x *Dividend) Reset() {
 	*x = Dividend{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[9]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -831,7 +1553,7 @@ func (x *Dividend) String() string {
 func (*Dividend) ProtoMessage() {}
 
 func (x *Dividend) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[9]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -844,7 +1566,7 @@ func (x *Dividend) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Dividend.ProtoReflect.Descriptor instead.
 func (*Dividend) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{9}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Dividend) GetDate() *date.Date {
@@ -885,7 +1607,7 @@ type Pagination struct {
 
 func (x *Pagination) Reset() {
 	*x = Pagination{}
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[10]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -897,7 +1619,7 @@ func (x *Pagination) String() string {
 func (*Pagination) ProtoMessage() {}
 
 func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[10]
+	mi := &file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -910,7 +1632,7 @@ func (x *Pagination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
 func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{10}
+	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *Pagination) GetTotal() int32 {
@@ -969,7 +1691,62 @@ const file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_raw
 	"\n" +
 	"pagination\x18\x02 \x01(\v2-.grpc.tradeapi.v1.corporateactions.PaginationR\n" +
 	"pagination\x12D\n" +
-	"\x06splits\x18\x03 \x03(\v2,.grpc.tradeapi.v1.corporateactions.SplitInfoR\x06splits\"\xb9\x02\n" +
+	"\x06splits\x18\x03 \x03(\v2,.grpc.tradeapi.v1.corporateactions.SplitInfoR\x06splits\"\x98\x02\n" +
+	"\x1bGetFutureBondsEventsRequest\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12.\n" +
+	"\tdate_from\x18\x02 \x01(\v2\x11.google.type.DateR\bdateFrom\x12*\n" +
+	"\adate_to\x18\x03 \x01(\v2\x11.google.type.DateR\x06dateTo\x12W\n" +
+	"\x0esort_direction\x18\x04 \x01(\x0e20.grpc.tradeapi.v1.corporateactions.SortDirectionR\rsortDirection\x12\x14\n" +
+	"\x05limit\x18\x05 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x06 \x01(\x05R\x06offset\"\xcb\x01\n" +
+	"\x1cGetFutureBondsEventsResponse\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12M\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2-.grpc.tradeapi.v1.corporateactions.PaginationR\n" +
+	"pagination\x12D\n" +
+	"\x06events\x18\x03 \x03(\v2,.grpc.tradeapi.v1.corporateactions.BondEventR\x06events\"\x96\x02\n" +
+	"\x19GetPastBondsEventsRequest\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12.\n" +
+	"\tdate_from\x18\x02 \x01(\v2\x11.google.type.DateR\bdateFrom\x12*\n" +
+	"\adate_to\x18\x03 \x01(\v2\x11.google.type.DateR\x06dateTo\x12W\n" +
+	"\x0esort_direction\x18\x04 \x01(\x0e20.grpc.tradeapi.v1.corporateactions.SortDirectionR\rsortDirection\x12\x14\n" +
+	"\x05limit\x18\x05 \x01(\x05R\x05limit\x12\x16\n" +
+	"\x06offset\x18\x06 \x01(\x05R\x06offset\"\xc9\x01\n" +
+	"\x1aGetPastBondsEventsResponse\x12\x16\n" +
+	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x12M\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2-.grpc.tradeapi.v1.corporateactions.PaginationR\n" +
+	"pagination\x12D\n" +
+	"\x06events\x18\x03 \x03(\v2,.grpc.tradeapi.v1.corporateactions.BondEventR\x06events\"\x9e\x04\n" +
+	"\tBondEvent\x12%\n" +
+	"\x04date\x18\x01 \x01(\v2\x11.google.type.DateR\x04date\x12D\n" +
+	"\x04type\x18\x02 \x01(\x0e20.grpc.tradeapi.v1.corporateactions.BondEventTypeR\x04type\x12*\n" +
+	"\x05value\x18\x03 \x01(\v2\x14.google.type.DecimalR\x05value\x128\n" +
+	"\bcurrency\x18\x04 \x01(\v2\x1c.google.protobuf.StringValueR\bcurrency\x12^\n" +
+	"\x0ecoupon_details\x18\x05 \x01(\v25.grpc.tradeapi.v1.corporateactions.CouponEventDetailsH\x00R\rcouponDetails\x12p\n" +
+	"\x14amortization_details\x18\x06 \x01(\v2;.grpc.tradeapi.v1.corporateactions.AmortizationEventDetailsH\x00R\x13amortizationDetails\x12[\n" +
+	"\roffer_details\x18\a \x01(\v24.grpc.tradeapi.v1.corporateactions.OfferEventDetailsH\x00R\fofferDetailsB\x0f\n" +
+	"\revent_details\"\xea\x01\n" +
+	"\x12CouponEventDetails\x122\n" +
+	"\vrecord_date\x18\x01 \x01(\v2\x11.google.type.DateR\n" +
+	"recordDate\x120\n" +
+	"\n" +
+	"start_date\x18\x02 \x01(\v2\x11.google.type.DateR\tstartDate\x123\n" +
+	"\n" +
+	"face_value\x18\x03 \x01(\v2\x14.google.type.DecimalR\tfaceValue\x129\n" +
+	"\rvalue_percent\x18\x04 \x01(\v2\x14.google.type.DecimalR\fvaluePercent\"\xe3\x01\n" +
+	"\x18AmortizationEventDetails\x12:\n" +
+	"\x0enew_face_value\x18\x01 \x01(\v2\x14.google.type.DecimalR\fnewFaceValue\x12B\n" +
+	"\x12initial_face_value\x18\x02 \x01(\v2\x14.google.type.DecimalR\x10initialFaceValue\x12G\n" +
+	"\x14amortization_percent\x18\x03 \x01(\v2\x14.google.type.DecimalR\x13amortizationPercent\"\x90\x02\n" +
+	"\x11OfferEventDetails\x12;\n" +
+	"\n" +
+	"offer_type\x18\x01 \x01(\v2\x1c.google.protobuf.StringValueR\tofferType\x12*\n" +
+	"\x05price\x18\x02 \x01(\v2\x14.google.type.DecimalR\x05price\x120\n" +
+	"\n" +
+	"start_date\x18\x03 \x01(\v2\x11.google.type.DateR\tstartDate\x12,\n" +
+	"\bend_date\x18\x04 \x01(\v2\x11.google.type.DateR\aendDate\x122\n" +
+	"\x05agent\x18\x05 \x01(\v2\x1c.google.protobuf.StringValueR\x05agent\"\xb9\x02\n" +
 	"\tSplitInfo\x12.\n" +
 	"\texec_date\x18\x01 \x01(\v2\x11.google.type.DateR\bexecDate\x121\n" +
 	"\told_ratio\x18\x02 \x01(\v2\x14.google.type.DecimalR\boldRatio\x121\n" +
@@ -1007,7 +1784,13 @@ const file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_raw
 	"\x05total\x18\x01 \x01(\x05R\x05total\x12\x14\n" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x12\x16\n" +
 	"\x06offset\x18\x03 \x01(\x05R\x06offset\x12\x19\n" +
-	"\bhas_next\x18\x04 \x01(\bR\ahasNext*\xd5\x01\n" +
+	"\bhas_next\x18\x04 \x01(\bR\ahasNext*I\n" +
+	"\rBondEventType\x12\x0f\n" +
+	"\vUNSPECIFIED\x10\x00\x12\n" +
+	"\n" +
+	"\x06COUPON\x10\x01\x12\x10\n" +
+	"\fAMORTIZATION\x10\x02\x12\t\n" +
+	"\x05OFFER\x10\x03*\xd5\x01\n" +
 	"\x10ConvertationType\x12\x14\n" +
 	"\x10CONVTYPE_UNKNOWN\x10\x00\x12\v\n" +
 	"\aBUYBACK\x10\x01\x12\x19\n" +
@@ -1021,14 +1804,20 @@ const file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_raw
 	"\fTENDER_OFFER\x10\t*\"\n" +
 	"\rSortDirection\x12\a\n" +
 	"\x03ASC\x10\x00\x12\b\n" +
-	"\x04DESC\x10\x012\xbb\t\n" +
+	"\x04DESC\x10\x012\xcb\f\n" +
 	"\x17CorporateActionsService\x12\xbb\x01\n" +
 	"\x0fGetFutureSplits\x129.grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest\x1a:.grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse\"1\x92A\x15b\x13\n" +
 	"\x11\n" +
 	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/splits/future\x12\xb3\x01\n" +
 	"\rGetPastSplits\x127.grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest\x1a8.grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse\"/\x92A\x15b\x13\n" +
 	"\x11\n" +
-	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/splits/past\x12\x8c\x03\n" +
+	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x11\x12\x0f/v1/splits/past\x12\xc9\x01\n" +
+	"\x14GetFutureBondsEvents\x12>.grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest\x1a?.grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsResponse\"0\x92A\x15b\x13\n" +
+	"\x11\n" +
+	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x12\x12\x10/v1/bonds/future\x12\xc1\x01\n" +
+	"\x12GetPastBondsEvents\x12<.grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest\x1a=.grpc.tradeapi.v1.corporateactions.GetPastBondsEventsResponse\".\x92A\x15b\x13\n" +
+	"\x11\n" +
+	"\rAuthorization\x12\x00\x82\xd3\xe4\x93\x02\x10\x12\x0e/v1/bonds/past\x12\x8c\x03\n" +
 	"\x12GetFutureDividends\x12<.grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest\x1a=.grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse\"\xf8\x01\x92A\xd8\x01J\xc0\x01\n" +
 	"\x03400\x12\xb8\x01\n" +
 	"\xb5\x01Неверно передан символ. Символ должен быть в виде ticker@mic. Где ticker - это, например, SBER. А mic, например, MISXb\x13\n" +
@@ -1067,63 +1856,106 @@ func file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawD
 	return file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDescData
 }
 
-var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_goTypes = []any{
-	(ConvertationType)(0),              // 0: grpc.tradeapi.v1.corporateactions.ConvertationType
-	(SortDirection)(0),                 // 1: grpc.tradeapi.v1.corporateactions.SortDirection
-	(*GetFutureSplitsRequest)(nil),     // 2: grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest
-	(*GetFutureSplitsResponse)(nil),    // 3: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse
-	(*GetPastSplitsRequest)(nil),       // 4: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest
-	(*GetPastSplitsResponse)(nil),      // 5: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse
-	(*SplitInfo)(nil),                  // 6: grpc.tradeapi.v1.corporateactions.SplitInfo
-	(*GetFutureDividendsRequest)(nil),  // 7: grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest
-	(*GetFutureDividendsResponse)(nil), // 8: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse
-	(*GetPastDividendsRequest)(nil),    // 9: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest
-	(*GetPastDividendsResponse)(nil),   // 10: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse
-	(*Dividend)(nil),                   // 11: grpc.tradeapi.v1.corporateactions.Dividend
-	(*Pagination)(nil),                 // 12: grpc.tradeapi.v1.corporateactions.Pagination
-	(*date.Date)(nil),                  // 13: google.type.Date
-	(*decimal.Decimal)(nil),            // 14: google.type.Decimal
-	(*wrapperspb.Int32Value)(nil),      // 15: google.protobuf.Int32Value
+	(BondEventType)(0),                   // 0: grpc.tradeapi.v1.corporateactions.BondEventType
+	(ConvertationType)(0),                // 1: grpc.tradeapi.v1.corporateactions.ConvertationType
+	(SortDirection)(0),                   // 2: grpc.tradeapi.v1.corporateactions.SortDirection
+	(*GetFutureSplitsRequest)(nil),       // 3: grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest
+	(*GetFutureSplitsResponse)(nil),      // 4: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse
+	(*GetPastSplitsRequest)(nil),         // 5: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest
+	(*GetPastSplitsResponse)(nil),        // 6: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse
+	(*GetFutureBondsEventsRequest)(nil),  // 7: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest
+	(*GetFutureBondsEventsResponse)(nil), // 8: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsResponse
+	(*GetPastBondsEventsRequest)(nil),    // 9: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest
+	(*GetPastBondsEventsResponse)(nil),   // 10: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsResponse
+	(*BondEvent)(nil),                    // 11: grpc.tradeapi.v1.corporateactions.BondEvent
+	(*CouponEventDetails)(nil),           // 12: grpc.tradeapi.v1.corporateactions.CouponEventDetails
+	(*AmortizationEventDetails)(nil),     // 13: grpc.tradeapi.v1.corporateactions.AmortizationEventDetails
+	(*OfferEventDetails)(nil),            // 14: grpc.tradeapi.v1.corporateactions.OfferEventDetails
+	(*SplitInfo)(nil),                    // 15: grpc.tradeapi.v1.corporateactions.SplitInfo
+	(*GetFutureDividendsRequest)(nil),    // 16: grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest
+	(*GetFutureDividendsResponse)(nil),   // 17: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse
+	(*GetPastDividendsRequest)(nil),      // 18: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest
+	(*GetPastDividendsResponse)(nil),     // 19: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse
+	(*Dividend)(nil),                     // 20: grpc.tradeapi.v1.corporateactions.Dividend
+	(*Pagination)(nil),                   // 21: grpc.tradeapi.v1.corporateactions.Pagination
+	(*date.Date)(nil),                    // 22: google.type.Date
+	(*decimal.Decimal)(nil),              // 23: google.type.Decimal
+	(*wrapperspb.StringValue)(nil),       // 24: google.protobuf.StringValue
+	(*wrapperspb.Int32Value)(nil),        // 25: google.protobuf.Int32Value
 }
 var file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_depIdxs = []int32{
-	1,  // 0: grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
-	12, // 1: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
-	6,  // 2: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse.splits:type_name -> grpc.tradeapi.v1.corporateactions.SplitInfo
-	13, // 3: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.date_from:type_name -> google.type.Date
-	13, // 4: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.date_to:type_name -> google.type.Date
-	1,  // 5: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
-	12, // 6: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
-	6,  // 7: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse.splits:type_name -> grpc.tradeapi.v1.corporateactions.SplitInfo
-	13, // 8: grpc.tradeapi.v1.corporateactions.SplitInfo.exec_date:type_name -> google.type.Date
-	14, // 9: grpc.tradeapi.v1.corporateactions.SplitInfo.old_ratio:type_name -> google.type.Decimal
-	14, // 10: grpc.tradeapi.v1.corporateactions.SplitInfo.new_ratio:type_name -> google.type.Decimal
-	15, // 11: grpc.tradeapi.v1.corporateactions.SplitInfo.new_lot:type_name -> google.protobuf.Int32Value
-	0,  // 12: grpc.tradeapi.v1.corporateactions.SplitInfo.convertation_type:type_name -> grpc.tradeapi.v1.corporateactions.ConvertationType
-	1,  // 13: grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
-	12, // 14: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
-	11, // 15: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse.dividends:type_name -> grpc.tradeapi.v1.corporateactions.Dividend
-	1,  // 16: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
-	13, // 17: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.date_from:type_name -> google.type.Date
-	13, // 18: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.date_to:type_name -> google.type.Date
-	12, // 19: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
-	11, // 20: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse.dividends:type_name -> grpc.tradeapi.v1.corporateactions.Dividend
-	13, // 21: grpc.tradeapi.v1.corporateactions.Dividend.date:type_name -> google.type.Date
-	14, // 22: grpc.tradeapi.v1.corporateactions.Dividend.amount:type_name -> google.type.Decimal
-	2,  // 23: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureSplits:input_type -> grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest
-	4,  // 24: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastSplits:input_type -> grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest
-	7,  // 25: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureDividends:input_type -> grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest
-	9,  // 26: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastDividends:input_type -> grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest
-	3,  // 27: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureSplits:output_type -> grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse
-	5,  // 28: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastSplits:output_type -> grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse
-	8,  // 29: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureDividends:output_type -> grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse
-	10, // 30: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastDividends:output_type -> grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse
-	27, // [27:31] is the sub-list for method output_type
-	23, // [23:27] is the sub-list for method input_type
-	23, // [23:23] is the sub-list for extension type_name
-	23, // [23:23] is the sub-list for extension extendee
-	0,  // [0:23] is the sub-list for field type_name
+	2,  // 0: grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	21, // 1: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	15, // 2: grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse.splits:type_name -> grpc.tradeapi.v1.corporateactions.SplitInfo
+	22, // 3: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.date_from:type_name -> google.type.Date
+	22, // 4: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.date_to:type_name -> google.type.Date
+	2,  // 5: grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	21, // 6: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	15, // 7: grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse.splits:type_name -> grpc.tradeapi.v1.corporateactions.SplitInfo
+	22, // 8: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest.date_from:type_name -> google.type.Date
+	22, // 9: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest.date_to:type_name -> google.type.Date
+	2,  // 10: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	21, // 11: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	11, // 12: grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsResponse.events:type_name -> grpc.tradeapi.v1.corporateactions.BondEvent
+	22, // 13: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest.date_from:type_name -> google.type.Date
+	22, // 14: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest.date_to:type_name -> google.type.Date
+	2,  // 15: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	21, // 16: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	11, // 17: grpc.tradeapi.v1.corporateactions.GetPastBondsEventsResponse.events:type_name -> grpc.tradeapi.v1.corporateactions.BondEvent
+	22, // 18: grpc.tradeapi.v1.corporateactions.BondEvent.date:type_name -> google.type.Date
+	0,  // 19: grpc.tradeapi.v1.corporateactions.BondEvent.type:type_name -> grpc.tradeapi.v1.corporateactions.BondEventType
+	23, // 20: grpc.tradeapi.v1.corporateactions.BondEvent.value:type_name -> google.type.Decimal
+	24, // 21: grpc.tradeapi.v1.corporateactions.BondEvent.currency:type_name -> google.protobuf.StringValue
+	12, // 22: grpc.tradeapi.v1.corporateactions.BondEvent.coupon_details:type_name -> grpc.tradeapi.v1.corporateactions.CouponEventDetails
+	13, // 23: grpc.tradeapi.v1.corporateactions.BondEvent.amortization_details:type_name -> grpc.tradeapi.v1.corporateactions.AmortizationEventDetails
+	14, // 24: grpc.tradeapi.v1.corporateactions.BondEvent.offer_details:type_name -> grpc.tradeapi.v1.corporateactions.OfferEventDetails
+	22, // 25: grpc.tradeapi.v1.corporateactions.CouponEventDetails.record_date:type_name -> google.type.Date
+	22, // 26: grpc.tradeapi.v1.corporateactions.CouponEventDetails.start_date:type_name -> google.type.Date
+	23, // 27: grpc.tradeapi.v1.corporateactions.CouponEventDetails.face_value:type_name -> google.type.Decimal
+	23, // 28: grpc.tradeapi.v1.corporateactions.CouponEventDetails.value_percent:type_name -> google.type.Decimal
+	23, // 29: grpc.tradeapi.v1.corporateactions.AmortizationEventDetails.new_face_value:type_name -> google.type.Decimal
+	23, // 30: grpc.tradeapi.v1.corporateactions.AmortizationEventDetails.initial_face_value:type_name -> google.type.Decimal
+	23, // 31: grpc.tradeapi.v1.corporateactions.AmortizationEventDetails.amortization_percent:type_name -> google.type.Decimal
+	24, // 32: grpc.tradeapi.v1.corporateactions.OfferEventDetails.offer_type:type_name -> google.protobuf.StringValue
+	23, // 33: grpc.tradeapi.v1.corporateactions.OfferEventDetails.price:type_name -> google.type.Decimal
+	22, // 34: grpc.tradeapi.v1.corporateactions.OfferEventDetails.start_date:type_name -> google.type.Date
+	22, // 35: grpc.tradeapi.v1.corporateactions.OfferEventDetails.end_date:type_name -> google.type.Date
+	24, // 36: grpc.tradeapi.v1.corporateactions.OfferEventDetails.agent:type_name -> google.protobuf.StringValue
+	22, // 37: grpc.tradeapi.v1.corporateactions.SplitInfo.exec_date:type_name -> google.type.Date
+	23, // 38: grpc.tradeapi.v1.corporateactions.SplitInfo.old_ratio:type_name -> google.type.Decimal
+	23, // 39: grpc.tradeapi.v1.corporateactions.SplitInfo.new_ratio:type_name -> google.type.Decimal
+	25, // 40: grpc.tradeapi.v1.corporateactions.SplitInfo.new_lot:type_name -> google.protobuf.Int32Value
+	1,  // 41: grpc.tradeapi.v1.corporateactions.SplitInfo.convertation_type:type_name -> grpc.tradeapi.v1.corporateactions.ConvertationType
+	2,  // 42: grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	21, // 43: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	20, // 44: grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse.dividends:type_name -> grpc.tradeapi.v1.corporateactions.Dividend
+	2,  // 45: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.sort_direction:type_name -> grpc.tradeapi.v1.corporateactions.SortDirection
+	22, // 46: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.date_from:type_name -> google.type.Date
+	22, // 47: grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest.date_to:type_name -> google.type.Date
+	21, // 48: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse.pagination:type_name -> grpc.tradeapi.v1.corporateactions.Pagination
+	20, // 49: grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse.dividends:type_name -> grpc.tradeapi.v1.corporateactions.Dividend
+	22, // 50: grpc.tradeapi.v1.corporateactions.Dividend.date:type_name -> google.type.Date
+	23, // 51: grpc.tradeapi.v1.corporateactions.Dividend.amount:type_name -> google.type.Decimal
+	3,  // 52: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureSplits:input_type -> grpc.tradeapi.v1.corporateactions.GetFutureSplitsRequest
+	5,  // 53: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastSplits:input_type -> grpc.tradeapi.v1.corporateactions.GetPastSplitsRequest
+	7,  // 54: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureBondsEvents:input_type -> grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsRequest
+	9,  // 55: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastBondsEvents:input_type -> grpc.tradeapi.v1.corporateactions.GetPastBondsEventsRequest
+	16, // 56: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureDividends:input_type -> grpc.tradeapi.v1.corporateactions.GetFutureDividendsRequest
+	18, // 57: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastDividends:input_type -> grpc.tradeapi.v1.corporateactions.GetPastDividendsRequest
+	4,  // 58: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureSplits:output_type -> grpc.tradeapi.v1.corporateactions.GetFutureSplitsResponse
+	6,  // 59: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastSplits:output_type -> grpc.tradeapi.v1.corporateactions.GetPastSplitsResponse
+	8,  // 60: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureBondsEvents:output_type -> grpc.tradeapi.v1.corporateactions.GetFutureBondsEventsResponse
+	10, // 61: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastBondsEvents:output_type -> grpc.tradeapi.v1.corporateactions.GetPastBondsEventsResponse
+	17, // 62: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetFutureDividends:output_type -> grpc.tradeapi.v1.corporateactions.GetFutureDividendsResponse
+	19, // 63: grpc.tradeapi.v1.corporateactions.CorporateActionsService.GetPastDividends:output_type -> grpc.tradeapi.v1.corporateactions.GetPastDividendsResponse
+	58, // [58:64] is the sub-list for method output_type
+	52, // [52:58] is the sub-list for method input_type
+	52, // [52:52] is the sub-list for extension type_name
+	52, // [52:52] is the sub-list for extension extendee
+	0,  // [0:52] is the sub-list for field type_name
 }
 
 func init() { file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_init() }
@@ -1131,13 +1963,18 @@ func file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_init
 	if File_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto != nil {
 		return
 	}
+	file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_msgTypes[8].OneofWrappers = []any{
+		(*BondEvent_CouponDetails)(nil),
+		(*BondEvent_AmortizationDetails)(nil),
+		(*BondEvent_OfferDetails)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDesc), len(file_grpc_tradeapi_v1_corporateactions_corporate_actions_service_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   11,
+			NumEnums:      3,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

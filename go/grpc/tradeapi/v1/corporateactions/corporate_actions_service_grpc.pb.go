@@ -19,10 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CorporateActionsService_GetFutureSplits_FullMethodName    = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetFutureSplits"
-	CorporateActionsService_GetPastSplits_FullMethodName      = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetPastSplits"
-	CorporateActionsService_GetFutureDividends_FullMethodName = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetFutureDividends"
-	CorporateActionsService_GetPastDividends_FullMethodName   = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetPastDividends"
+	CorporateActionsService_GetFutureSplits_FullMethodName      = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetFutureSplits"
+	CorporateActionsService_GetPastSplits_FullMethodName        = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetPastSplits"
+	CorporateActionsService_GetFutureBondsEvents_FullMethodName = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetFutureBondsEvents"
+	CorporateActionsService_GetPastBondsEvents_FullMethodName   = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetPastBondsEvents"
+	CorporateActionsService_GetFutureDividends_FullMethodName   = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetFutureDividends"
+	CorporateActionsService_GetPastDividends_FullMethodName     = "/grpc.tradeapi.v1.corporateactions.CorporateActionsService/GetPastDividends"
 )
 
 // CorporateActionsServiceClient is the client API for CorporateActionsService service.
@@ -35,6 +37,10 @@ type CorporateActionsServiceClient interface {
 	GetFutureSplits(ctx context.Context, in *GetFutureSplitsRequest, opts ...grpc.CallOption) (*GetFutureSplitsResponse, error)
 	// Получить историю сплитов по инструменту
 	GetPastSplits(ctx context.Context, in *GetPastSplitsRequest, opts ...grpc.CallOption) (*GetPastSplitsResponse, error)
+	// Получить календарь будущих событий по облигациям
+	GetFutureBondsEvents(ctx context.Context, in *GetFutureBondsEventsRequest, opts ...grpc.CallOption) (*GetFutureBondsEventsResponse, error)
+	// Получить календарь исторических событий по облигациям
+	GetPastBondsEvents(ctx context.Context, in *GetPastBondsEventsRequest, opts ...grpc.CallOption) (*GetPastBondsEventsResponse, error)
 	// Получить список предстоящих (будущих) дивидендных выплат по инструменту.
 	GetFutureDividends(ctx context.Context, in *GetFutureDividendsRequest, opts ...grpc.CallOption) (*GetFutureDividendsResponse, error)
 	// Получить исторические данные по выплаченным дивидендам инструмента
@@ -63,6 +69,26 @@ func (c *corporateActionsServiceClient) GetPastSplits(ctx context.Context, in *G
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetPastSplitsResponse)
 	err := c.cc.Invoke(ctx, CorporateActionsService_GetPastSplits_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *corporateActionsServiceClient) GetFutureBondsEvents(ctx context.Context, in *GetFutureBondsEventsRequest, opts ...grpc.CallOption) (*GetFutureBondsEventsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFutureBondsEventsResponse)
+	err := c.cc.Invoke(ctx, CorporateActionsService_GetFutureBondsEvents_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *corporateActionsServiceClient) GetPastBondsEvents(ctx context.Context, in *GetPastBondsEventsRequest, opts ...grpc.CallOption) (*GetPastBondsEventsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPastBondsEventsResponse)
+	err := c.cc.Invoke(ctx, CorporateActionsService_GetPastBondsEvents_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,6 +125,10 @@ type CorporateActionsServiceServer interface {
 	GetFutureSplits(context.Context, *GetFutureSplitsRequest) (*GetFutureSplitsResponse, error)
 	// Получить историю сплитов по инструменту
 	GetPastSplits(context.Context, *GetPastSplitsRequest) (*GetPastSplitsResponse, error)
+	// Получить календарь будущих событий по облигациям
+	GetFutureBondsEvents(context.Context, *GetFutureBondsEventsRequest) (*GetFutureBondsEventsResponse, error)
+	// Получить календарь исторических событий по облигациям
+	GetPastBondsEvents(context.Context, *GetPastBondsEventsRequest) (*GetPastBondsEventsResponse, error)
 	// Получить список предстоящих (будущих) дивидендных выплат по инструменту.
 	GetFutureDividends(context.Context, *GetFutureDividendsRequest) (*GetFutureDividendsResponse, error)
 	// Получить исторические данные по выплаченным дивидендам инструмента
@@ -118,6 +148,12 @@ func (UnimplementedCorporateActionsServiceServer) GetFutureSplits(context.Contex
 }
 func (UnimplementedCorporateActionsServiceServer) GetPastSplits(context.Context, *GetPastSplitsRequest) (*GetPastSplitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPastSplits not implemented")
+}
+func (UnimplementedCorporateActionsServiceServer) GetFutureBondsEvents(context.Context, *GetFutureBondsEventsRequest) (*GetFutureBondsEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFutureBondsEvents not implemented")
+}
+func (UnimplementedCorporateActionsServiceServer) GetPastBondsEvents(context.Context, *GetPastBondsEventsRequest) (*GetPastBondsEventsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPastBondsEvents not implemented")
 }
 func (UnimplementedCorporateActionsServiceServer) GetFutureDividends(context.Context, *GetFutureDividendsRequest) (*GetFutureDividendsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFutureDividends not implemented")
@@ -183,6 +219,42 @@ func _CorporateActionsService_GetPastSplits_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CorporateActionsService_GetFutureBondsEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFutureBondsEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CorporateActionsServiceServer).GetFutureBondsEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CorporateActionsService_GetFutureBondsEvents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CorporateActionsServiceServer).GetFutureBondsEvents(ctx, req.(*GetFutureBondsEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CorporateActionsService_GetPastBondsEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPastBondsEventsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CorporateActionsServiceServer).GetPastBondsEvents(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CorporateActionsService_GetPastBondsEvents_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CorporateActionsServiceServer).GetPastBondsEvents(ctx, req.(*GetPastBondsEventsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _CorporateActionsService_GetFutureDividends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetFutureDividendsRequest)
 	if err := dec(in); err != nil {
@@ -233,6 +305,14 @@ var CorporateActionsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPastSplits",
 			Handler:    _CorporateActionsService_GetPastSplits_Handler,
+		},
+		{
+			MethodName: "GetFutureBondsEvents",
+			Handler:    _CorporateActionsService_GetFutureBondsEvents_Handler,
+		},
+		{
+			MethodName: "GetPastBondsEvents",
+			Handler:    _CorporateActionsService_GetPastBondsEvents_Handler,
 		},
 		{
 			MethodName: "GetFutureDividends",
