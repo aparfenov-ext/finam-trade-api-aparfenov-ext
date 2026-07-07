@@ -446,7 +446,7 @@ type AccountReportInfo struct {
 	ReportForm ReportForm `protobuf:"varint,4,opt,name=report_form,json=reportForm,proto3,enum=grpc.tradeapi.v1.reports.ReportForm" json:"report_form,omitempty"`
 	// Идентификатор счета. Берётся из запроса на генерацию отчёта
 	AccountId int64 `protobuf:"varint,5,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
-	// Ссылка на скачивание отчёта. Появляется только в случае успешной генерации отчёта (ReportCreationStatus = SUCCESS)
+	// Ссылка на скачивание отчёта. Появляется только в случае успешной генерации отчёта (ReportCreationStatus = SUCCESS). Для скачивания отчёта по данной ссылке необходимо передать заголовок Authorization: Bearer <your_access_key>
 	Url           *wrapperspb.StringValue `protobuf:"bytes,6,opt,name=url,proto3" json:"url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
