@@ -281,6 +281,10 @@ message Position {
   google.type.Decimal daily_pnl = 6;
   // Суммарная нереализованная прибыль или убыток (PnL) текущей позиции
   google.type.Decimal unrealized_pnl = 7;
+  // Код валюты текущей цены. Только для общего типа счетов Московской Биржи
+  string current_price_currency = 8;
+  // Код валюты средней цены. Только для общего типа счетов Московской Биржи
+  string average_price_currency = 9;
 }
 
 // Информация о транзакции
