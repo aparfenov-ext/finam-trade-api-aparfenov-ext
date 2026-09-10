@@ -2762,6 +2762,14 @@
         "comment": {
           "type": "string",
           "title": "Метка заявки. (максимум 128 символов)"
+        },
+        "sl_qty_measure": {
+          "$ref": "#/definitions/ordersSLTPQtyMeasure",
+          "description": "Единица измерения объёма для Stop Loss части.\nЕсли SLTP_QTY_MEASURE_PERCENT — quantity_sl трактуется как процент (0–100) от позиции на момент исполнения."
+        },
+        "tp_qty_measure": {
+          "$ref": "#/definitions/ordersSLTPQtyMeasure",
+          "description": "Единица измерения объёма для Take Profit части.\nЕсли SLTP_QTY_MEASURE_PERCENT — quantity_tp трактуется как процент (0–100) от позиции на момент исполнения."
         }
       },
       "title": "Информация о SL/TP заявке"
@@ -2934,6 +2942,14 @@
         "unrealized_pnl": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Суммарная нереализованная прибыль или убыток (PnL) текущей позиции"
+        },
+        "current_price_currency": {
+          "type": "string",
+          "title": "Код валюты текущей цены. Только для общего типа счетов Московской Биржи"
+        },
+        "average_price_currency": {
+          "type": "string",
+          "title": "Код валюты средней цены. Только для общего типа счетов Московской Биржи"
         }
       },
       "title": "Информация о позиции"
@@ -4471,6 +4487,10 @@
         "triggered_order_id": {
           "type": "string",
           "description": "Идентификатор биржевой заявки, порожденной в результате срабатывания условия или достижения стоп-цены."
+        },
+        "status_description": {
+          "type": "string",
+          "title": "Описание статуса заявки"
         }
       },
       "title": "Состояние заявки"
@@ -4631,9 +4651,28 @@
         "comment": {
           "type": "string",
           "title": "Метка заявки. (максимум 128 символов)"
+        },
+        "sl_qty_measure": {
+          "$ref": "#/definitions/ordersSLTPQtyMeasure",
+          "description": "Единица измерения объёма для Stop Loss части.\nЕсли SLTP_QTY_MEASURE_PERCENT — quantity_sl трактуется как процент (0–100) от позиции на момент исполнения."
+        },
+        "tp_qty_measure": {
+          "$ref": "#/definitions/ordersSLTPQtyMeasure",
+          "description": "Единица измерения объёма для Take Profit части.\nЕсли SLTP_QTY_MEASURE_PERCENT — quantity_tp трактуется как процент (0–100) от позиции на момент исполнения."
         }
       },
       "title": "Информация о SL/TP заявке"
+    },
+    "ordersSLTPQtyMeasure": {
+      "type": "string",
+      "enum": [
+        "SLTP_QTY_MEASURE_UNDEFINED",
+        "SLTP_QTY_MEASURE_VALUE",
+        "SLTP_QTY_MEASURE_PERCENT"
+      ],
+      "default": "SLTP_QTY_MEASURE_UNDEFINED",
+      "description": "- SLTP_QTY_MEASURE_UNDEFINED: Не определено\n - SLTP_QTY_MEASURE_VALUE: Количество в единицах (штуках). Значение по умолчанию.\n - SLTP_QTY_MEASURE_PERCENT: Процент от позиции на момент исполнения, точность до сотых процента",
+      "title": "Единица измерения объёма для SL/TP заявки"
     },
     "ordersStopCondition": {
       "type": "string",

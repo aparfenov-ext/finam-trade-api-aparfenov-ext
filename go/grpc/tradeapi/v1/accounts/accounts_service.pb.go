@@ -753,8 +753,12 @@ type Position struct {
 	DailyPnl *decimal.Decimal `protobuf:"bytes,6,opt,name=daily_pnl,json=dailyPnl,proto3" json:"daily_pnl,omitempty"`
 	// Суммарная нереализованная прибыль или убыток (PnL) текущей позиции
 	UnrealizedPnl *decimal.Decimal `protobuf:"bytes,7,opt,name=unrealized_pnl,json=unrealizedPnl,proto3" json:"unrealized_pnl,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Код валюты текущей цены. Только для общего типа счетов Московской Биржи
+	CurrentPriceCurrency string `protobuf:"bytes,8,opt,name=current_price_currency,json=currentPriceCurrency,proto3" json:"current_price_currency,omitempty"`
+	// Код валюты средней цены. Только для общего типа счетов Московской Биржи
+	AveragePriceCurrency string `protobuf:"bytes,9,opt,name=average_price_currency,json=averagePriceCurrency,proto3" json:"average_price_currency,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Position) Reset() {
@@ -834,6 +838,20 @@ func (x *Position) GetUnrealizedPnl() *decimal.Decimal {
 		return x.UnrealizedPnl
 	}
 	return nil
+}
+
+func (x *Position) GetCurrentPriceCurrency() string {
+	if x != nil {
+		return x.CurrentPriceCurrency
+	}
+	return ""
+}
+
+func (x *Position) GetAveragePriceCurrency() string {
+	if x != nil {
+		return x.AveragePriceCurrency
+	}
+	return ""
 }
 
 // Информация о транзакции
@@ -1067,7 +1085,7 @@ const file_grpc_tradeapi_v1_accounts_accounts_service_proto_rawDesc = "" +
 	"\x05limit\x18\x02 \x01(\x05R\x05limit\x121\n" +
 	"\binterval\x18\x03 \x01(\v2\x15.google.type.IntervalR\binterval\"b\n" +
 	"\x14TransactionsResponse\x12J\n" +
-	"\ftransactions\x18\x01 \x03(\v2&.grpc.tradeapi.v1.accounts.TransactionR\ftransactions\"\xff\x02\n" +
+	"\ftransactions\x18\x01 \x03(\v2&.grpc.tradeapi.v1.accounts.TransactionR\ftransactions\"\xeb\x03\n" +
 	"\bPosition\x12\x16\n" +
 	"\x06symbol\x18\x01 \x01(\tR\x06symbol\x120\n" +
 	"\bquantity\x18\x02 \x01(\v2\x14.google.type.DecimalR\bquantity\x129\n" +
@@ -1075,7 +1093,9 @@ const file_grpc_tradeapi_v1_accounts_accounts_service_proto_rawDesc = "" +
 	"\rcurrent_price\x18\x04 \x01(\v2\x14.google.type.DecimalR\fcurrentPrice\x12C\n" +
 	"\x12maintenance_margin\x18\x05 \x01(\v2\x14.google.type.DecimalR\x11maintenanceMargin\x121\n" +
 	"\tdaily_pnl\x18\x06 \x01(\v2\x14.google.type.DecimalR\bdailyPnl\x12;\n" +
-	"\x0eunrealized_pnl\x18\a \x01(\v2\x14.google.type.DecimalR\runrealizedPnl\"\xae\x06\n" +
+	"\x0eunrealized_pnl\x18\a \x01(\v2\x14.google.type.DecimalR\runrealizedPnl\x124\n" +
+	"\x16current_price_currency\x18\b \x01(\tR\x14currentPriceCurrency\x124\n" +
+	"\x16average_price_currency\x18\t \x01(\tR\x14averagePriceCurrency\"\xae\x06\n" +
 	"\vTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
 	"\bcategory\x18\x02 \x01(\tB\x02\x18\x01R\bcategory\x128\n" +
