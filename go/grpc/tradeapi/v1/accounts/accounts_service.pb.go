@@ -867,7 +867,7 @@ type Transaction struct {
 	Timestamp *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	// Символ инструмента
 	Symbol string `protobuf:"bytes,5,opt,name=symbol,proto3" json:"symbol,omitempty"`
-	// Изменение в деньгах
+	// Изменение в деньгах, в рублях
 	Change *money.Money `protobuf:"bytes,6,opt,name=change,proto3" json:"change,omitempty"`
 	// Информация о сделке
 	Trade *Transaction_Trade `protobuf:"bytes,7,opt,name=trade,proto3" json:"trade,omitempty"`
@@ -876,7 +876,11 @@ type Transaction struct {
 	// Наименование транзакции
 	TransactionName string `protobuf:"bytes,9,opt,name=transaction_name,json=transactionName,proto3" json:"transaction_name,omitempty"`
 	// Изменение в штуках, только для трансфера бумаг (для TransactionCategory = TRANSFER)
-	ChangeQty     *decimal.Decimal `protobuf:"bytes,10,opt,name=change_qty,json=changeQty,proto3" json:"change_qty,omitempty"`
+	ChangeQty *decimal.Decimal `protobuf:"bytes,10,opt,name=change_qty,json=changeQty,proto3" json:"change_qty,omitempty"`
+	// Изменение в деньгах, в валюте инструмента
+	ChangeOriginal *money.Money `protobuf:"bytes,11,opt,name=change_original,json=changeOriginal,proto3" json:"change_original,omitempty"`
+	// Полный список тикеров, входящих в транзакцию. Поле symbol сохраняется и заполняется первым элементом для обратной совместимости.
+	Symbols       []string `protobuf:"bytes,12,rep,name=symbols,proto3" json:"symbols,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -971,6 +975,20 @@ func (x *Transaction) GetTransactionName() string {
 func (x *Transaction) GetChangeQty() *decimal.Decimal {
 	if x != nil {
 		return x.ChangeQty
+	}
+	return nil
+}
+
+func (x *Transaction) GetChangeOriginal() *money.Money {
+	if x != nil {
+		return x.ChangeOriginal
+	}
+	return nil
+}
+
+func (x *Transaction) GetSymbols() []string {
+	if x != nil {
+		return x.Symbols
 	}
 	return nil
 }
@@ -1095,7 +1113,7 @@ const file_grpc_tradeapi_v1_accounts_accounts_service_proto_rawDesc = "" +
 	"\tdaily_pnl\x18\x06 \x01(\v2\x14.google.type.DecimalR\bdailyPnl\x12;\n" +
 	"\x0eunrealized_pnl\x18\a \x01(\v2\x14.google.type.DecimalR\runrealizedPnl\x124\n" +
 	"\x16current_price_currency\x18\b \x01(\tR\x14currentPriceCurrency\x124\n" +
-	"\x16average_price_currency\x18\t \x01(\tR\x14averagePriceCurrency\"\xae\x06\n" +
+	"\x16average_price_currency\x18\t \x01(\tR\x14averagePriceCurrency\"\x85\a\n" +
 	"\vTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
 	"\bcategory\x18\x02 \x01(\tB\x02\x18\x01R\bcategory\x128\n" +
@@ -1107,7 +1125,9 @@ const file_grpc_tradeapi_v1_accounts_accounts_service_proto_rawDesc = "" +
 	"\x10transaction_name\x18\t \x01(\tR\x0ftransactionName\x123\n" +
 	"\n" +
 	"change_qty\x18\n" +
-	" \x01(\v2\x14.google.type.DecimalR\tchangeQty\x1a\x9e\x01\n" +
+	" \x01(\v2\x14.google.type.DecimalR\tchangeQty\x12;\n" +
+	"\x0fchange_original\x18\v \x01(\v2\x12.google.type.MoneyR\x0echangeOriginal\x12\x18\n" +
+	"\asymbols\x18\f \x03(\tR\asymbols\x1a\x9e\x01\n" +
 	"\x05Trade\x12(\n" +
 	"\x04size\x18\x01 \x01(\v2\x14.google.type.DecimalR\x04size\x12*\n" +
 	"\x05price\x18\x02 \x01(\v2\x14.google.type.DecimalR\x05price\x12?\n" +
@@ -1227,22 +1247,23 @@ var file_grpc_tradeapi_v1_accounts_accounts_service_proto_depIdxs = []int32{
 	12, // 27: grpc.tradeapi.v1.accounts.Transaction.trade:type_name -> grpc.tradeapi.v1.accounts.Transaction.Trade
 	0,  // 28: grpc.tradeapi.v1.accounts.Transaction.transaction_category:type_name -> grpc.tradeapi.v1.accounts.Transaction.TransactionCategory
 	13, // 29: grpc.tradeapi.v1.accounts.Transaction.change_qty:type_name -> google.type.Decimal
-	13, // 30: grpc.tradeapi.v1.accounts.Transaction.Trade.size:type_name -> google.type.Decimal
-	13, // 31: grpc.tradeapi.v1.accounts.Transaction.Trade.price:type_name -> google.type.Decimal
-	13, // 32: grpc.tradeapi.v1.accounts.Transaction.Trade.accrued_interest:type_name -> google.type.Decimal
-	1,  // 33: grpc.tradeapi.v1.accounts.AccountsService.GetAccount:input_type -> grpc.tradeapi.v1.accounts.GetAccountRequest
-	6,  // 34: grpc.tradeapi.v1.accounts.AccountsService.Trades:input_type -> grpc.tradeapi.v1.accounts.TradesRequest
-	8,  // 35: grpc.tradeapi.v1.accounts.AccountsService.Transactions:input_type -> grpc.tradeapi.v1.accounts.TransactionsRequest
-	1,  // 36: grpc.tradeapi.v1.accounts.AccountsService.SubscribeAccount:input_type -> grpc.tradeapi.v1.accounts.GetAccountRequest
-	2,  // 37: grpc.tradeapi.v1.accounts.AccountsService.GetAccount:output_type -> grpc.tradeapi.v1.accounts.GetAccountResponse
-	7,  // 38: grpc.tradeapi.v1.accounts.AccountsService.Trades:output_type -> grpc.tradeapi.v1.accounts.TradesResponse
-	9,  // 39: grpc.tradeapi.v1.accounts.AccountsService.Transactions:output_type -> grpc.tradeapi.v1.accounts.TransactionsResponse
-	2,  // 40: grpc.tradeapi.v1.accounts.AccountsService.SubscribeAccount:output_type -> grpc.tradeapi.v1.accounts.GetAccountResponse
-	37, // [37:41] is the sub-list for method output_type
-	33, // [33:37] is the sub-list for method input_type
-	33, // [33:33] is the sub-list for extension type_name
-	33, // [33:33] is the sub-list for extension extendee
-	0,  // [0:33] is the sub-list for field type_name
+	14, // 30: grpc.tradeapi.v1.accounts.Transaction.change_original:type_name -> google.type.Money
+	13, // 31: grpc.tradeapi.v1.accounts.Transaction.Trade.size:type_name -> google.type.Decimal
+	13, // 32: grpc.tradeapi.v1.accounts.Transaction.Trade.price:type_name -> google.type.Decimal
+	13, // 33: grpc.tradeapi.v1.accounts.Transaction.Trade.accrued_interest:type_name -> google.type.Decimal
+	1,  // 34: grpc.tradeapi.v1.accounts.AccountsService.GetAccount:input_type -> grpc.tradeapi.v1.accounts.GetAccountRequest
+	6,  // 35: grpc.tradeapi.v1.accounts.AccountsService.Trades:input_type -> grpc.tradeapi.v1.accounts.TradesRequest
+	8,  // 36: grpc.tradeapi.v1.accounts.AccountsService.Transactions:input_type -> grpc.tradeapi.v1.accounts.TransactionsRequest
+	1,  // 37: grpc.tradeapi.v1.accounts.AccountsService.SubscribeAccount:input_type -> grpc.tradeapi.v1.accounts.GetAccountRequest
+	2,  // 38: grpc.tradeapi.v1.accounts.AccountsService.GetAccount:output_type -> grpc.tradeapi.v1.accounts.GetAccountResponse
+	7,  // 39: grpc.tradeapi.v1.accounts.AccountsService.Trades:output_type -> grpc.tradeapi.v1.accounts.TradesResponse
+	9,  // 40: grpc.tradeapi.v1.accounts.AccountsService.Transactions:output_type -> grpc.tradeapi.v1.accounts.TransactionsResponse
+	2,  // 41: grpc.tradeapi.v1.accounts.AccountsService.SubscribeAccount:output_type -> grpc.tradeapi.v1.accounts.GetAccountResponse
+	38, // [38:42] is the sub-list for method output_type
+	34, // [34:38] is the sub-list for method input_type
+	34, // [34:34] is the sub-list for extension type_name
+	34, // [34:34] is the sub-list for extension extendee
+	0,  // [0:34] is the sub-list for field type_name
 }
 
 func init() { file_grpc_tradeapi_v1_accounts_accounts_service_proto_init() }

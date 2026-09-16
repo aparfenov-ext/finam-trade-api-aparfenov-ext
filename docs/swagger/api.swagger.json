@@ -2990,7 +2990,7 @@
         },
         "change": {
           "$ref": "#/definitions/typeMoney",
-          "title": "Изменение в деньгах"
+          "title": "Изменение в деньгах, в рублях"
         },
         "trade": {
           "$ref": "#/definitions/accountsTransactionTrade",
@@ -3007,6 +3007,17 @@
         "change_qty": {
           "$ref": "#/definitions/typeDecimal",
           "title": "Изменение в штуках, только для трансфера бумаг (для TransactionCategory = TRANSFER)"
+        },
+        "change_original": {
+          "$ref": "#/definitions/typeMoney",
+          "title": "Изменение в деньгах, в валюте инструмента"
+        },
+        "symbols": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Полный список тикеров, входящих в транзакцию. Поле symbol сохраняется и заполняется первым элементом для обратной совместимости."
         }
       },
       "title": "Информация о транзакции"
